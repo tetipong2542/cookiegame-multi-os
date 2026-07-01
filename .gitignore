@@ -25,6 +25,8 @@ ingame_fail_*.png
 
 # Debug logs (from user field tests)
 runs/
+runs*/
+runs\ */
 logs/
 crash_log/
 
