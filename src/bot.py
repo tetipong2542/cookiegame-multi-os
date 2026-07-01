@@ -319,6 +319,36 @@ def auto_select_device():
 
 
 _SCREENCAP_METHOD = None
+_MINICAP = None
+_MINICAP_ATTEMPTED = False
+
+
+def _try_start_minicap():
+    global _MINICAP, _MINICAP_ATTEMPTED
+    if _MINICAP_ATTEMPTED:
+        return _MINICAP is not None
+    _MINICAP_ATTEMPTED = True
+    try:
+        from capture import MinicapCapture
+    except Exception as e:
+        print(f'[minicap] import failed: {e}')
+        return False
+    try:
+        cap = MinicapCapture(resolution='1280x720', adb_base=_adb_base())
+        if cap.start():
+            _MINICAP = cap
+            print(f'[capture] using MINICAP mode ({cap.width}x{cap.height})')
+            return True
+        print('[capture] minicap not available -> fallback')
+    except Exception as e:
+        print(f'[minicap] start error: {e}')
+    return False
+
+
+def _screencap_minicap():
+    if _MINICAP is None:
+        return None
+    return _MINICAP.read()
 
 
 def _screencap_raw():
@@ -368,6 +398,12 @@ def _screencap_png():
 
 def adb_screencap():
     global _SCREENCAP_METHOD
+    if _SCREENCAP_METHOD == 'minicap':
+        img = _screencap_minicap()
+        if img is not None:
+            return img
+        _SCREENCAP_METHOD = 'raw'
+        print('[capture] minicap read stalled -> fallback RAW')
     if _SCREENCAP_METHOD == 'png':
         return _screencap_png()
     if _SCREENCAP_METHOD == 'raw':
@@ -375,16 +411,26 @@ def adb_screencap():
         if img is not None:
             return img
         _SCREENCAP_METHOD = 'png'
-        print('[screencap] raw failed mid-run -> switch to PNG for rest of session')
+        print('[capture] raw failed mid-run -> fallback PNG for rest of session')
         return _screencap_png()
+    if not _MINICAP_ATTEMPTED and _try_start_minicap():
+        _SCREENCAP_METHOD = 'minicap'
+        img = _screencap_minicap()
+        if img is not None:
+            return img
+        _SCREENCAP_METHOD = None
     img = _screencap_raw()
     if img is not None:
         _SCREENCAP_METHOD = 'raw'
-        print(f'[screencap] using RAW RGBA mode ({img.shape[1]}x{img.shape[0]})')
+        print(f'[capture] using RAW RGBA mode ({img.shape[1]}x{img.shape[0]})')
         return img
     _SCREENCAP_METHOD = 'png'
-    print('[screencap] raw not supported -> using PNG mode')
+    print('[capture] raw not supported -> using PNG mode')
     return _screencap_png()
+
+
+def get_capture_mode():
+    return _SCREENCAP_METHOD or 'unknown'
 
 
 def adb_tap(x, y, jitter=None):
@@ -994,7 +1040,7 @@ def _maybe_save_run_log(t_start, reason):
         ts = time.strftime('%Y%m%d_%H%M%S')
         run_dir = os.path.join(_writable_dir(), 'logs', 'runs',
                                f'{ts}_round_{_ROUND_NUMBER:03d}_{reason}')
-        _DETECTOR.save_run_log(run_dir, run_duration, _config_source_path())
+        _DETECTOR.save_run_log(run_dir, run_duration, _config_source_path(), get_capture_mode())
     except Exception as e:
         print(f'[run-log] error: {e}')
 

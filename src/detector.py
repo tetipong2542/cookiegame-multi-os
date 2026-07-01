@@ -532,11 +532,13 @@ class ObstacleDetector:
         except Exception:
             return frame
 
-    def get_summary(self, run_duration: float, config_path: Optional[str] = None) -> Dict[str, Any]:
+    def get_summary(self, run_duration: float, config_path: Optional[str] = None,
+                    capture_mode: Optional[str] = None) -> Dict[str, Any]:
         def _avg(xs):
             return round(float(sum(xs) / len(xs)), 3) if xs else 0.0
         tg = self.get_timing_summary()
         return {
+            'capture_mode': capture_mode or 'unknown',
             'run_duration': round(float(run_duration), 3),
             'total_detections': int(self.total_detections),
             'actions': dict(self.action_counts),
@@ -554,7 +556,8 @@ class ObstacleDetector:
             'avg_loop_total_ms': tg.get('avg_loop_total_ms', 0.0),
         }
 
-    def save_run_log(self, run_dir: str, run_duration: float, config_path: Optional[str] = None) -> bool:
+    def save_run_log(self, run_dir: str, run_duration: float, config_path: Optional[str] = None,
+                     capture_mode: Optional[str] = None) -> bool:
         if not self.save_all_runs:
             return False
         try:
@@ -571,7 +574,7 @@ class ObstacleDetector:
             with open(os.path.join(run_dir, 'decisions.json'), 'w', encoding='utf-8') as f:
                 json.dump(self._decision_log, f, indent=2, default=str, ensure_ascii=False)
 
-            summary = self.get_summary(run_duration, config_path)
+            summary = self.get_summary(run_duration, config_path, capture_mode)
             with open(os.path.join(run_dir, 'summary.json'), 'w', encoding='utf-8') as f:
                 json.dump(summary, f, indent=2, ensure_ascii=False)
 
