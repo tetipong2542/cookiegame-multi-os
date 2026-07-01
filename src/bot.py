@@ -204,7 +204,7 @@ BOOST_START_ENABLED = True
 BOOST_START_DELAY_SEC = 3.5   # เริ่ม spam tap ที่วินาทีนี้ (หลัง Play)
 BOOST_END_DELAY_SEC = 6.0     # หยุด spam tap ที่วินาทีนี้
 BOOST_TAP_INTERVAL_SEC = 0.5  # spam ทุกกี่วิ (5 ครั้งใน window 2.5 วิ)
-BOOST_DEBUG_SAVE_SCREEN = True   # เซฟภาพหน้าจอตอน tap ครั้งแรก -> ตรวจว่ากดถูกจังหวะ
+BOOST_DEBUG_SAVE_SCREEN = False   # เซฟภาพหน้าจอตอน tap ครั้งแรก -> ตรวจว่ากดถูกจังหวะ
 BOOST_START_TAP = (640, 350)   # LDPlayer 1280x720 — ปรับถ้า resolution ต่าง
 IMG_BOOST_START = 'templates/boost_start.png'
 BOOST_START_THRESHOLD = 0.7
@@ -541,13 +541,13 @@ def multibuy_until_target():
     # TODO: verify against disasm — reconstructed with best effort
     print('[reroll] เลือกกล่อง Random Boost ก่อน')
     adb_tap(*BTN_BOX)
-    time.sleep(0.6)
+    time.sleep(0.4)
     print('[reroll] เปิดหน้า Multi-Buy')
     adb_tap(*BTN_MULTI)
-    time.sleep(1.0)
+    time.sleep(0.6)
     for tgt in MULTI_SELECT_TARGETS:
         adb_tap(*tgt)
-        time.sleep(0.3)
+        time.sleep(0.15)
     print('[reroll] กดปุ่ม Multi-Buy')
     adb_tap(*BTN_MULTI_BUY)
     start = time.time()
@@ -556,13 +556,13 @@ def multibuy_until_target():
             return False
         screen = adb_screencap()
         if screen is None:
-            time.sleep(0.3)
+            time.sleep(0.2)
             continue
         found, _, score = find_template(screen, IMG_TARGET_ITEM)
         if found:
             print(f'[OK] เจอ Double Coins (score={score:.3f})')
             return True
-        time.sleep(0.5)
+        time.sleep(0.25)
     print('[WARN] multi-buy timeout')
     return False
 
