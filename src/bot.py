@@ -201,7 +201,7 @@ PATTERN_FILE = 'pattern.json'
 REPLAY_PATTERN = None
 
 BOOST_START_ENABLED = True
-BOOST_START_DELAY_SEC = 2.0
+BOOST_START_DELAY_SEC = 0.5
 BOOST_START_TAP = (640, 350)   # LDPlayer 1280x720 — ปรับถ้า resolution ต่าง
 IMG_BOOST_START = 'templates/boost_start.png'   # optional — ถ้ามีจะ detect ก่อนกด (แม่นกว่า)
 BOOST_START_THRESHOLD = 0.7
@@ -647,6 +647,8 @@ def state_run():
         print('[WARN] ไม่พบหน้าวิ่งภายใน timeout')
         return State.RESULT
     t_start = time.time()
+    if BOOST_START_ENABLED:
+        print(f'[boost] BONUSTIME detected — จะกด boost อีก {BOOST_START_DELAY_SEC}s ที่ {BOOST_START_TAP}')
     last_sig = None
     last_change_time = time.time()
     pattern = REPLAY_PATTERN
