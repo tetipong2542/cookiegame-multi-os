@@ -203,6 +203,9 @@ REPLAY_PATTERN = None
 BOOST_START_ENABLED = True
 BOOST_START_DELAY_SEC = 2.0
 BOOST_START_TAP = (640, 350)   # LDPlayer 1280x720 — ปรับถ้า resolution ต่าง
+IMG_BOOST_START = 'templates/boost_start.png'   # optional — ถ้ามีจะ detect ก่อนกด (แม่นกว่า)
+BOOST_START_THRESHOLD = 0.7
+BOOST_START_DETECT_WINDOW_SEC = 5.0   # หา template นานเท่าไหร่แล้วยอมแพ้
 
 PIT_LIFT_AVOID = True
 IMG_PIT_LIFT = 'templates/pit_lift.png'   # ต้องครอปจากหน้าจอเอง (ดู README)
@@ -680,13 +683,25 @@ def state_run():
             time.sleep(0.5)
             continue
 
-        # === Fast Start Boost: หลังเริ่มด่าน BOOST_START_DELAY_SEC วิ -> กดครั้งเดียว ===
         if BOOST_START_ENABLED and not boost_tapped and (now - t_start) >= BOOST_START_DELAY_SEC:
-            print(f'[boost] กด Fast Start Boost ที่ {BOOST_START_TAP} (หลังเริ่มเกม {BOOST_START_DELAY_SEC}s)')
-            adb_tap(*BOOST_START_TAP)
-            boost_tapped = True
-            time.sleep(0.3)
-            continue
+            tmpl = load_template(IMG_BOOST_START)
+            if tmpl is not None:
+                bf, bc, bs = find_template(screen, IMG_BOOST_START, BOOST_START_THRESHOLD)
+                if bf and bc is not None:
+                    print(f'[boost] เจอ Fast Start Boost (score={bs:.3f}) -> กด {bc}')
+                    adb_tap(*bc)
+                    boost_tapped = True
+                    time.sleep(0.3)
+                    continue
+                if (now - t_start) > BOOST_START_DETECT_WINDOW_SEC:
+                    print('[boost] หา template ไม่เจอในเวลา window -> ข้าม')
+                    boost_tapped = True
+            else:
+                print(f'[boost] blind tap ที่ {BOOST_START_TAP} (สร้าง {IMG_BOOST_START} เพื่อความแม่นยำ)')
+                adb_tap(*BOOST_START_TAP)
+                boost_tapped = True
+                time.sleep(0.3)
+                continue
 
         if pattern and pat_i < len(pattern):
             t, action = pattern[pat_i]
