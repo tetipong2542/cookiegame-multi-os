@@ -1,0 +1,33 @@
+{
+  "run_duration": 24.042,
+  "total_detections": 15,
+  "actions": {
+    "jump": 0,
+    "slide": 11,
+    "double_jump": 2
+  },
+  "skipped_by_cooldown": 0,
+  "avg_jump_score": 2.067,
+  "avg_slide_score": 2.467,
+  "action_threshold": 3,
+  "weights": {
+    "template": 3,
+    "mog2": 2,
+    "canny": 1
+  },
+  "zones": {
+    "high": [
+      500,
+      200,
+      900,
+      450
+    ],
+    "low": [
+      500,
+      500,
+      900,
+      650
+    ]
+  },
+  "config_path": "C:\\Users\\NEXTSP~1\\AppData\\Local\\Temp\\_MEI199922\\config.yaml"
+}

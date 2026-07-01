@@ -739,7 +739,11 @@ def state_run():
             print('[WARN] RUN state timeout')
             _maybe_save_crash_log(t_start, 'timeout')
             return State.RESULT
+        _loop_t0 = time.perf_counter()
+        _t = _loop_t0
         screen = adb_screencap()
+        if detector is not None:
+            detector.record_external_timing('screencap_ms', (time.perf_counter() - _t) * 1000)
         if screen is None:
             time.sleep(LOOP_SLEEP)
             continue
@@ -766,7 +770,9 @@ def state_run():
 
         if detector is not None and _CFG is not None and _CFG['detection'].get('enabled', True):
             detector.push_frame(screen)
+            _tt = time.perf_counter()
             _sf, _, _ = find_template(screen, IMG_INGAME2, INGAME2_THRESHOLD)
+            detector.record_external_timing('template_ms', (time.perf_counter() - _tt) * 1000)
             _action, _score, _votes = detector.detect(screen, template_slide_match=bool(_sf))
             if _action == 'slide':
                 print(f'[hybrid] SLIDE score={_score} votes={_votes}')
@@ -823,6 +829,8 @@ def state_run():
             last_sig = sig
         except Exception:
             pass
+        if detector is not None:
+            detector.record_external_timing('loop_total_ms', (time.perf_counter() - _loop_t0) * 1000)
         time.sleep(LOOP_SLEEP)
     _maybe_save_run_log(t_start, 'stopped')
     return State.RESULT

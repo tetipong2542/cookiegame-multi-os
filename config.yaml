@@ -19,7 +19,7 @@ config_version: 1
 detection:
   enabled: true              # true = ใช้ hybrid detector, false = ปิด (fallback random jump)
   detection_hz: 10           # ตรวจทุก 100ms (ค่ายิ่งสูง = ตรวจถี่ = CPU สูงขึ้น)
-  warmup_seconds: 8          # skip 8s แรกของแต่ละรอบ (รอ MOG2 learn background)
+  warmup_seconds: 3          # skip 8s แรกของแต่ละรอบ (รอ MOG2 learn background)
 
 # ------------------------------------------------------------------------------
 # ROI Zones - Region of Interest สำหรับตรวจ obstacle
@@ -27,8 +27,8 @@ detection:
 # ------------------------------------------------------------------------------
 zones:
   # Format: [x1, y1, x2, y2] - rectangular region ข้างหน้า Cookie
-  high: [500, 200, 900, 450] # ระดับหัว Cookie → obstacle ตรงนี้ = ต้อง Jump
-  low:  [500, 500, 900, 650] # ระดับเท้า Cookie → obstacle ตรงนี้ = ต้อง Slide
+  high: [350, 150, 750, 480] # ระดับหัว Cookie → obstacle ตรงนี้ = ต้อง Jump
+  low:  [350, 480, 750, 570] # ระดับเท้า Cookie → obstacle ตรงนี้ = ต้อง Slide
 
 # ------------------------------------------------------------------------------
 # MOG2 Background Subtractor - เรียนรู้ background แต่ละ biome เอง
@@ -37,7 +37,7 @@ mog2:
   history: 500               # จำ 500 frame ล่าสุด (มากขึ้น = ปรับตัวช้าลงเมื่อ biome เปลี่ยน)
   var_threshold: 25          # sensitivity - ค่าต่ำ = ไวขึ้น (แต่ false positive เพิ่ม)
   detect_shadows: false      # false เพราะเงาในเกมไม่เกี่ยว
-  min_pixels_trigger: 500    # foreground pixel count > 500 = มี obstacle ใน zone
+  min_pixels_trigger: 3000    # foreground pixel count > 500 = มี obstacle ใน zone
 
 # ------------------------------------------------------------------------------
 # Canny Edge Detector - color-agnostic (biome ไหนก็ทำงาน)
@@ -45,7 +45,7 @@ mog2:
 canny:
   low_threshold: 50          # edge detection lower bound (สูงขึ้น = จับ edge น้อยลง)
   high_threshold: 150        # edge detection upper bound
-  min_edges_trigger: 300     # edge count > 300 ใน zone = มี obstacle
+  min_edges_trigger: 800     # edge count > 300 ใน zone = มี obstacle
 
 # ------------------------------------------------------------------------------
 # Template Matching Thresholds
