@@ -146,6 +146,7 @@ except ImportError as _e:
 _CFG = None
 _DETECTOR = None
 _DETECTOR_INITIALIZED = False
+_ROUND_NUMBER = 0
 
 MATCH_THRESHOLD = 0.85
 IMG_TARGET_ITEM = 'templates/target_item.png'
@@ -719,9 +720,12 @@ def state_run():
             print(f'[debug] เซฟ ingame_fail ล้ม: {_e}')
         return State.RESULT
     t_start = time.time()
+    global _ROUND_NUMBER
+    _ROUND_NUMBER += 1
     detector = _get_detector()
     if detector is not None:
         detector.reset_round()
+    print(f'[round] #{_ROUND_NUMBER:03d} start')
     last_sig = None
     last_change_time = time.time()
     pattern = REPLAY_PATTERN
@@ -899,7 +903,8 @@ def _maybe_save_run_log(t_start, reason):
     try:
         run_duration = time.time() - t_start
         ts = time.strftime('%Y%m%d_%H%M%S')
-        run_dir = os.path.join(_writable_dir(), 'logs', 'runs', f'{ts}_{reason}')
+        run_dir = os.path.join(_writable_dir(), 'logs', 'runs',
+                               f'{ts}_round_{_ROUND_NUMBER:03d}_{reason}')
         _DETECTOR.save_run_log(run_dir, run_duration, _config_source_path())
     except Exception as e:
         print(f'[run-log] error: {e}')
@@ -912,7 +917,8 @@ def _maybe_save_crash_log(t_start, reason):
         run_duration = time.time() - t_start
         if run_duration < _CFG['crash_log']['short_run_threshold_sec']:
             ts = time.strftime('%Y%m%d_%H%M%S')
-            crash_dir = os.path.join(_writable_dir(), 'crash_log', f'{ts}_{reason}')
+            crash_dir = os.path.join(_writable_dir(), 'crash_log',
+                                     f'{ts}_round_{_ROUND_NUMBER:03d}_{reason}')
             _DETECTOR.save_crash_log(crash_dir, run_duration)
     except Exception as e:
         print(f'[crash-log] error: {e}')
