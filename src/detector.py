@@ -342,27 +342,29 @@ class ObstacleDetector:
         chosen_score = 0
         chosen_votes: Dict[str, Any] = {}
 
+        candidates = []
+        if jump_score >= self.action_threshold:
+            if (now - self.last_jump) > self.cd_jump:
+                candidates.append(('jump', jump_score, jump_votes))
+            else:
+                cooldown_blocked_jump = True
+                self.cooldown_blocks += 1
         if slide_score >= self.action_threshold:
             if (now - self.last_slide) > self.cd_slide:
-                chosen_action = 'slide'
-                chosen_score = slide_score
-                chosen_votes = slide_votes
-                self.last_slide = now
-                self.action_counts['slide'] += 1
+                candidates.append(('slide', slide_score, slide_votes))
             else:
                 cooldown_blocked_slide = True
                 self.cooldown_blocks += 1
 
-        if chosen_action is None and jump_score >= self.action_threshold:
-            if (now - self.last_jump) > self.cd_jump:
-                chosen_action = 'jump'
-                chosen_score = jump_score
-                chosen_votes = jump_votes
+        if candidates:
+            candidates.sort(key=lambda c: (c[1], 1 if c[0] == 'jump' else 0), reverse=True)
+            chosen_action, chosen_score, chosen_votes = candidates[0]
+            if chosen_action == 'jump':
                 self.last_jump = now
                 self.action_counts['jump'] += 1
             else:
-                cooldown_blocked_jump = True
-                self.cooldown_blocks += 1
+                self.last_slide = now
+                self.action_counts['slide'] += 1
 
         entry = {
             'time': round(elapsed, 3),
