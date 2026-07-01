@@ -201,8 +201,10 @@ PATTERN_FILE = 'pattern.json'
 REPLAY_PATTERN = None
 
 BOOST_START_ENABLED = True
-BOOST_START_DELAY_SEC = 2.5   # วินาทีหลังกด Play — เพิ่มทีละ 0.5 ถ้า debug screencap ยังเป็น Loading
-BOOST_DEBUG_SAVE_SCREEN = True   # บันทึกภาพหน้าจอตอนกด boost -> ดูว่าตอน tap กำลังเห็นอะไร
+BOOST_START_DELAY_SEC = 3.5   # เริ่ม spam tap ที่วินาทีนี้ (หลัง Play)
+BOOST_END_DELAY_SEC = 6.0     # หยุด spam tap ที่วินาทีนี้
+BOOST_TAP_INTERVAL_SEC = 0.5  # spam ทุกกี่วิ (5 ครั้งใน window 2.5 วิ)
+BOOST_DEBUG_SAVE_SCREEN = True   # เซฟภาพหน้าจอตอน tap ครั้งแรก -> ตรวจว่ากดถูกจังหวะ
 BOOST_START_TAP = (640, 350)   # LDPlayer 1280x720 — ปรับถ้า resolution ต่าง
 IMG_BOOST_START = 'templates/boost_start.png'
 BOOST_START_THRESHOLD = 0.7
@@ -596,25 +598,40 @@ def _tap_fast_start_boost():
     time.sleep(BOOST_START_DELAY_SEC)
     if STOP_FLAG.is_set():
         return
-    screen = adb_screencap() if (BOOST_DEBUG_SAVE_SCREEN or load_template(IMG_BOOST_START) is not None) else None
-    if BOOST_DEBUG_SAVE_SCREEN and screen is not None:
-        try:
-            path = os.path.join(_writable_dir(), f'boost_debug_{int(time.time())}.png')
-            cv2.imwrite(path, screen)
-            print(f'[boost-debug] saved screen -> {path}')
-        except Exception as e:
-            print(f'[boost-debug] save failed: {e}')
+
     tmpl = load_template(IMG_BOOST_START)
-    if tmpl is not None and screen is not None:
-        bf, bc, bs = find_template(screen, IMG_BOOST_START, BOOST_START_THRESHOLD)
-        if bf and bc is not None:
-            print(f'[boost] เจอ Fast Start Boost (score={bs:.3f}) -> กด {bc}')
-            adb_tap(*bc)
-            return
-        print(f'[boost] template ไม่เจอ -> blind tap ที่ {BOOST_START_TAP}')
-    else:
-        print(f'[boost] blind tap ที่ {BOOST_START_TAP} (หลังกด Play {BOOST_START_DELAY_SEC}s)')
-    adb_tap(*BOOST_START_TAP)
+    if tmpl is not None:
+        end_time = time.time() + (BOOST_END_DELAY_SEC - BOOST_START_DELAY_SEC)
+        while time.time() < end_time and not STOP_FLAG.is_set():
+            screen = adb_screencap()
+            if screen is not None:
+                bf, bc, bs = find_template(screen, IMG_BOOST_START, BOOST_START_THRESHOLD)
+                if bf and bc is not None:
+                    print(f'[boost] เจอ Fast Start Boost (score={bs:.3f}) -> กด {bc}')
+                    adb_tap(*bc)
+                    return
+            time.sleep(0.3)
+        print('[boost] template ไม่เจอในเวลา window')
+        return
+
+    if BOOST_DEBUG_SAVE_SCREEN:
+        screen = adb_screencap()
+        if screen is not None:
+            try:
+                path = os.path.join(_writable_dir(), f'boost_debug_{int(time.time())}.png')
+                cv2.imwrite(path, screen)
+                print(f'[boost-debug] saved -> {path}')
+            except Exception as e:
+                print(f'[boost-debug] save failed: {e}')
+
+    end_time = time.time() + (BOOST_END_DELAY_SEC - BOOST_START_DELAY_SEC)
+    tap_count = 0
+    print(f'[boost] spam tap ที่ {BOOST_START_TAP} ระหว่าง {BOOST_START_DELAY_SEC}s-{BOOST_END_DELAY_SEC}s (ทุก {BOOST_TAP_INTERVAL_SEC}s)')
+    while time.time() < end_time and not STOP_FLAG.is_set():
+        adb_tap(*BOOST_START_TAP)
+        tap_count += 1
+        time.sleep(BOOST_TAP_INTERVAL_SEC)
+    print(f'[boost] จบ spam tap รวม {tap_count} ครั้ง')
 
 
 def _pattern_path():
