@@ -475,7 +475,7 @@ cookiegame.pyc (Python 3.12)
                         (
                             'pady'
                         )
-                        'By gamerael'
+                        'By Pond'
                         (
                             'Segoe UI'
                             9
@@ -761,7 +761,7 @@ cookiegame.pyc (Python 3.12)
                         386     LOAD_ATTR                       18: Label
                         406     LOAD_FAST                       0: self
                         408     LOAD_ATTR                       0: root
-                        428     LOAD_CONST                      13: 'By gamerael'
+                        428     LOAD_CONST                      13: 'By Pond'
                         430     LOAD_CONST                      14: ('Segoe UI', 9, 'italic')
                         432     LOAD_CONST                      5: '#2b2b3a'
                         434     LOAD_CONST                      15: '#7ec8ff'

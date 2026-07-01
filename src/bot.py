@@ -201,11 +201,10 @@ PATTERN_FILE = 'pattern.json'
 REPLAY_PATTERN = None
 
 BOOST_START_ENABLED = True
-BOOST_START_DELAY_SEC = 0.5
+BOOST_START_DELAY_SEC = 2.5   # วินาทีหลังกด Play (รอเกม load แล้ว boost prompt โผล่)
 BOOST_START_TAP = (640, 350)   # LDPlayer 1280x720 — ปรับถ้า resolution ต่าง
-IMG_BOOST_START = 'templates/boost_start.png'   # optional — ถ้ามีจะ detect ก่อนกด (แม่นกว่า)
+IMG_BOOST_START = 'templates/boost_start.png'
 BOOST_START_THRESHOLD = 0.7
-BOOST_START_DETECT_WINDOW_SEC = 5.0   # หา template นานเท่าไหร่แล้วยอมแพ้
 
 PIT_LIFT_AVOID = True
 IMG_PIT_LIFT = 'templates/pit_lift.png'   # ต้องครอปจากหน้าจอเอง (ดู README)
@@ -586,7 +585,29 @@ def state_reroll():
     print('[OK] -> กด Play เริ่มวิ่ง')
     time.sleep(DELAY_AFTER_PLAY)
     adb_tap(*BTN_PLAY)
+    _tap_fast_start_boost()
     return State.RUN
+
+
+def _tap_fast_start_boost():
+    if not BOOST_START_ENABLED or STOP_FLAG.is_set():
+        return
+    time.sleep(BOOST_START_DELAY_SEC)
+    if STOP_FLAG.is_set():
+        return
+    tmpl = load_template(IMG_BOOST_START)
+    if tmpl is not None:
+        screen = adb_screencap()
+        if screen is not None:
+            bf, bc, bs = find_template(screen, IMG_BOOST_START, BOOST_START_THRESHOLD)
+            if bf and bc is not None:
+                print(f'[boost] เจอ Fast Start Boost (score={bs:.3f}) -> กด {bc}')
+                adb_tap(*bc)
+                return
+        print(f'[boost] template ไม่เจอ -> blind tap ที่ {BOOST_START_TAP}')
+    else:
+        print(f'[boost] blind tap ที่ {BOOST_START_TAP} (หลังกด Play {BOOST_START_DELAY_SEC}s)')
+    adb_tap(*BOOST_START_TAP)
 
 
 def _pattern_path():
@@ -647,15 +668,12 @@ def state_run():
         print('[WARN] ไม่พบหน้าวิ่งภายใน timeout')
         return State.RESULT
     t_start = time.time()
-    if BOOST_START_ENABLED:
-        print(f'[boost] BONUSTIME detected — จะกด boost อีก {BOOST_START_DELAY_SEC}s ที่ {BOOST_START_TAP}')
     last_sig = None
     last_change_time = time.time()
     pattern = REPLAY_PATTERN
     pat_i = 0
     last_jump_time = 0.0
     next_jump_delay = random.uniform(JUMP_DELAY_MIN, JUMP_DELAY_MAX)
-    boost_tapped = False
     while not STOP_FLAG.is_set():
         now = time.time()
         if now - t_start > RUN_STATE_TIMEOUT:
@@ -684,26 +702,6 @@ def state_run():
             adb_tap(*BTN_RELAY)
             time.sleep(0.5)
             continue
-
-        if BOOST_START_ENABLED and not boost_tapped and (now - t_start) >= BOOST_START_DELAY_SEC:
-            tmpl = load_template(IMG_BOOST_START)
-            if tmpl is not None:
-                bf, bc, bs = find_template(screen, IMG_BOOST_START, BOOST_START_THRESHOLD)
-                if bf and bc is not None:
-                    print(f'[boost] เจอ Fast Start Boost (score={bs:.3f}) -> กด {bc}')
-                    adb_tap(*bc)
-                    boost_tapped = True
-                    time.sleep(0.3)
-                    continue
-                if (now - t_start) > BOOST_START_DETECT_WINDOW_SEC:
-                    print('[boost] หา template ไม่เจอในเวลา window -> ข้าม')
-                    boost_tapped = True
-            else:
-                print(f'[boost] blind tap ที่ {BOOST_START_TAP} (สร้าง {IMG_BOOST_START} เพื่อความแม่นยำ)')
-                adb_tap(*BOOST_START_TAP)
-                boost_tapped = True
-                time.sleep(0.3)
-                continue
 
         if pattern and pat_i < len(pattern):
             t, action = pattern[pat_i]

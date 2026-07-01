@@ -66,7 +66,7 @@ class CookieGameApp:
                         font=('Segoe UI', 20, 'bold'),
                         bg='#2b2b3a', fg='#ffd966')
         head.pack(pady=(14, 2))
-        tk.Label(self.root, text='By gamerael',
+        tk.Label(self.root, text='By Pond',
                  font=('Segoe UI', 9, 'italic'),
                  bg='#2b2b3a', fg='#7ec8ff').pack()
 
