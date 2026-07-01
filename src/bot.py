@@ -191,12 +191,12 @@ JUMP_TAP_POINTS = [
     (430, 648),
     (560, 665),
 ]
-RELAY_THRESHOLD = 0.7
+RELAY_THRESHOLD = 0.6
 TAP_JITTER = 7
 JUMP_JITTER = 28
 SLIDE_HOLD_SEC = 0.35
 IMG_INGAME = 'templates/ingame.png'
-INGAME_THRESHOLD = 0.82
+INGAME_THRESHOLD = 0.72
 PATTERN_FILE = 'pattern.json'
 REPLAY_PATTERN = None
 
@@ -690,6 +690,15 @@ def state_run():
     print('\n===== [STATE 2] RUN — วิ่งในด่าน =====')
     if not wait_ingame():
         print('[WARN] ไม่พบหน้าวิ่งภายใน timeout')
+        try:
+            _dbg = adb_screencap()
+            if _dbg is not None:
+                _ts = time.strftime('%H%M%S')
+                _path = os.path.join(_writable_dir(), f'ingame_fail_{_ts}.png')
+                cv2.imwrite(_path, _dbg)
+                print(f'[debug] เซฟหน้าจอ ingame_fail -> {_path}')
+        except Exception as _e:
+            print(f'[debug] เซฟ ingame_fail ล้ม: {_e}')
         return State.RESULT
     t_start = time.time()
     last_sig = None
