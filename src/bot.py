@@ -217,6 +217,11 @@ INGAME_THRESHOLD = 0.72
 IMG_INGAME2 = 'templates/ingame2.png'
 INGAME2_THRESHOLD = 0.75
 SLIDE_COOLDOWN = 0.8
+
+ROI_RESULT = (200, 100, 1080, 620)
+ROI_RELAY = (300, 200, 900, 500)
+ROI_PIT_LIFT = (200, 250, 1080, 500)
+ROI_INGAME2 = (300, 100, 900, 620)
 PATTERN_FILE = 'pattern.json'
 REPLAY_PATTERN = None
 
@@ -460,25 +465,31 @@ def load_template(path):
     return tmpl
 
 
-def find_template(screen, template_path, threshold=MATCH_THRESHOLD):
-    '''
-    ค้นหา template ในภาพ screen ด้วย cv2.matchTemplate
-    คืนค่า: (found: bool, center: (x, y) หรือ None, score: float)
-    '''
-    # TODO: verify against disasm — reconstructed with best effort
+def find_template(screen, template_path, threshold=MATCH_THRESHOLD, roi=None):
     if screen is None:
         return (False, None, 0.0)
     tmpl = load_template(template_path)
     if tmpl is None:
         return (False, None, 0.0)
+    offset_x, offset_y = 0, 0
+    search_area = screen
+    if roi is not None:
+        h, w = screen.shape[:2]
+        x1 = max(0, min(int(roi[0]), w))
+        y1 = max(0, min(int(roi[1]), h))
+        x2 = max(x1, min(int(roi[2]), w))
+        y2 = max(y1, min(int(roi[3]), h))
+        if x2 > x1 and y2 > y1:
+            search_area = screen[y1:y2, x1:x2]
+            offset_x, offset_y = x1, y1
     try:
-        result = cv2.matchTemplate(screen, tmpl, cv2.TM_CCOEFF_NORMED)
+        result = cv2.matchTemplate(search_area, tmpl, cv2.TM_CCOEFF_NORMED)
         _, max_val, _, max_loc = cv2.minMaxLoc(result)
     except Exception:
         return (False, None, 0.0)
     if max_val >= threshold:
-        h, w = tmpl.shape[:2]
-        center = (max_loc[0] + w // 2, max_loc[1] + h // 2)
+        th, tw = tmpl.shape[:2]
+        center = (max_loc[0] + offset_x + tw // 2, max_loc[1] + offset_y + th // 2)
         return (True, center, float(max_val))
     return (False, None, float(max_val))
 
@@ -801,16 +812,23 @@ def state_run():
         if PIT_LIFT_AVOID and (now - _last_pit_check) > 0.8:
             _last_pit_check = now
             _tt = time.perf_counter()
-            _pit_hit_cache, _, _ = find_template(screen, IMG_PIT_LIFT, PIT_LIFT_THRESHOLD)
+            _pit_hit_cache, _, _ = find_template(screen, IMG_PIT_LIFT, PIT_LIFT_THRESHOLD, roi=ROI_PIT_LIFT)
+            _ms = (time.perf_counter() - _tt) * 1000
             if detector is not None:
-                detector.record_external_timing('template_ms', (time.perf_counter() - _tt) * 1000)
+                detector.record_external_timing('template_ms', _ms)
+                detector.record_external_timing('template_pit_ms', _ms)
         if _pit_hit_cache:
             print('[pit-lift] เจอหน้า Save the Cookie / Pit Lift -> รอ auto-decline (ไม่กด)')
             _pit_hit_cache = False
             time.sleep(1.0)
             continue
 
-        f, _, _ = find_template(screen, IMG_RESULT, 0.75)
+        _tt = time.perf_counter()
+        f, _, _ = find_template(screen, IMG_RESULT, 0.75, roi=ROI_RESULT)
+        _ms = (time.perf_counter() - _tt) * 1000
+        if detector is not None:
+            detector.record_external_timing('template_ms', _ms)
+            detector.record_external_timing('template_result_ms', _ms)
         if f:
             print('[OK] เจอหน้า Result -> STATE 3')
             _maybe_save_run_log(t_start, 'result')
@@ -818,9 +836,11 @@ def state_run():
         if (now - _last_relay_check) > 0.6:
             _last_relay_check = now
             _tt = time.perf_counter()
-            f, _, _ = find_template(screen, IMG_RELAY, RELAY_THRESHOLD)
+            f, _, _ = find_template(screen, IMG_RELAY, RELAY_THRESHOLD, roi=ROI_RELAY)
+            _ms = (time.perf_counter() - _tt) * 1000
             if detector is not None:
-                detector.record_external_timing('template_ms', (time.perf_counter() - _tt) * 1000)
+                detector.record_external_timing('template_ms', _ms)
+                detector.record_external_timing('template_relay_ms', _ms)
             if f:
                 print('[relay] กด Relay')
                 adb_tap(*BTN_RELAY)
@@ -830,8 +850,10 @@ def state_run():
         if detector is not None and _CFG is not None and _CFG['detection'].get('enabled', True):
             detector.push_frame(screen)
             _tt = time.perf_counter()
-            _sf, _, _ = find_template(screen, IMG_INGAME2, INGAME2_THRESHOLD)
-            detector.record_external_timing('template_ms', (time.perf_counter() - _tt) * 1000)
+            _sf, _, _ = find_template(screen, IMG_INGAME2, INGAME2_THRESHOLD, roi=ROI_INGAME2)
+            _ms = (time.perf_counter() - _tt) * 1000
+            detector.record_external_timing('template_ms', _ms)
+            detector.record_external_timing('template_ingame2_ms', _ms)
             _action, _score, _votes = detector.detect(screen, template_slide_match=bool(_sf))
             if _action == 'slide':
                 print(f'[hybrid] SLIDE score={_score} votes={_votes}')

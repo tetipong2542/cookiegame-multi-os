@@ -209,6 +209,10 @@ class ObstacleDetector:
         self.timing_stats: Dict[str, list] = {
             'screencap_ms': [],
             'template_ms': [],
+            'template_result_ms': [],
+            'template_relay_ms': [],
+            'template_pit_ms': [],
+            'template_ingame2_ms': [],
             'crop_ms': [],
             'mog2_ms': [],
             'canny_ms': [],
