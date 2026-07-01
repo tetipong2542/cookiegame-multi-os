@@ -176,7 +176,7 @@ BTN_MULTI = (1097, 200)
 BTN_MULTI_BUY = (635, 588)
 BTN_MULTI_CLOSE = (1043, 82)
 MULTI_SELECT_TARGETS = [(285, 176)]
-MULTIBUY_TIMEOUT = 15
+MULTIBUY_TIMEOUT = 20
 IMG_MULTI_CHECK = 'templates/multi_check.png'
 MULTI_CHECK_THRESHOLD = 0.7
 BTN_JUMP = (80, 670)
@@ -492,7 +492,7 @@ def ensure_on_boost_screen(max_tries=15):
         if screen is None:
             time.sleep(0.5)
             continue
-        found, _, _ = find_template(screen, IMG_BOOST_SCREEN)
+        found, _, _ = find_template(screen, IMG_BOOST_SCREEN, 0.75)
         if found:
             return True
         dismissed = False
@@ -506,15 +506,15 @@ def ensure_on_boost_screen(max_tries=15):
                 break
         if dismissed:
             continue
-        f, ok_center, _ = find_template(screen, IMG_OK_BUTTON)
+        f, ok_center, _ = find_template(screen, IMG_OK_BUTTON, 0.75)
         if f and ok_center is not None:
-            r, _, _ = find_template(screen, IMG_RESULT)
+            r, _, _ = find_template(screen, IMG_RESULT, 0.75)
             if r:
                 print('[nav] result screen -> OK')
                 adb_tap(*ok_center)
                 time.sleep(1.5)
                 continue
-        f, _, _ = find_template(screen, IMG_LOBBY_PLAY)
+        f, _, _ = find_template(screen, IMG_LOBBY_PLAY, 0.75)
         if f:
             print('[nav] lobby -> Play')
             adb_tap(*BTN_LOBBY_PLAY)
@@ -558,7 +558,7 @@ def multibuy_until_target():
         if screen is None:
             time.sleep(0.2)
             continue
-        found, _, score = find_template(screen, IMG_TARGET_ITEM)
+        found, _, score = find_template(screen, IMG_TARGET_ITEM, 0.75)
         if found:
             print(f'[OK] เจอ Double Coins (score={score:.3f})')
             return True
@@ -578,7 +578,7 @@ def state_reroll():
         time.sleep(3)
         return State.REROLL
     screen = adb_screencap()
-    (found, _, score) = find_template(screen, IMG_TARGET_ITEM)
+    (found, _, score) = find_template(screen, IMG_TARGET_ITEM, 0.75)
     if found:
         print(f'[OK] มี Double Coins อยู่แล้ว (score={score:.3f}) -> ข้ามการสุ่ม')
     elif not multibuy_until_target():
@@ -725,7 +725,7 @@ def state_run():
                 time.sleep(1.0)
                 continue
 
-        f, _, _ = find_template(screen, IMG_RESULT)
+        f, _, _ = find_template(screen, IMG_RESULT, 0.75)
         if f:
             print('[OK] เจอหน้า Result -> STATE 3')
             return State.RESULT
@@ -964,7 +964,7 @@ def state_result():
             except Exception as e:
                 print(f'[ERR] record_result_coins: {e}')
             recorded = True
-        found, center, _ = find_template(screen, IMG_OK_BUTTON)
+        found, center, _ = find_template(screen, IMG_OK_BUTTON, 0.75)
         if found and center is not None:
             print('[OK] กด OK -> กลับล็อบบี้')
             adb_tap(*center)
