@@ -201,7 +201,7 @@ PATTERN_FILE = 'pattern.json'
 REPLAY_PATTERN = None
 
 BOOST_START_ENABLED = True
-BOOST_START_DELAY_SEC = 2.5   # วินาทีหลังกด Play (รอเกม load แล้ว boost prompt โผล่)
+BOOST_START_DELAY_SEC = 0.6   # วินาทีหลังกด Play (รอเกม load แล้ว boost prompt โผล่)
 BOOST_START_TAP = (640, 350)   # LDPlayer 1280x720 — ปรับถ้า resolution ต่าง
 IMG_BOOST_START = 'templates/boost_start.png'
 BOOST_START_THRESHOLD = 0.7
