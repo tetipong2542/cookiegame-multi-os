@@ -199,6 +199,14 @@ IMG_INGAME = 'templates/ingame.png'
 INGAME_THRESHOLD = 0.82
 PATTERN_FILE = 'pattern.json'
 REPLAY_PATTERN = None
+
+BOOST_START_ENABLED = True
+BOOST_START_DELAY_SEC = 2.0
+BOOST_START_TAP = (640, 350)   # LDPlayer 1280x720 — ปรับถ้า resolution ต่าง
+
+PIT_LIFT_AVOID = True
+IMG_PIT_LIFT = 'templates/pit_lift.png'   # ต้องครอปจากหน้าจอเอง (ดู README)
+PIT_LIFT_THRESHOLD = 0.7
 BOOST_ITEMS = [
     {
         'name': 'Potion',
@@ -642,6 +650,7 @@ def state_run():
     pat_i = 0
     last_jump_time = 0.0
     next_jump_delay = random.uniform(JUMP_DELAY_MIN, JUMP_DELAY_MAX)
+    boost_tapped = False
     while not STOP_FLAG.is_set():
         now = time.time()
         if now - t_start > RUN_STATE_TIMEOUT:
@@ -651,6 +660,15 @@ def state_run():
         if screen is None:
             time.sleep(LOOP_SLEEP)
             continue
+
+        # === Pit Lift avoidance: เจอหน้า "5 for 1 Pit Lift" -> หยุดกดทุกปุ่ม ===
+        if PIT_LIFT_AVOID:
+            pl, _, _ = find_template(screen, IMG_PIT_LIFT, PIT_LIFT_THRESHOLD)
+            if pl:
+                print('[pit-lift] เจอหน้า Save the Cookie / Pit Lift -> รอ auto-decline (ไม่กด)')
+                time.sleep(1.0)
+                continue
+
         f, _, _ = find_template(screen, IMG_RESULT)
         if f:
             print('[OK] เจอหน้า Result -> STATE 3')
@@ -661,6 +679,15 @@ def state_run():
             adb_tap(*BTN_RELAY)
             time.sleep(0.5)
             continue
+
+        # === Fast Start Boost: หลังเริ่มด่าน BOOST_START_DELAY_SEC วิ -> กดครั้งเดียว ===
+        if BOOST_START_ENABLED and not boost_tapped and (now - t_start) >= BOOST_START_DELAY_SEC:
+            print(f'[boost] กด Fast Start Boost ที่ {BOOST_START_TAP} (หลังเริ่มเกม {BOOST_START_DELAY_SEC}s)')
+            adb_tap(*BOOST_START_TAP)
+            boost_tapped = True
+            time.sleep(0.3)
+            continue
+
         if pattern and pat_i < len(pattern):
             t, action = pattern[pat_i]
             if now - t_start >= t:
