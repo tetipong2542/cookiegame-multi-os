@@ -1,4 +1,17 @@
-# CookieGame — Source (recovered from `cookiegame.exe`)
+# CookieGame — Multi-OS
+
+**Download**: https://github.com/tetipong2542/cookiegame-multi-os/releases
+
+| OS | ไฟล์ | วิธีใช้ |
+|---|---|---|
+| Windows | `cookiegame.exe` | ดับเบิลคลิก |
+| macOS   | `CookieGame-macOS.zip` | unzip → ลากเข้า Applications → เปิด |
+
+Build อัตโนมัติจาก [GitHub Actions](https://github.com/tetipong2542/cookiegame-multi-os/actions) ทุกครั้งที่ push tag `v*`
+
+---
+
+# Source (recovered from `cookiegame.exe`)
 
 Python source ที่ได้จากการถอด `cookiegame.exe` (PyInstaller + Python 3.12) กลับมา
 สำหรับพัฒนาต่อบน **macOS**
