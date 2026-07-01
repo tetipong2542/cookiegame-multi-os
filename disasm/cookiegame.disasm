@@ -1,0 +1,2741 @@
+cookiegame.pyc (Python 3.12)
+[Code]
+    File Name: cookiegame.py
+    Object Name: <module>
+    Qualified Name: <module>
+    Arg Count: 0
+    Pos Only Arg Count: 0
+    KW Only Arg Count: 0
+    Stack Size: 4
+    Flags: 0x00000000
+    [Names]
+        '__doc__'
+        'sys'
+        'time'
+        'queue'
+        'threading'
+        'tkinter'
+        'tk'
+        'ttk'
+        'scrolledtext'
+        'os'
+        'bot'
+        'license_core'
+        'APP_NAME'
+        '_license_path'
+        'QueueWriter'
+        'CookieGameApp'
+        'main'
+        '__name__'
+    [Locals+Names]
+    [Constants]
+        '\nCookieGame — หน้าต่างควบคุมบอท Cookie Run (LDPlayer)\n=====================================================\nแอปมีปุ่มเปิด/ปิดการทำงานของบอท + ช่องตั้งค่า ADB + log แบบเรียลไทม์\nสร้างเป็น .exe แจกให้คนอื่นใช้ได้ (ดูไฟล์ build_exe.bat / README)\n'
+        0
+        None
+        (
+            'ttk'
+            'scrolledtext'
+        )
+        'CookieGame'
+        [Code]
+            File Name: cookiegame.py
+            Object Name: _license_path
+            Qualified Name: _license_path
+            Arg Count: 0
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 5
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                'getattr'
+                'sys'
+                'os'
+                'path'
+                'dirname'
+                'executable'
+                'abspath'
+                '__file__'
+                'join'
+            [Locals+Names]
+                'base'
+            [Constants]
+                None
+                'frozen'
+                False
+                'license.key'
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_GLOBAL                     1: NULL + getattr
+                12      LOAD_GLOBAL                     2: sys
+                22      LOAD_CONST                      1: 'frozen'
+                24      LOAD_CONST                      2: False
+                26      CALL                            3
+                34      POP_JUMP_IF_FALSE               45 (to 126)
+                36      LOAD_GLOBAL                     4: os
+                46      LOAD_ATTR                       6: path
+                66      LOAD_ATTR                       9: dirname
+                86      LOAD_GLOBAL                     2: sys
+                96      LOAD_ATTR                       10: executable
+                116     CALL                            1
+                124     JUMP_FORWARD                    63 (to 252)
+                126     LOAD_GLOBAL                     4: os
+                136     LOAD_ATTR                       6: path
+                156     LOAD_ATTR                       9: dirname
+                176     LOAD_GLOBAL                     4: os
+                186     LOAD_ATTR                       6: path
+                206     LOAD_ATTR                       13: abspath
+                226     LOAD_GLOBAL                     14: __file__
+                236     CALL                            1
+                244     CALL                            1
+                252     STORE_FAST                      0: base
+                254     LOAD_GLOBAL                     4: os
+                264     LOAD_ATTR                       6: path
+                284     LOAD_ATTR                       17: join
+                304     LOAD_FAST                       0: base
+                306     LOAD_CONST                      3: 'license.key'
+                308     CALL                            2
+                316     RETURN_VALUE                    
+            [Exception Table]
+        [Code]
+            File Name: cookiegame.py
+            Object Name: QueueWriter
+            Qualified Name: QueueWriter
+            Arg Count: 0
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 1
+            Flags: 0x00000000
+            [Names]
+                '__name__'
+                '__module__'
+                '__qualname__'
+                '__init__'
+                'write'
+                'flush'
+            [Locals+Names]
+            [Constants]
+                'QueueWriter'
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: __init__
+                    Qualified Name: QueueWriter.__init__
+                    Arg Count: 2
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 2
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'q'
+                    [Locals+Names]
+                        'self'
+                        'q'
+                    [Constants]
+                        None
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_FAST                       1: q
+                        4       LOAD_FAST                       0: self
+                        6       STORE_ATTR                      0: q
+                        16      RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: write
+                    Qualified Name: QueueWriter.write
+                    Arg Count: 2
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 3
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'q'
+                        'put'
+                    [Locals+Names]
+                        'self'
+                        'text'
+                    [Constants]
+                        None
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_FAST                       1: text
+                        4       POP_JUMP_IF_FALSE               28 (to 62)
+                        6       LOAD_FAST                       0: self
+                        8       LOAD_ATTR                       0: q
+                        28      LOAD_ATTR                       3: put
+                        48      LOAD_FAST                       1: text
+                        50      CALL                            1
+                        58      POP_TOP                         
+                        60      RETURN_CONST                    0: None
+                        62      RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: flush
+                    Qualified Name: QueueWriter.flush
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 0
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                    [Locals+Names]
+                        'self'
+                    [Constants]
+                        None
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       RETURN_CONST                    0: None
+                    [Exception Table]
+                None
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_NAME                       0: __name__
+                4       STORE_NAME                      1: __module__
+                6       LOAD_CONST                      0: 'QueueWriter'
+                8       STORE_NAME                      2: __qualname__
+                10      LOAD_CONST                      1: <CODE> __init__
+                12      MAKE_FUNCTION                   0
+                14      STORE_NAME                      3: __init__
+                16      LOAD_CONST                      2: <CODE> write
+                18      MAKE_FUNCTION                   0
+                20      STORE_NAME                      4: write
+                22      LOAD_CONST                      3: <CODE> flush
+                24      MAKE_FUNCTION                   0
+                26      STORE_NAME                      5: flush
+                28      RETURN_CONST                    4: None
+            [Exception Table]
+        'QueueWriter'
+        [Code]
+            File Name: cookiegame.py
+            Object Name: CookieGameApp
+            Qualified Name: CookieGameApp
+            Arg Count: 0
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 1
+            Flags: 0x00000000
+            [Names]
+                '__name__'
+                '__module__'
+                '__qualname__'
+                '__init__'
+                '_build_ui'
+                'copy_hwid'
+                '_apply_license_result'
+                'load_license'
+                'activate_license'
+                'auto_find_adb'
+                '_apply_config'
+                'test_connection'
+                'toggle'
+                'start_bot'
+                '_on_loop_done'
+                '_update_coins'
+                'stop_bot'
+                '_on_bot_stopped'
+                '_log'
+                '_poll_log'
+                'on_close'
+            [Locals+Names]
+            [Constants]
+                'CookieGameApp'
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: __init__
+                    Qualified Name: CookieGameApp.__init__
+                    Arg Count: 2
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 2
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'root'
+                        'queue'
+                        'Queue'
+                        'log_queue'
+                        'bot_thread'
+                        'running'
+                        '_max_loops'
+                        'license_core'
+                        'get_hwid'
+                        'hwid'
+                        'licensed'
+                        'bot'
+                        'LOG_CALLBACK'
+                        'COIN_CALLBACK'
+                        '_build_ui'
+                        'load_license'
+                        '_poll_log'
+                    [Locals+Names]
+                        'self'
+                        'root'
+                    [Constants]
+                        None
+                        False
+                        0
+                        [Code]
+                            File Name: cookiegame.py
+                            Object Name: <lambda>
+                            Qualified Name: CookieGameApp.__init__.<locals>.<lambda>
+                            Arg Count: 1
+                            Pos Only Arg Count: 0
+                            KW Only Arg Count: 0
+                            Stack Size: 4
+                            Flags: 0x00000013 (CO_OPTIMIZED | CO_NEWLOCALS | CO_NESTED)
+                            [Names]
+                                'log_queue'
+                                'put'
+                            [Locals+Names]
+                                'm'
+                                'self'
+                            [Constants]
+                                None
+                                '\n'
+                            [Disassembly]
+                                0       COPY_FREE_VARS                  1
+                                2       RESUME                          0
+                                4       LOAD_DEREF                      1: self
+                                6       LOAD_ATTR                       0: log_queue
+                                26      LOAD_ATTR                       3: put
+                                46      LOAD_FAST                       0: m
+                                48      LOAD_CONST                      1: '\n'
+                                50      BINARY_OP                       0 (+)
+                                54      CALL                            1
+                                62      RETURN_VALUE                    
+                            [Exception Table]
+                        [Code]
+                            File Name: cookiegame.py
+                            Object Name: <lambda>
+                            Qualified Name: CookieGameApp.__init__.<locals>.<lambda>
+                            Arg Count: 2
+                            Pos Only Arg Count: 0
+                            KW Only Arg Count: 0
+                            Stack Size: 6
+                            Flags: 0x00000013 (CO_OPTIMIZED | CO_NEWLOCALS | CO_NESTED)
+                            [Names]
+                                'root'
+                                'after'
+                                '_update_coins'
+                            [Locals+Names]
+                                'c'
+                                't'
+                                'self'
+                            [Constants]
+                                None
+                                0
+                            [Disassembly]
+                                0       COPY_FREE_VARS                  1
+                                2       RESUME                          0
+                                4       LOAD_DEREF                      2: self
+                                6       LOAD_ATTR                       0: root
+                                26      LOAD_ATTR                       3: after
+                                46      LOAD_CONST                      1: 0
+                                48      LOAD_DEREF                      2: self
+                                50      LOAD_ATTR                       4: _update_coins
+                                70      LOAD_FAST                       0: c
+                                72      LOAD_FAST                       1: t
+                                74      CALL                            4
+                                82      RETURN_VALUE                    
+                            [Exception Table]
+                    [Disassembly]
+                        0       MAKE_CELL                       0: self
+                        2       RESUME                          0
+                        4       LOAD_FAST                       1: root
+                        6       LOAD_DEREF                      0: self
+                        8       STORE_ATTR                      0: root
+                        18      LOAD_GLOBAL                     3: NULL + queue
+                        28      LOAD_ATTR                       4: Queue
+                        48      CALL                            0
+                        56      LOAD_DEREF                      0: self
+                        58      STORE_ATTR                      3: log_queue
+                        68      LOAD_CONST                      0: None
+                        70      LOAD_DEREF                      0: self
+                        72      STORE_ATTR                      4: bot_thread
+                        82      LOAD_CONST                      1: False
+                        84      LOAD_DEREF                      0: self
+                        86      STORE_ATTR                      5: running
+                        96      LOAD_CONST                      2: 0
+                        98      LOAD_DEREF                      0: self
+                        100     STORE_ATTR                      6: _max_loops
+                        110     LOAD_GLOBAL                     15: NULL + license_core
+                        120     LOAD_ATTR                       16: get_hwid
+                        140     CALL                            0
+                        148     LOAD_DEREF                      0: self
+                        150     STORE_ATTR                      9: hwid
+                        160     LOAD_CONST                      1: False
+                        162     LOAD_DEREF                      0: self
+                        164     STORE_ATTR                      10: licensed
+                        174     LOAD_CLOSURE                    0: self
+                        176     BUILD_TUPLE                     1
+                        178     LOAD_CONST                      3: <CODE> <lambda>
+                        180     MAKE_FUNCTION                   8
+                        182     LOAD_GLOBAL                     22: bot
+                        192     STORE_ATTR                      12: LOG_CALLBACK
+                        202     LOAD_CLOSURE                    0: self
+                        204     BUILD_TUPLE                     1
+                        206     LOAD_CONST                      4: <CODE> <lambda>
+                        208     MAKE_FUNCTION                   8
+                        210     LOAD_GLOBAL                     22: bot
+                        220     STORE_ATTR                      13: COIN_CALLBACK
+                        230     LOAD_DEREF                      0: self
+                        232     LOAD_ATTR                       29: _build_ui
+                        252     CALL                            0
+                        260     POP_TOP                         
+                        262     LOAD_DEREF                      0: self
+                        264     LOAD_ATTR                       31: load_license
+                        284     CALL                            0
+                        292     POP_TOP                         
+                        294     LOAD_DEREF                      0: self
+                        296     LOAD_ATTR                       33: _poll_log
+                        316     CALL                            0
+                        324     POP_TOP                         
+                        326     RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: _build_ui
+                    Qualified Name: CookieGameApp._build_ui
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 13
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'root'
+                        'title'
+                        'APP_NAME'
+                        'bot'
+                        'BOT_VERSION'
+                        'geometry'
+                        'minsize'
+                        'configure'
+                        'tk'
+                        'Label'
+                        'pack'
+                        'Frame'
+                        'StringVar'
+                        'key_var'
+                        'Entry'
+                        'Button'
+                        'activate_license'
+                        'lic_status'
+                        'lic_lbl'
+                        'hwid'
+                        'grid'
+                        'ADB_PATH'
+                        'adb_var'
+                        'auto_find_adb'
+                        'ADB_DEVICE'
+                        'dev_var'
+                        'test_connection'
+                        'loops_var'
+                        'status_var'
+                        'status_lbl'
+                        'toggle'
+                        'toggle_btn'
+                        'coins_var'
+                        'scrolledtext'
+                        'ScrolledText'
+                        'log'
+                        'protocol'
+                        'on_close'
+                    [Locals+Names]
+                        'self'
+                        'head'
+                        'lic'
+                        'row2'
+                        'cfg'
+                    [Constants]
+                        None
+                        ' v'
+                        '560x720'
+                        520
+                        660
+                        '#2b2b3a'
+                        (
+                            'bg'
+                        )
+                        '🍪  CookieGame'
+                        (
+                            'Segoe UI'
+                            20
+                            'bold'
+                        )
+                        '#ffd966'
+                        (
+                            'text'
+                            'font'
+                            'bg'
+                            'fg'
+                        )
+                        (
+                            14
+                            2
+                        )
+                        (
+                            'pady'
+                        )
+                        'By gamerael'
+                        (
+                            'Segoe UI'
+                            9
+                            'italic'
+                        )
+                        '#7ec8ff'
+                        '#3a3450'
+                        'x'
+                        16
+                        (
+                            8
+                            2
+                        )
+                        (
+                            'fill'
+                            'padx'
+                            'pady'
+                        )
+                        8
+                        (
+                            8
+                            4
+                        )
+                        'License key:'
+                        '#dddde8'
+                        (
+                            'Segoe UI'
+                            9
+                        )
+                        (
+                            'text'
+                            'bg'
+                            'fg'
+                            'font'
+                        )
+                        'left'
+                        (
+                            'side'
+                        )
+                        36
+                        (
+                            'Consolas'
+                            8
+                        )
+                        (
+                            'textvariable'
+                            'width'
+                            'font'
+                        )
+                        4
+                        (
+                            'side'
+                            'padx'
+                        )
+                        'ใช้งาน key'
+                        (
+                            'Segoe UI'
+                            8
+                        )
+                        (
+                            'text'
+                            'command'
+                            'font'
+                        )
+                        '🔒 ยังไม่ได้ใช้งาน key'
+                        (
+                            'value'
+                        )
+                        '#ff9e9e'
+                        (
+                            'Segoe UI'
+                            9
+                            'bold'
+                        )
+                        (
+                            'textvariable'
+                            'bg'
+                            'fg'
+                            'font'
+                        )
+                        'w'
+                        10
+                        (
+                            0
+                            4
+                        )
+                        (
+                            'anchor'
+                            'padx'
+                            'pady'
+                        )
+                        '(เครื่อง: '
+                        ')'
+                        '#7a7a90'
+                        (
+                            'Segoe UI'
+                            7
+                        )
+                        (
+                            0
+                            6
+                        )
+                        '#34344a'
+                        'ADB path:'
+                        0
+                        6
+                        (
+                            'row'
+                            'column'
+                            'sticky'
+                            'padx'
+                            'pady'
+                        )
+                        44
+                        (
+                            'Consolas'
+                            9
+                        )
+                        1
+                        (
+                            'row'
+                            'column'
+                            'padx'
+                            'pady'
+                        )
+                        'หาอัตโนมัติ'
+                        2
+                        (
+                            'row'
+                            'column'
+                            'padx'
+                        )
+                        'Device:'
+                        24
+                        'ทดสอบเชื่อมต่อ'
+                        'จำนวนรอบ:'
+                        '0'
+                        'center'
+                        (
+                            'textvariable'
+                            'width'
+                            'font'
+                            'justify'
+                        )
+                        '(0 = ไม่จำกัด รันจนกดหยุด)'
+                        '#9a9ab0'
+                        (
+                            'row'
+                            'column'
+                            'sticky'
+                            'padx'
+                        )
+                        '● หยุดอยู่'
+                        (
+                            'Segoe UI'
+                            11
+                            'bold'
+                        )
+                        '#ff6b6b'
+                        (
+                            'textvariable'
+                            'font'
+                            'bg'
+                            'fg'
+                        )
+                        (
+                            2
+                            6
+                        )
+                        '▶  เริ่มบอท'
+                        (
+                            'Segoe UI'
+                            14
+                            'bold'
+                        )
+                        '#4caf50'
+                        'white'
+                        '#43a047'
+                        20
+                        'hand2'
+                        (
+                            'text'
+                            'command'
+                            'font'
+                            'bg'
+                            'fg'
+                            'activebackground'
+                            'width'
+                            'height'
+                            'bd'
+                            'cursor'
+                        )
+                        '🪙 เหรียญรอบล่าสุด: -    รวม: 0'
+                        (
+                            'Segoe UI'
+                            12
+                            'bold'
+                        )
+                        'บันทึกการทำงาน (log):'
+                        '#b8b8c8'
+                        18
+                        (
+                            10
+                            0
+                        )
+                        12
+                        '#1e1e28'
+                        '#d4d4d4'
+                        'word'
+                        (
+                            'height'
+                            'font'
+                            'bg'
+                            'fg'
+                            'insertbackground'
+                            'wrap'
+                        )
+                        'both'
+                        True
+                        (
+                            2
+                            14
+                        )
+                        (
+                            'fill'
+                            'expand'
+                            'padx'
+                            'pady'
+                        )
+                        'WM_DELETE_WINDOW'
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_FAST                       0: self
+                        4       LOAD_ATTR                       0: root
+                        24      LOAD_ATTR                       3: title
+                        44      LOAD_GLOBAL                     4: APP_NAME
+                        54      FORMAT_VALUE                    0 (FVC_NONE)
+                        56      LOAD_CONST                      1: ' v'
+                        58      LOAD_GLOBAL                     6: bot
+                        68      LOAD_ATTR                       8: BOT_VERSION
+                        88      FORMAT_VALUE                    0 (FVC_NONE)
+                        90      BUILD_STRING                    3
+                        92      CALL                            1
+                        100     POP_TOP                         
+                        102     LOAD_FAST                       0: self
+                        104     LOAD_ATTR                       0: root
+                        124     LOAD_ATTR                       11: geometry
+                        144     LOAD_CONST                      2: '560x720'
+                        146     CALL                            1
+                        154     POP_TOP                         
+                        156     LOAD_FAST                       0: self
+                        158     LOAD_ATTR                       0: root
+                        178     LOAD_ATTR                       13: minsize
+                        198     LOAD_CONST                      3: 520
+                        200     LOAD_CONST                      4: 660
+                        202     CALL                            2
+                        210     POP_TOP                         
+                        212     LOAD_FAST                       0: self
+                        214     LOAD_ATTR                       0: root
+                        234     LOAD_ATTR                       15: configure
+                        254     LOAD_CONST                      5: '#2b2b3a'
+                        256     KW_NAMES                        6: ('bg',)
+                        258     CALL                            1
+                        266     POP_TOP                         
+                        268     LOAD_GLOBAL                     17: NULL + tk
+                        278     LOAD_ATTR                       18: Label
+                        298     LOAD_FAST                       0: self
+                        300     LOAD_ATTR                       0: root
+                        320     LOAD_CONST                      7: '🍪  CookieGame'
+                        322     LOAD_CONST                      8: ('Segoe UI', 20, 'bold')
+                        324     LOAD_CONST                      5: '#2b2b3a'
+                        326     LOAD_CONST                      9: '#ffd966'
+                        328     KW_NAMES                        10: ('text', 'font', 'bg', 'fg')
+                        330     CALL                            5
+                        338     STORE_FAST                      1: head
+                        340     LOAD_FAST                       1: head
+                        342     LOAD_ATTR                       21: pack
+                        362     LOAD_CONST                      11: (14, 2)
+                        364     KW_NAMES                        12: ('pady',)
+                        366     CALL                            1
+                        374     POP_TOP                         
+                        376     LOAD_GLOBAL                     17: NULL + tk
+                        386     LOAD_ATTR                       18: Label
+                        406     LOAD_FAST                       0: self
+                        408     LOAD_ATTR                       0: root
+                        428     LOAD_CONST                      13: 'By gamerael'
+                        430     LOAD_CONST                      14: ('Segoe UI', 9, 'italic')
+                        432     LOAD_CONST                      5: '#2b2b3a'
+                        434     LOAD_CONST                      15: '#7ec8ff'
+                        436     KW_NAMES                        10: ('text', 'font', 'bg', 'fg')
+                        438     CALL                            5
+                        446     LOAD_ATTR                       21: pack
+                        466     CALL                            0
+                        474     POP_TOP                         
+                        476     LOAD_GLOBAL                     17: NULL + tk
+                        486     LOAD_ATTR                       22: Frame
+                        506     LOAD_FAST                       0: self
+                        508     LOAD_ATTR                       0: root
+                        528     LOAD_CONST                      16: '#3a3450'
+                        530     KW_NAMES                        6: ('bg',)
+                        532     CALL                            2
+                        540     STORE_FAST                      2: lic
+                        542     LOAD_FAST                       2: lic
+                        544     LOAD_ATTR                       21: pack
+                        564     LOAD_CONST                      17: 'x'
+                        566     LOAD_CONST                      18: 16
+                        568     LOAD_CONST                      19: (8, 2)
+                        570     KW_NAMES                        20: ('fill', 'padx', 'pady')
+                        572     CALL                            3
+                        580     POP_TOP                         
+                        582     LOAD_GLOBAL                     17: NULL + tk
+                        592     LOAD_ATTR                       22: Frame
+                        612     LOAD_FAST                       2: lic
+                        614     LOAD_CONST                      16: '#3a3450'
+                        616     KW_NAMES                        6: ('bg',)
+                        618     CALL                            2
+                        626     STORE_FAST                      3: row2
+                        628     LOAD_FAST                       3: row2
+                        630     LOAD_ATTR                       21: pack
+                        650     LOAD_CONST                      17: 'x'
+                        652     LOAD_CONST                      21: 8
+                        654     LOAD_CONST                      22: (8, 4)
+                        656     KW_NAMES                        20: ('fill', 'padx', 'pady')
+                        658     CALL                            3
+                        666     POP_TOP                         
+                        668     LOAD_GLOBAL                     17: NULL + tk
+                        678     LOAD_ATTR                       18: Label
+                        698     LOAD_FAST                       3: row2
+                        700     LOAD_CONST                      23: 'License key:'
+                        702     LOAD_CONST                      16: '#3a3450'
+                        704     LOAD_CONST                      24: '#dddde8'
+                        706     LOAD_CONST                      25: ('Segoe UI', 9)
+                        708     KW_NAMES                        26: ('text', 'bg', 'fg', 'font')
+                        710     CALL                            5
+                        718     LOAD_ATTR                       21: pack
+                        738     LOAD_CONST                      27: 'left'
+                        740     KW_NAMES                        28: ('side',)
+                        742     CALL                            1
+                        750     POP_TOP                         
+                        752     LOAD_GLOBAL                     17: NULL + tk
+                        762     LOAD_ATTR                       24: StringVar
+                        782     CALL                            0
+                        790     LOAD_FAST                       0: self
+                        792     STORE_ATTR                      13: key_var
+                        802     LOAD_GLOBAL                     17: NULL + tk
+                        812     LOAD_ATTR                       28: Entry
+                        832     LOAD_FAST                       3: row2
+                        834     LOAD_FAST                       0: self
+                        836     LOAD_ATTR                       26: key_var
+                        856     LOAD_CONST                      29: 36
+                        858     LOAD_CONST                      30: ('Consolas', 8)
+                        860     KW_NAMES                        31: ('textvariable', 'width', 'font')
+                        862     CALL                            4
+                        870     LOAD_ATTR                       21: pack
+                        890     LOAD_CONST                      27: 'left'
+                        892     LOAD_CONST                      32: 4
+                        894     KW_NAMES                        33: ('side', 'padx')
+                        896     CALL                            2
+                        904     POP_TOP                         
+                        906     LOAD_GLOBAL                     17: NULL + tk
+                        916     LOAD_ATTR                       30: Button
+                        936     LOAD_FAST                       3: row2
+                        938     LOAD_CONST                      34: 'ใช้งาน key'
+                        940     LOAD_FAST                       0: self
+                        942     LOAD_ATTR                       32: activate_license
+                        962     LOAD_CONST                      35: ('Segoe UI', 8)
+                        964     KW_NAMES                        36: ('text', 'command', 'font')
+                        966     CALL                            4
+                        974     LOAD_ATTR                       21: pack
+                        994     LOAD_CONST                      27: 'left'
+                        996     KW_NAMES                        28: ('side',)
+                        998     CALL                            1
+                        1006    POP_TOP                         
+                        1008    LOAD_GLOBAL                     17: NULL + tk
+                        1018    LOAD_ATTR                       24: StringVar
+                        1038    LOAD_CONST                      37: '🔒 ยังไม่ได้ใช้งาน key'
+                        1040    KW_NAMES                        38: ('value',)
+                        1042    CALL                            1
+                        1050    LOAD_FAST                       0: self
+                        1052    STORE_ATTR                      17: lic_status
+                        1062    LOAD_GLOBAL                     17: NULL + tk
+                        1072    LOAD_ATTR                       18: Label
+                        1092    LOAD_FAST                       2: lic
+                        1094    LOAD_FAST                       0: self
+                        1096    LOAD_ATTR                       34: lic_status
+                        1116    LOAD_CONST                      16: '#3a3450'
+                        1118    LOAD_CONST                      39: '#ff9e9e'
+                        1120    LOAD_CONST                      40: ('Segoe UI', 9, 'bold')
+                        1122    KW_NAMES                        41: ('textvariable', 'bg', 'fg', 'font')
+                        1124    CALL                            5
+                        1132    LOAD_FAST                       0: self
+                        1134    STORE_ATTR                      18: lic_lbl
+                        1144    LOAD_FAST                       0: self
+                        1146    LOAD_ATTR                       36: lic_lbl
+                        1166    LOAD_ATTR                       21: pack
+                        1186    LOAD_CONST                      42: 'w'
+                        1188    LOAD_CONST                      43: 10
+                        1190    LOAD_CONST                      44: (0, 4)
+                        1192    KW_NAMES                        45: ('anchor', 'padx', 'pady')
+                        1194    CALL                            3
+                        1202    POP_TOP                         
+                        1204    LOAD_GLOBAL                     17: NULL + tk
+                        1214    LOAD_ATTR                       18: Label
+                        1234    LOAD_FAST                       2: lic
+                        1236    LOAD_CONST                      46: '(เครื่อง: '
+                        1238    LOAD_FAST                       0: self
+                        1240    LOAD_ATTR                       38: hwid
+                        1260    FORMAT_VALUE                    0 (FVC_NONE)
+                        1262    LOAD_CONST                      47: ')'
+                        1264    BUILD_STRING                    3
+                        1266    LOAD_CONST                      16: '#3a3450'
+                        1268    LOAD_CONST                      48: '#7a7a90'
+                        1270    LOAD_CONST                      49: ('Segoe UI', 7)
+                        1272    KW_NAMES                        26: ('text', 'bg', 'fg', 'font')
+                        1274    CALL                            5
+                        1282    LOAD_ATTR                       21: pack
+                        1302    LOAD_CONST                      42: 'w'
+                        1304    LOAD_CONST                      43: 10
+                        1306    LOAD_CONST                      50: (0, 6)
+                        1308    KW_NAMES                        45: ('anchor', 'padx', 'pady')
+                        1310    CALL                            3
+                        1318    POP_TOP                         
+                        1320    LOAD_GLOBAL                     17: NULL + tk
+                        1330    LOAD_ATTR                       22: Frame
+                        1350    LOAD_FAST                       0: self
+                        1352    LOAD_ATTR                       0: root
+                        1372    LOAD_CONST                      51: '#34344a'
+                        1374    KW_NAMES                        6: ('bg',)
+                        1376    CALL                            2
+                        1384    STORE_FAST                      4: cfg
+                        1386    LOAD_FAST                       4: cfg
+                        1388    LOAD_ATTR                       21: pack
+                        1408    LOAD_CONST                      17: 'x'
+                        1410    LOAD_CONST                      18: 16
+                        1412    LOAD_CONST                      43: 10
+                        1414    KW_NAMES                        20: ('fill', 'padx', 'pady')
+                        1416    CALL                            3
+                        1424    POP_TOP                         
+                        1426    LOAD_GLOBAL                     17: NULL + tk
+                        1436    LOAD_ATTR                       18: Label
+                        1456    LOAD_FAST                       4: cfg
+                        1458    LOAD_CONST                      52: 'ADB path:'
+                        1460    LOAD_CONST                      51: '#34344a'
+                        1462    LOAD_CONST                      24: '#dddde8'
+                        1464    LOAD_CONST                      25: ('Segoe UI', 9)
+                        1466    KW_NAMES                        26: ('text', 'bg', 'fg', 'font')
+                        1468    CALL                            5
+                        1476    LOAD_ATTR                       41: grid
+                        1496    LOAD_CONST                      53: 0
+                        1498    LOAD_CONST                      53: 0
+                        1500    LOAD_CONST                      42: 'w'
+                        1502    LOAD_CONST                      21: 8
+                        1504    LOAD_CONST                      54: 6
+                        1506    KW_NAMES                        55: ('row', 'column', 'sticky', 'padx', 'pady')
+                        1508    CALL                            5
+                        1516    POP_TOP                         
+                        1518    LOAD_GLOBAL                     17: NULL + tk
+                        1528    LOAD_ATTR                       24: StringVar
+                        1548    LOAD_GLOBAL                     6: bot
+                        1558    LOAD_ATTR                       42: ADB_PATH
+                        1578    KW_NAMES                        38: ('value',)
+                        1580    CALL                            1
+                        1588    LOAD_FAST                       0: self
+                        1590    STORE_ATTR                      22: adb_var
+                        1600    LOAD_GLOBAL                     17: NULL + tk
+                        1610    LOAD_ATTR                       28: Entry
+                        1630    LOAD_FAST                       4: cfg
+                        1632    LOAD_FAST                       0: self
+                        1634    LOAD_ATTR                       44: adb_var
+                        1654    LOAD_CONST                      56: 44
+                        1656    LOAD_CONST                      57: ('Consolas', 9)
+                        1658    KW_NAMES                        31: ('textvariable', 'width', 'font')
+                        1660    CALL                            4
+                        1668    LOAD_ATTR                       41: grid
+                        1688    LOAD_CONST                      53: 0
+                        1690    LOAD_CONST                      58: 1
+                        1692    LOAD_CONST                      32: 4
+                        1694    LOAD_CONST                      54: 6
+                        1696    KW_NAMES                        59: ('row', 'column', 'padx', 'pady')
+                        1698    CALL                            4
+                        1706    POP_TOP                         
+                        1708    LOAD_GLOBAL                     17: NULL + tk
+                        1718    LOAD_ATTR                       30: Button
+                        1738    LOAD_FAST                       4: cfg
+                        1740    LOAD_CONST                      60: 'หาอัตโนมัติ'
+                        1742    LOAD_FAST                       0: self
+                        1744    LOAD_ATTR                       46: auto_find_adb
+                        1764    LOAD_CONST                      35: ('Segoe UI', 8)
+                        1766    KW_NAMES                        36: ('text', 'command', 'font')
+                        1768    CALL                            4
+                        1776    LOAD_ATTR                       41: grid
+                        1796    LOAD_CONST                      53: 0
+                        1798    LOAD_CONST                      61: 2
+                        1800    LOAD_CONST                      54: 6
+                        1802    KW_NAMES                        62: ('row', 'column', 'padx')
+                        1804    CALL                            3
+                        1812    POP_TOP                         
+                        1814    LOAD_GLOBAL                     17: NULL + tk
+                        1824    LOAD_ATTR                       18: Label
+                        1844    LOAD_FAST                       4: cfg
+                        1846    LOAD_CONST                      63: 'Device:'
+                        1848    LOAD_CONST                      51: '#34344a'
+                        1850    LOAD_CONST                      24: '#dddde8'
+                        1852    LOAD_CONST                      25: ('Segoe UI', 9)
+                        1854    KW_NAMES                        26: ('text', 'bg', 'fg', 'font')
+                        1856    CALL                            5
+                        1864    LOAD_ATTR                       41: grid
+                        1884    LOAD_CONST                      58: 1
+                        1886    LOAD_CONST                      53: 0
+                        1888    LOAD_CONST                      42: 'w'
+                        1890    LOAD_CONST                      21: 8
+                        1892    LOAD_CONST                      54: 6
+                        1894    KW_NAMES                        55: ('row', 'column', 'sticky', 'padx', 'pady')
+                        1896    CALL                            5
+                        1904    POP_TOP                         
+                        1906    LOAD_GLOBAL                     17: NULL + tk
+                        1916    LOAD_ATTR                       24: StringVar
+                        1936    LOAD_GLOBAL                     6: bot
+                        1946    LOAD_ATTR                       48: ADB_DEVICE
+                        1966    KW_NAMES                        38: ('value',)
+                        1968    CALL                            1
+                        1976    LOAD_FAST                       0: self
+                        1978    STORE_ATTR                      25: dev_var
+                        1988    LOAD_GLOBAL                     17: NULL + tk
+                        1998    LOAD_ATTR                       28: Entry
+                        2018    LOAD_FAST                       4: cfg
+                        2020    LOAD_FAST                       0: self
+                        2022    LOAD_ATTR                       50: dev_var
+                        2042    LOAD_CONST                      64: 24
+                        2044    LOAD_CONST                      57: ('Consolas', 9)
+                        2046    KW_NAMES                        31: ('textvariable', 'width', 'font')
+                        2048    CALL                            4
+                        2056    LOAD_ATTR                       41: grid
+                        2076    LOAD_CONST                      58: 1
+                        2078    LOAD_CONST                      58: 1
+                        2080    LOAD_CONST                      42: 'w'
+                        2082    LOAD_CONST                      32: 4
+                        2084    LOAD_CONST                      54: 6
+                        2086    KW_NAMES                        55: ('row', 'column', 'sticky', 'padx', 'pady')
+                        2088    CALL                            5
+                        2096    POP_TOP                         
+                        2098    LOAD_GLOBAL                     17: NULL + tk
+                        2108    LOAD_ATTR                       30: Button
+                        2128    LOAD_FAST                       4: cfg
+                        2130    LOAD_CONST                      65: 'ทดสอบเชื่อมต่อ'
+                        2132    LOAD_FAST                       0: self
+                        2134    LOAD_ATTR                       52: test_connection
+                        2154    LOAD_CONST                      35: ('Segoe UI', 8)
+                        2156    KW_NAMES                        36: ('text', 'command', 'font')
+                        2158    CALL                            4
+                        2166    LOAD_ATTR                       41: grid
+                        2186    LOAD_CONST                      58: 1
+                        2188    LOAD_CONST                      61: 2
+                        2190    LOAD_CONST                      54: 6
+                        2192    KW_NAMES                        62: ('row', 'column', 'padx')
+                        2194    CALL                            3
+                        2202    POP_TOP                         
+                        2204    LOAD_GLOBAL                     17: NULL + tk
+                        2214    LOAD_ATTR                       18: Label
+                        2234    LOAD_FAST                       4: cfg
+                        2236    LOAD_CONST                      66: 'จำนวนรอบ:'
+                        2238    LOAD_CONST                      51: '#34344a'
+                        2240    LOAD_CONST                      24: '#dddde8'
+                        2242    LOAD_CONST                      25: ('Segoe UI', 9)
+                        2244    KW_NAMES                        26: ('text', 'bg', 'fg', 'font')
+                        2246    CALL                            5
+                        2254    LOAD_ATTR                       41: grid
+                        2274    LOAD_CONST                      61: 2
+                        2276    LOAD_CONST                      53: 0
+                        2278    LOAD_CONST                      42: 'w'
+                        2280    LOAD_CONST                      21: 8
+                        2282    LOAD_CONST                      54: 6
+                        2284    KW_NAMES                        55: ('row', 'column', 'sticky', 'padx', 'pady')
+                        2286    CALL                            5
+                        2294    POP_TOP                         
+                        2296    LOAD_GLOBAL                     17: NULL + tk
+                        2306    LOAD_ATTR                       24: StringVar
+                        2326    LOAD_CONST                      67: '0'
+                        2328    KW_NAMES                        38: ('value',)
+                        2330    CALL                            1
+                        2338    LOAD_FAST                       0: self
+                        2340    STORE_ATTR                      27: loops_var
+                        2350    LOAD_GLOBAL                     17: NULL + tk
+                        2360    LOAD_ATTR                       28: Entry
+                        2380    LOAD_FAST                       4: cfg
+                        2382    LOAD_FAST                       0: self
+                        2384    LOAD_ATTR                       54: loops_var
+                        2404    LOAD_CONST                      43: 10
+                        2406    LOAD_CONST                      57: ('Consolas', 9)
+                        2408    LOAD_CONST                      68: 'center'
+                        2410    KW_NAMES                        69: ('textvariable', 'width', 'font', 'justify')
+                        2412    CALL                            5
+                        2420    LOAD_ATTR                       41: grid
+                        2440    LOAD_CONST                      61: 2
+                        2442    LOAD_CONST                      58: 1
+                        2444    LOAD_CONST                      42: 'w'
+                        2446    LOAD_CONST                      32: 4
+                        2448    LOAD_CONST                      54: 6
+                        2450    KW_NAMES                        55: ('row', 'column', 'sticky', 'padx', 'pady')
+                        2452    CALL                            5
+                        2460    POP_TOP                         
+                        2462    LOAD_GLOBAL                     17: NULL + tk
+                        2472    LOAD_ATTR                       18: Label
+                        2492    LOAD_FAST                       4: cfg
+                        2494    LOAD_CONST                      70: '(0 = ไม่จำกัด รันจนกดหยุด)'
+                        2496    LOAD_CONST                      51: '#34344a'
+                        2498    LOAD_CONST                      71: '#9a9ab0'
+                        2500    LOAD_CONST                      35: ('Segoe UI', 8)
+                        2502    KW_NAMES                        26: ('text', 'bg', 'fg', 'font')
+                        2504    CALL                            5
+                        2512    LOAD_ATTR                       41: grid
+                        2532    LOAD_CONST                      61: 2
+                        2534    LOAD_CONST                      61: 2
+                        2536    LOAD_CONST                      42: 'w'
+                        2538    LOAD_CONST                      54: 6
+                        2540    KW_NAMES                        72: ('row', 'column', 'sticky', 'padx')
+                        2542    CALL                            4
+                        2550    POP_TOP                         
+                        2552    LOAD_GLOBAL                     17: NULL + tk
+                        2562    LOAD_ATTR                       24: StringVar
+                        2582    LOAD_CONST                      73: '● หยุดอยู่'
+                        2584    KW_NAMES                        38: ('value',)
+                        2586    CALL                            1
+                        2594    LOAD_FAST                       0: self
+                        2596    STORE_ATTR                      28: status_var
+                        2606    LOAD_GLOBAL                     17: NULL + tk
+                        2616    LOAD_ATTR                       18: Label
+                        2636    LOAD_FAST                       0: self
+                        2638    LOAD_ATTR                       0: root
+                        2658    LOAD_FAST                       0: self
+                        2660    LOAD_ATTR                       56: status_var
+                        2680    LOAD_CONST                      74: ('Segoe UI', 11, 'bold')
+                        2682    LOAD_CONST                      5: '#2b2b3a'
+                        2684    LOAD_CONST                      75: '#ff6b6b'
+                        2686    KW_NAMES                        76: ('textvariable', 'font', 'bg', 'fg')
+                        2688    CALL                            5
+                        2696    LOAD_FAST                       0: self
+                        2698    STORE_ATTR                      29: status_lbl
+                        2708    LOAD_FAST                       0: self
+                        2710    LOAD_ATTR                       58: status_lbl
+                        2730    LOAD_ATTR                       21: pack
+                        2750    LOAD_CONST                      77: (2, 6)
+                        2752    KW_NAMES                        12: ('pady',)
+                        2754    CALL                            1
+                        2762    POP_TOP                         
+                        2764    LOAD_GLOBAL                     17: NULL + tk
+                        2774    LOAD_ATTR                       30: Button
+                        2794    LOAD_FAST                       0: self
+                        2796    LOAD_ATTR                       0: root
+                        2816    LOAD_CONST                      78: '▶  เริ่มบอท'
+                        2818    LOAD_FAST                       0: self
+                        2820    LOAD_ATTR                       60: toggle
+                        2840    LOAD_CONST                      79: ('Segoe UI', 14, 'bold')
+                        2842    LOAD_CONST                      80: '#4caf50'
+                        2844    LOAD_CONST                      81: 'white'
+                        2846    LOAD_CONST                      82: '#43a047'
+                        2848    LOAD_CONST                      83: 20
+                        2850    LOAD_CONST                      58: 1
+                        2852    LOAD_CONST                      53: 0
+                        2854    LOAD_CONST                      84: 'hand2'
+                        2856    KW_NAMES                        85: ('text', 'command', 'font', 'bg', 'fg', 'activebackground', 'width', 'height', 'bd', 'cursor')
+                        2858    CALL                            11
+                        2866    LOAD_FAST                       0: self
+                        2868    STORE_ATTR                      31: toggle_btn
+                        2878    LOAD_FAST                       0: self
+                        2880    LOAD_ATTR                       62: toggle_btn
+                        2900    LOAD_ATTR                       21: pack
+                        2920    LOAD_CONST                      32: 4
+                        2922    KW_NAMES                        12: ('pady',)
+                        2924    CALL                            1
+                        2932    POP_TOP                         
+                        2934    LOAD_GLOBAL                     17: NULL + tk
+                        2944    LOAD_ATTR                       24: StringVar
+                        2964    LOAD_CONST                      86: '🪙 เหรียญรอบล่าสุด: -    รวม: 0'
+                        2966    KW_NAMES                        38: ('value',)
+                        2968    CALL                            1
+                        2976    LOAD_FAST                       0: self
+                        2978    STORE_ATTR                      32: coins_var
+                        2988    LOAD_GLOBAL                     17: NULL + tk
+                        2998    LOAD_ATTR                       18: Label
+                        3018    LOAD_FAST                       0: self
+                        3020    LOAD_ATTR                       0: root
+                        3040    LOAD_FAST                       0: self
+                        3042    LOAD_ATTR                       64: coins_var
+                        3062    LOAD_CONST                      87: ('Segoe UI', 12, 'bold')
+                        3064    LOAD_CONST                      5: '#2b2b3a'
+                        3066    LOAD_CONST                      9: '#ffd966'
+                        3068    KW_NAMES                        76: ('textvariable', 'font', 'bg', 'fg')
+                        3070    CALL                            5
+                        3078    LOAD_ATTR                       21: pack
+                        3098    LOAD_CONST                      77: (2, 6)
+                        3100    KW_NAMES                        12: ('pady',)
+                        3102    CALL                            1
+                        3110    POP_TOP                         
+                        3112    LOAD_GLOBAL                     17: NULL + tk
+                        3122    LOAD_ATTR                       18: Label
+                        3142    LOAD_FAST                       0: self
+                        3144    LOAD_ATTR                       0: root
+                        3164    LOAD_CONST                      88: 'บันทึกการทำงาน (log):'
+                        3166    LOAD_CONST                      5: '#2b2b3a'
+                        3168    LOAD_CONST                      89: '#b8b8c8'
+                        3170    LOAD_CONST                      25: ('Segoe UI', 9)
+                        3172    KW_NAMES                        26: ('text', 'bg', 'fg', 'font')
+                        3174    CALL                            5
+                        3182    LOAD_ATTR                       21: pack
+                        3202    LOAD_CONST                      42: 'w'
+                        3204    LOAD_CONST                      90: 18
+                        3206    LOAD_CONST                      91: (10, 0)
+                        3208    KW_NAMES                        45: ('anchor', 'padx', 'pady')
+                        3210    CALL                            3
+                        3218    POP_TOP                         
+                        3220    LOAD_GLOBAL                     67: NULL + scrolledtext
+                        3230    LOAD_ATTR                       68: ScrolledText
+                        3250    LOAD_FAST                       0: self
+                        3252    LOAD_ATTR                       0: root
+                        3272    LOAD_CONST                      92: 12
+                        3274    LOAD_CONST                      57: ('Consolas', 9)
+                        3276    LOAD_CONST                      93: '#1e1e28'
+                        3278    LOAD_CONST                      94: '#d4d4d4'
+                        3280    LOAD_CONST                      81: 'white'
+                        3282    LOAD_CONST                      95: 'word'
+                        3284    KW_NAMES                        96: ('height', 'font', 'bg', 'fg', 'insertbackground', 'wrap')
+                        3286    CALL                            7
+                        3294    LOAD_FAST                       0: self
+                        3296    STORE_ATTR                      35: log
+                        3306    LOAD_FAST                       0: self
+                        3308    LOAD_ATTR                       70: log
+                        3328    LOAD_ATTR                       21: pack
+                        3348    LOAD_CONST                      97: 'both'
+                        3350    LOAD_CONST                      98: True
+                        3352    LOAD_CONST                      18: 16
+                        3354    LOAD_CONST                      99: (2, 14)
+                        3356    KW_NAMES                        100: ('fill', 'expand', 'padx', 'pady')
+                        3358    CALL                            4
+                        3366    POP_TOP                         
+                        3368    LOAD_FAST                       0: self
+                        3370    LOAD_ATTR                       0: root
+                        3390    LOAD_ATTR                       73: protocol
+                        3410    LOAD_CONST                      101: 'WM_DELETE_WINDOW'
+                        3412    LOAD_FAST                       0: self
+                        3414    LOAD_ATTR                       74: on_close
+                        3434    CALL                            2
+                        3442    POP_TOP                         
+                        3444    RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: copy_hwid
+                    Qualified Name: CookieGameApp.copy_hwid
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 5
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'root'
+                        'clipboard_clear'
+                        'clipboard_append'
+                        'hwid'
+                        '_log'
+                    [Locals+Names]
+                        'self'
+                    [Constants]
+                        None
+                        '[app] คัดลอก HWID แล้ว: '
+                        '\n'
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_FAST                       0: self
+                        4       LOAD_ATTR                       0: root
+                        24      LOAD_ATTR                       3: clipboard_clear
+                        44      CALL                            0
+                        52      POP_TOP                         
+                        54      LOAD_FAST                       0: self
+                        56      LOAD_ATTR                       0: root
+                        76      LOAD_ATTR                       5: clipboard_append
+                        96      LOAD_FAST                       0: self
+                        98      LOAD_ATTR                       6: hwid
+                        118     CALL                            1
+                        126     POP_TOP                         
+                        128     LOAD_FAST                       0: self
+                        130     LOAD_ATTR                       9: _log
+                        150     LOAD_CONST                      1: '[app] คัดลอก HWID แล้ว: '
+                        152     LOAD_FAST                       0: self
+                        154     LOAD_ATTR                       6: hwid
+                        174     FORMAT_VALUE                    0 (FVC_NONE)
+                        176     LOAD_CONST                      2: '\n'
+                        178     BUILD_STRING                    3
+                        180     CALL                            1
+                        188     POP_TOP                         
+                        190     RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: _apply_license_result
+                    Qualified Name: CookieGameApp._apply_license_result
+                    Arg Count: 3
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 6
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'get'
+                        'lic_status'
+                        'set'
+                        'lic_lbl'
+                        'config'
+                        'licensed'
+                    [Locals+Names]
+                        'self'
+                        'ok'
+                        'info'
+                        't'
+                    [Constants]
+                        None
+                        'type'
+                        'permanent'
+                        '✅ License: ถาวร'
+                        'rental'
+                        '✅ License: เช่า (หมดอายุ '
+                        'exp'
+                        ')'
+                        '✅ License ใช้งานได้'
+                        '#69f0ae'
+                        (
+                            'fg'
+                        )
+                        True
+                        '🔒 '
+                        '#ff9e9e'
+                        False
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_FAST                       1: ok
+                        4       POP_JUMP_IF_FALSE               165 (to 336)
+                        6       LOAD_FAST                       2: info
+                        8       LOAD_ATTR                       1: get
+                        28      LOAD_CONST                      1: 'type'
+                        30      CALL                            1
+                        38      STORE_FAST                      3: t
+                        40      LOAD_FAST                       3: t
+                        42      LOAD_CONST                      2: 'permanent'
+                        44      COMPARE_OP                      40 (==)
+                        48      POP_JUMP_IF_FALSE               28 (to 106)
+                        50      LOAD_FAST                       0: self
+                        52      LOAD_ATTR                       2: lic_status
+                        72      LOAD_ATTR                       5: set
+                        92      LOAD_CONST                      3: '✅ License: ถาวร'
+                        94      CALL                            1
+                        102     POP_TOP                         
+                        104     JUMP_FORWARD                    79 (to 264)
+                        106     LOAD_FAST                       3: t
+                        108     LOAD_CONST                      4: 'rental'
+                        110     COMPARE_OP                      40 (==)
+                        114     POP_JUMP_IF_FALSE               47 (to 210)
+                        116     LOAD_FAST                       0: self
+                        118     LOAD_ATTR                       2: lic_status
+                        138     LOAD_ATTR                       5: set
+                        158     LOAD_CONST                      5: '✅ License: เช่า (หมดอายุ '
+                        160     LOAD_FAST                       2: info
+                        162     LOAD_ATTR                       1: get
+                        182     LOAD_CONST                      6: 'exp'
+                        184     CALL                            1
+                        192     FORMAT_VALUE                    0 (FVC_NONE)
+                        194     LOAD_CONST                      7: ')'
+                        196     BUILD_STRING                    3
+                        198     CALL                            1
+                        206     POP_TOP                         
+                        208     JUMP_FORWARD                    27 (to 264)
+                        210     LOAD_FAST                       0: self
+                        212     LOAD_ATTR                       2: lic_status
+                        232     LOAD_ATTR                       5: set
+                        252     LOAD_CONST                      8: '✅ License ใช้งานได้'
+                        254     CALL                            1
+                        262     POP_TOP                         
+                        264     LOAD_FAST                       0: self
+                        266     LOAD_ATTR                       6: lic_lbl
+                        286     LOAD_ATTR                       9: config
+                        306     LOAD_CONST                      9: '#69f0ae'
+                        308     KW_NAMES                        10: ('fg',)
+                        310     CALL                            1
+                        318     POP_TOP                         
+                        320     LOAD_CONST                      11: True
+                        322     LOAD_FAST                       0: self
+                        324     STORE_ATTR                      5: licensed
+                        334     RETURN_CONST                    0: None
+                        336     LOAD_FAST                       0: self
+                        338     LOAD_ATTR                       2: lic_status
+                        358     LOAD_ATTR                       5: set
+                        378     LOAD_CONST                      12: '🔒 '
+                        380     LOAD_FAST                       2: info
+                        382     FORMAT_VALUE                    0 (FVC_NONE)
+                        384     BUILD_STRING                    2
+                        386     CALL                            1
+                        394     POP_TOP                         
+                        396     LOAD_FAST                       0: self
+                        398     LOAD_ATTR                       6: lic_lbl
+                        418     LOAD_ATTR                       9: config
+                        438     LOAD_CONST                      13: '#ff9e9e'
+                        440     KW_NAMES                        10: ('fg',)
+                        442     CALL                            1
+                        450     POP_TOP                         
+                        452     LOAD_CONST                      14: False
+                        454     LOAD_FAST                       0: self
+                        456     STORE_ATTR                      5: licensed
+                        466     RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: load_license
+                    Qualified Name: CookieGameApp.load_license
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 4
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'license_core'
+                        'check_license'
+                        '_apply_license_result'
+                    [Locals+Names]
+                        'self'
+                        'ok'
+                        'info'
+                    [Constants]
+                        'ตรวจ license ที่ล็อกกับเครื่องนี้ (ถ้าเคย activate แล้ว)'
+                        None
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_GLOBAL                     1: NULL + license_core
+                        12      LOAD_ATTR                       2: check_license
+                        32      CALL                            0
+                        40      UNPACK_SEQUENCE                 2
+                        44      STORE_FAST                      1: ok
+                        46      STORE_FAST                      2: info
+                        48      LOAD_FAST                       0: self
+                        50      LOAD_ATTR                       5: _apply_license_result
+                        70      LOAD_FAST                       1: ok
+                        72      LOAD_FAST                       2: info
+                        74      CALL                            2
+                        82      POP_TOP                         
+                        84      RETURN_CONST                    1: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: activate_license
+                    Qualified Name: CookieGameApp.activate_license
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 5
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'key_var'
+                        'get'
+                        'strip'
+                        '_apply_license_result'
+                        'license_core'
+                        'activate'
+                        '_log'
+                    [Locals+Names]
+                        'self'
+                        'key'
+                        'ok'
+                        'info'
+                    [Constants]
+                        None
+                        False
+                        'กรุณาวาง key ก่อน'
+                        '[app] ✅ ใช้งาน key สำเร็จ (ล็อกกับเครื่องนี้แล้ว)\n'
+                        '[app] ❌ key ใช้ไม่ได้: '
+                        '\n'
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_FAST                       0: self
+                        4       LOAD_ATTR                       0: key_var
+                        24      LOAD_ATTR                       3: get
+                        44      CALL                            0
+                        52      LOAD_ATTR                       5: strip
+                        72      CALL                            0
+                        80      STORE_FAST                      1: key
+                        82      LOAD_FAST                       1: key
+                        84      POP_JUMP_IF_TRUE                19 (to 124)
+                        86      LOAD_FAST                       0: self
+                        88      LOAD_ATTR                       7: _apply_license_result
+                        108     LOAD_CONST                      1: False
+                        110     LOAD_CONST                      2: 'กรุณาวาง key ก่อน'
+                        112     CALL                            2
+                        120     POP_TOP                         
+                        122     RETURN_CONST                    0: None
+                        124     LOAD_GLOBAL                     9: NULL + license_core
+                        134     LOAD_ATTR                       10: activate
+                        154     LOAD_FAST                       1: key
+                        156     CALL                            1
+                        164     UNPACK_SEQUENCE                 2
+                        168     STORE_FAST                      2: ok
+                        170     STORE_FAST                      3: info
+                        172     LOAD_FAST                       2: ok
+                        174     POP_JUMP_IF_FALSE               18 (to 212)
+                        176     LOAD_FAST                       0: self
+                        178     LOAD_ATTR                       13: _log
+                        198     LOAD_CONST                      3: '[app] ✅ ใช้งาน key สำเร็จ (ล็อกกับเครื่องนี้แล้ว)\n'
+                        200     CALL                            1
+                        208     POP_TOP                         
+                        210     JUMP_FORWARD                    21 (to 254)
+                        212     LOAD_FAST                       0: self
+                        214     LOAD_ATTR                       13: _log
+                        234     LOAD_CONST                      4: '[app] ❌ key ใช้ไม่ได้: '
+                        236     LOAD_FAST                       3: info
+                        238     FORMAT_VALUE                    0 (FVC_NONE)
+                        240     LOAD_CONST                      5: '\n'
+                        242     BUILD_STRING                    3
+                        244     CALL                            1
+                        252     POP_TOP                         
+                        254     LOAD_FAST                       0: self
+                        256     LOAD_ATTR                       7: _apply_license_result
+                        276     LOAD_FAST                       2: ok
+                        278     LOAD_FAST                       3: info
+                        280     CALL                            2
+                        288     POP_TOP                         
+                        290     RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: auto_find_adb
+                    Qualified Name: CookieGameApp.auto_find_adb
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 5
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'bot'
+                        'find_adb'
+                        'adb_var'
+                        'set'
+                        '_log'
+                    [Locals+Names]
+                        'self'
+                        'path'
+                    [Constants]
+                        None
+                        '[app] หา adb อัตโนมัติ: '
+                        '\n'
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_GLOBAL                     1: NULL + bot
+                        12      LOAD_ATTR                       2: find_adb
+                        32      CALL                            0
+                        40      STORE_FAST                      1: path
+                        42      LOAD_FAST                       0: self
+                        44      LOAD_ATTR                       4: adb_var
+                        64      LOAD_ATTR                       7: set
+                        84      LOAD_FAST                       1: path
+                        86      CALL                            1
+                        94      POP_TOP                         
+                        96      LOAD_FAST                       0: self
+                        98      LOAD_ATTR                       9: _log
+                        118     LOAD_CONST                      1: '[app] หา adb อัตโนมัติ: '
+                        120     LOAD_FAST                       1: path
+                        122     FORMAT_VALUE                    0 (FVC_NONE)
+                        124     LOAD_CONST                      2: '\n'
+                        126     BUILD_STRING                    3
+                        128     CALL                            1
+                        136     POP_TOP                         
+                        138     RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: _apply_config
+                    Qualified Name: CookieGameApp._apply_config
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 2
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'adb_var'
+                        'get'
+                        'strip'
+                        'bot'
+                        'ADB_PATH'
+                        'dev_var'
+                        'ADB_DEVICE'
+                    [Locals+Names]
+                        'self'
+                    [Constants]
+                        None
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_FAST                       0: self
+                        4       LOAD_ATTR                       0: adb_var
+                        24      LOAD_ATTR                       3: get
+                        44      CALL                            0
+                        52      LOAD_ATTR                       5: strip
+                        72      CALL                            0
+                        80      LOAD_GLOBAL                     6: bot
+                        90      STORE_ATTR                      4: ADB_PATH
+                        100     LOAD_FAST                       0: self
+                        102     LOAD_ATTR                       10: dev_var
+                        122     LOAD_ATTR                       3: get
+                        142     CALL                            0
+                        150     LOAD_ATTR                       5: strip
+                        170     CALL                            0
+                        178     COPY                            1
+                        180     POP_JUMP_IF_TRUE                2 (to 186)
+                        182     POP_TOP                         
+                        184     LOAD_CONST                      0: None
+                        186     LOAD_GLOBAL                     6: bot
+                        196     STORE_ATTR                      6: ADB_DEVICE
+                        206     RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: test_connection
+                    Qualified Name: CookieGameApp.test_connection
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 4
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        '_apply_config'
+                        '_log'
+                        'threading'
+                        'Thread'
+                        'start'
+                    [Locals+Names]
+                        'self'
+                        'worker'
+                    [Constants]
+                        None
+                        '[app] กำลังทดสอบการเชื่อมต่อ...\n'
+                        [Code]
+                            File Name: cookiegame.py
+                            Object Name: worker
+                            Qualified Name: CookieGameApp.test_connection.<locals>.worker
+                            Arg Count: 0
+                            Pos Only Arg Count: 0
+                            KW Only Arg Count: 0
+                            Stack Size: 3
+                            Flags: 0x00000013 (CO_OPTIMIZED | CO_NEWLOCALS | CO_NESTED)
+                            [Names]
+                                'bot'
+                                'check_connection'
+                                '_log'
+                            [Locals+Names]
+                                'ok'
+                                'self'
+                            [Constants]
+                                None
+                                '[app] ✅ เชื่อมต่อสำเร็จ! แคปหน้าจอได้\n'
+                                '[app] ❌ เชื่อมต่อไม่ได้ — เปิด LDPlayer และเช็ค ADB path/Device\n'
+                            [Disassembly]
+                                0       COPY_FREE_VARS                  1
+                                2       RESUME                          0
+                                4       LOAD_GLOBAL                     1: NULL + bot
+                                14      LOAD_ATTR                       2: check_connection
+                                34      CALL                            0
+                                42      STORE_FAST                      0: ok
+                                44      LOAD_FAST                       0: ok
+                                46      POP_JUMP_IF_FALSE               18 (to 84)
+                                48      LOAD_DEREF                      1: self
+                                50      LOAD_ATTR                       5: _log
+                                70      LOAD_CONST                      1: '[app] ✅ เชื่อมต่อสำเร็จ! แคปหน้าจอได้\n'
+                                72      CALL                            1
+                                80      POP_TOP                         
+                                82      RETURN_CONST                    0: None
+                                84      LOAD_DEREF                      1: self
+                                86      LOAD_ATTR                       5: _log
+                                106     LOAD_CONST                      2: '[app] ❌ เชื่อมต่อไม่ได้ — เปิด LDPlayer และเช็ค ADB path/Device\n'
+                                108     CALL                            1
+                                116     POP_TOP                         
+                                118     RETURN_CONST                    0: None
+                            [Exception Table]
+                        True
+                        (
+                            'target'
+                            'daemon'
+                        )
+                    [Disassembly]
+                        0       MAKE_CELL                       0: self
+                        2       RESUME                          0
+                        4       LOAD_DEREF                      0: self
+                        6       LOAD_ATTR                       1: _apply_config
+                        26      CALL                            0
+                        34      POP_TOP                         
+                        36      LOAD_DEREF                      0: self
+                        38      LOAD_ATTR                       3: _log
+                        58      LOAD_CONST                      1: '[app] กำลังทดสอบการเชื่อมต่อ...\n'
+                        60      CALL                            1
+                        68      POP_TOP                         
+                        70      LOAD_CLOSURE                    0: self
+                        72      BUILD_TUPLE                     1
+                        74      LOAD_CONST                      2: <CODE> worker
+                        76      MAKE_FUNCTION                   8
+                        78      STORE_FAST                      1: worker
+                        80      LOAD_GLOBAL                     5: NULL + threading
+                        90      LOAD_ATTR                       6: Thread
+                        110     LOAD_FAST                       1: worker
+                        112     LOAD_CONST                      3: True
+                        114     KW_NAMES                        4: ('target', 'daemon')
+                        116     CALL                            2
+                        124     LOAD_ATTR                       9: start
+                        144     CALL                            0
+                        152     POP_TOP                         
+                        154     RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: toggle
+                    Qualified Name: CookieGameApp.toggle
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 2
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'running'
+                        'start_bot'
+                        'stop_bot'
+                    [Locals+Names]
+                        'self'
+                    [Constants]
+                        None
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_FAST                       0: self
+                        4       LOAD_ATTR                       0: running
+                        24      POP_JUMP_IF_TRUE                17 (to 60)
+                        26      LOAD_FAST                       0: self
+                        28      LOAD_ATTR                       3: start_bot
+                        48      CALL                            0
+                        56      POP_TOP                         
+                        58      RETURN_CONST                    0: None
+                        60      LOAD_FAST                       0: self
+                        62      LOAD_ATTR                       5: stop_bot
+                        82      CALL                            0
+                        90      POP_TOP                         
+                        92      RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: start_bot
+                    Qualified Name: CookieGameApp.start_bot
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 7
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'license_core'
+                        'check_license'
+                        '_apply_license_result'
+                        '_log'
+                        'acquire_run_lock'
+                        '_apply_config'
+                        'max'
+                        'int'
+                        'loops_var'
+                        'get'
+                        'strip'
+                        'ValueError'
+                        '_max_loops'
+                        'bot'
+                        'STOP_FLAG'
+                        'clear'
+                        'running'
+                        'toggle_btn'
+                        'config'
+                        'status_var'
+                        'set'
+                        'status_lbl'
+                        'coins_var'
+                        'threading'
+                        'Thread'
+                        'bot_thread'
+                        'start'
+                    [Locals+Names]
+                        'self'
+                        'ok'
+                        'info'
+                        'worker'
+                        'max_loops'
+                    [Constants]
+                        None
+                        '[app] 🔒 เริ่มไม่ได้: '
+                        ' — กรุณาใส่ license key ที่ใช้งานได้\n'
+                        '[app] 🔒 คีย์นี้กำลังใช้งานอยู่บนอีกจอ (1 คีย์ = 1 จอ)\n        ปิดจอที่เปิดอยู่ก่อน หรือใช้คีย์อื่นสำหรับจอนี้\n'
+                        0
+                        '0'
+                        True
+                        '■  หยุดบอท'
+                        '#ff5252'
+                        '#e53935'
+                        (
+                            'text'
+                            'bg'
+                            'activebackground'
+                        )
+                        '● กำลังทำงาน'
+                        '#69f0ae'
+                        (
+                            'fg'
+                        )
+                        '🪙 เหรียญรอบล่าสุด: -    รวม: 0'
+                        '\n[app] ===== เริ่มบอท (จะเล่น '
+                        ' รอบแล้วหยุด) =====\n'
+                        '\n[app] ===== เริ่มบอท (ไม่จำกัดรอบ) =====\n'
+                        [Code]
+                            File Name: cookiegame.py
+                            Object Name: worker
+                            Qualified Name: CookieGameApp.start_bot.<locals>.worker
+                            Arg Count: 0
+                            Pos Only Arg Count: 0
+                            KW Only Arg Count: 0
+                            Stack Size: 8
+                            Flags: 0x00000013 (CO_OPTIMIZED | CO_NEWLOCALS | CO_NESTED)
+                            [Names]
+                                'bot'
+                                'check_connection'
+                                '_log'
+                                'root'
+                                'after'
+                                '_on_bot_stopped'
+                                'run_state_machine'
+                                '_on_loop_done'
+                                'Exception'
+                                'traceback'
+                                'format_exc'
+                            [Locals+Names]
+                                'e'
+                                '_tb'
+                                'max_loops'
+                                'self'
+                            [Constants]
+                                None
+                                '[app] ❌ เชื่อมต่อ ADB ไม่ได้ — หยุด\n'
+                                0
+                                (
+                                    'on_loop_done'
+                                )
+                                '[app] ❌ บอทหยุดเพราะข้อผิดพลาด: '
+                                '\n'
+                            [Disassembly]
+                                0       COPY_FREE_VARS                  2
+                                2       RESUME                          0
+                                4       NOP                             
+                                6       LOAD_GLOBAL                     1: NULL + bot
+                                16      LOAD_ATTR                       2: check_connection
+                                36      CALL                            0
+                                44      POP_JUMP_IF_TRUE                57 (to 160)
+                                46      LOAD_DEREF                      3: self
+                                48      LOAD_ATTR                       5: _log
+                                68      LOAD_CONST                      1: '[app] ❌ เชื่อมต่อ ADB ไม่ได้ — หยุด\n'
+                                70      CALL                            1
+                                78      POP_TOP                         
+                                80      NOP                             
+                                82      LOAD_DEREF                      3: self
+                                84      LOAD_ATTR                       6: root
+                                104     LOAD_ATTR                       9: after
+                                124     LOAD_CONST                      2: 0
+                                126     LOAD_DEREF                      3: self
+                                128     LOAD_ATTR                       10: _on_bot_stopped
+                                148     CALL                            2
+                                156     POP_TOP                         
+                                158     RETURN_CONST                    0: None
+                                160     LOAD_GLOBAL                     1: NULL + bot
+                                170     LOAD_ATTR                       12: run_state_machine
+                                190     LOAD_DEREF                      2: max_loops
+                                192     LOAD_DEREF                      3: self
+                                194     LOAD_ATTR                       14: _on_loop_done
+                                214     KW_NAMES                        3: ('on_loop_done',)
+                                216     CALL                            2
+                                224     POP_TOP                         
+                                226     LOAD_DEREF                      3: self
+                                228     LOAD_ATTR                       6: root
+                                248     LOAD_ATTR                       9: after
+                                268     LOAD_CONST                      2: 0
+                                270     LOAD_DEREF                      3: self
+                                272     LOAD_ATTR                       10: _on_bot_stopped
+                                292     CALL                            2
+                                300     POP_TOP                         
+                                302     RETURN_CONST                    0: None
+                                304     PUSH_EXC_INFO                   
+                                306     LOAD_GLOBAL                     16: Exception
+                                316     CHECK_EXC_MATCH                 
+                                318     POP_JUMP_IF_FALSE               52 (to 424)
+                                320     STORE_FAST                      0: e
+                                322     LOAD_CONST                      2: 0
+                                324     LOAD_CONST                      0: None
+                                326     IMPORT_NAME                     9: traceback
+                                328     STORE_FAST                      1: _tb
+                                330     LOAD_DEREF                      3: self
+                                332     LOAD_ATTR                       5: _log
+                                352     LOAD_CONST                      4: '[app] ❌ บอทหยุดเพราะข้อผิดพลาด: '
+                                354     LOAD_FAST                       0: e
+                                356     FORMAT_VALUE                    0 (FVC_NONE)
+                                358     LOAD_CONST                      5: '\n'
+                                360     LOAD_FAST                       1: _tb
+                                362     LOAD_ATTR                       21: format_exc
+                                382     CALL                            0
+                                390     FORMAT_VALUE                    0 (FVC_NONE)
+                                392     LOAD_CONST                      5: '\n'
+                                394     BUILD_STRING                    5
+                                396     CALL                            1
+                                404     POP_TOP                         
+                                406     POP_EXCEPT                      
+                                408     LOAD_CONST                      0: None
+                                410     STORE_FAST                      0: e
+                                412     DELETE_FAST                     0: e
+                                414     JUMP_BACKWARD                   95 (to 226)
+                                416     LOAD_CONST                      0: None
+                                418     STORE_FAST                      0: e
+                                420     DELETE_FAST                     0: e
+                                422     RERAISE                         1
+                                424     RERAISE                         0
+                                426     COPY                            3
+                                428     POP_EXCEPT                      
+                                430     RERAISE                         1
+                                432     PUSH_EXC_INFO                   
+                                434     LOAD_DEREF                      3: self
+                                436     LOAD_ATTR                       6: root
+                                456     LOAD_ATTR                       9: after
+                                476     LOAD_CONST                      2: 0
+                                478     LOAD_DEREF                      3: self
+                                480     LOAD_ATTR                       10: _on_bot_stopped
+                                500     CALL                            2
+                                508     POP_TOP                         
+                                510     RERAISE                         0
+                                512     COPY                            3
+                                514     POP_EXCEPT                      
+                                516     RERAISE                         1
+                            [Exception Table]
+                                6 to 80 -> 304 [0] 
+                                160 to 226 -> 304 [0] 
+                                304 to 322 -> 426 [1] lasti
+                                322 to 406 -> 416 [1] lasti
+                                406 to 416 -> 432 [0] 
+                                416 to 426 -> 426 [1] lasti
+                                426 to 432 -> 432 [0] 
+                                432 to 512 -> 512 [1] lasti
+                        (
+                            'target'
+                            'daemon'
+                        )
+                    [Disassembly]
+                        0       MAKE_CELL                       0: self
+                        2       MAKE_CELL                       4: max_loops
+                        4       RESUME                          0
+                        6       LOAD_GLOBAL                     1: NULL + license_core
+                        16      LOAD_ATTR                       2: check_license
+                        36      CALL                            0
+                        44      UNPACK_SEQUENCE                 2
+                        48      STORE_FAST                      1: ok
+                        50      STORE_FAST                      2: info
+                        52      LOAD_DEREF                      0: self
+                        54      LOAD_ATTR                       5: _apply_license_result
+                        74      LOAD_FAST                       1: ok
+                        76      LOAD_FAST                       2: info
+                        78      CALL                            2
+                        86      POP_TOP                         
+                        88      LOAD_FAST                       1: ok
+                        90      POP_JUMP_IF_TRUE                22 (to 136)
+                        92      LOAD_DEREF                      0: self
+                        94      LOAD_ATTR                       7: _log
+                        114     LOAD_CONST                      1: '[app] 🔒 เริ่มไม่ได้: '
+                        116     LOAD_FAST                       2: info
+                        118     FORMAT_VALUE                    0 (FVC_NONE)
+                        120     LOAD_CONST                      2: ' — กรุณาใส่ license key ที่ใช้งานได้\n'
+                        122     BUILD_STRING                    3
+                        124     CALL                            1
+                        132     POP_TOP                         
+                        134     RETURN_CONST                    0: None
+                        136     LOAD_GLOBAL                     1: NULL + license_core
+                        146     LOAD_ATTR                       8: acquire_run_lock
+                        166     CALL                            0
+                        174     POP_JUMP_IF_TRUE                18 (to 212)
+                        176     LOAD_DEREF                      0: self
+                        178     LOAD_ATTR                       7: _log
+                        198     LOAD_CONST                      3: '[app] 🔒 คีย์นี้กำลังใช้งานอยู่บนอีกจอ (1 คีย์ = 1 จอ)\n        ปิดจอที่เปิดอยู่ก่อน หรือใช้คีย์อื่นสำหรับจอนี้\n'
+                        200     CALL                            1
+                        208     POP_TOP                         
+                        210     RETURN_CONST                    0: None
+                        212     LOAD_DEREF                      0: self
+                        214     LOAD_ATTR                       11: _apply_config
+                        234     CALL                            0
+                        242     POP_TOP                         
+                        244     NOP                             
+                        246     LOAD_GLOBAL                     13: NULL + max
+                        256     LOAD_CONST                      4: 0
+                        258     LOAD_GLOBAL                     15: NULL + int
+                        268     LOAD_DEREF                      0: self
+                        270     LOAD_ATTR                       16: loops_var
+                        290     LOAD_ATTR                       19: get
+                        310     CALL                            0
+                        318     LOAD_ATTR                       21: strip
+                        338     CALL                            0
+                        346     COPY                            1
+                        348     POP_JUMP_IF_TRUE                2 (to 354)
+                        350     POP_TOP                         
+                        352     LOAD_CONST                      5: '0'
+                        354     CALL                            1
+                        362     CALL                            2
+                        370     STORE_DEREF                     4: max_loops
+                        372     LOAD_DEREF                      4: max_loops
+                        374     LOAD_DEREF                      0: self
+                        376     STORE_ATTR                      12: _max_loops
+                        386     LOAD_GLOBAL                     26: bot
+                        396     LOAD_ATTR                       28: STOP_FLAG
+                        416     LOAD_ATTR                       31: clear
+                        436     CALL                            0
+                        444     POP_TOP                         
+                        446     LOAD_CONST                      6: True
+                        448     LOAD_DEREF                      0: self
+                        450     STORE_ATTR                      16: running
+                        460     LOAD_DEREF                      0: self
+                        462     LOAD_ATTR                       34: toggle_btn
+                        482     LOAD_ATTR                       37: config
+                        502     LOAD_CONST                      7: '■  หยุดบอท'
+                        504     LOAD_CONST                      8: '#ff5252'
+                        506     LOAD_CONST                      9: '#e53935'
+                        508     KW_NAMES                        10: ('text', 'bg', 'activebackground')
+                        510     CALL                            3
+                        518     POP_TOP                         
+                        520     LOAD_DEREF                      0: self
+                        522     LOAD_ATTR                       38: status_var
+                        542     LOAD_ATTR                       41: set
+                        562     LOAD_CONST                      11: '● กำลังทำงาน'
+                        564     CALL                            1
+                        572     POP_TOP                         
+                        574     LOAD_DEREF                      0: self
+                        576     LOAD_ATTR                       42: status_lbl
+                        596     LOAD_ATTR                       37: config
+                        616     LOAD_CONST                      12: '#69f0ae'
+                        618     KW_NAMES                        13: ('fg',)
+                        620     CALL                            1
+                        628     POP_TOP                         
+                        630     LOAD_DEREF                      0: self
+                        632     LOAD_ATTR                       44: coins_var
+                        652     LOAD_ATTR                       41: set
+                        672     LOAD_CONST                      14: '🪙 เหรียญรอบล่าสุด: -    รวม: 0'
+                        674     CALL                            1
+                        682     POP_TOP                         
+                        684     LOAD_DEREF                      4: max_loops
+                        686     POP_JUMP_IF_FALSE               22 (to 732)
+                        688     LOAD_DEREF                      0: self
+                        690     LOAD_ATTR                       7: _log
+                        710     LOAD_CONST                      15: '\n[app] ===== เริ่มบอท (จะเล่น '
+                        712     LOAD_DEREF                      4: max_loops
+                        714     FORMAT_VALUE                    0 (FVC_NONE)
+                        716     LOAD_CONST                      16: ' รอบแล้วหยุด) =====\n'
+                        718     BUILD_STRING                    3
+                        720     CALL                            1
+                        728     POP_TOP                         
+                        730     JUMP_FORWARD                    17 (to 766)
+                        732     LOAD_DEREF                      0: self
+                        734     LOAD_ATTR                       7: _log
+                        754     LOAD_CONST                      17: '\n[app] ===== เริ่มบอท (ไม่จำกัดรอบ) =====\n'
+                        756     CALL                            1
+                        764     POP_TOP                         
+                        766     LOAD_CLOSURE                    4: max_loops
+                        768     LOAD_CLOSURE                    0: self
+                        770     BUILD_TUPLE                     2
+                        772     LOAD_CONST                      18: <CODE> worker
+                        774     MAKE_FUNCTION                   8
+                        776     STORE_FAST                      3: worker
+                        778     LOAD_GLOBAL                     47: NULL + threading
+                        788     LOAD_ATTR                       48: Thread
+                        808     LOAD_FAST                       3: worker
+                        810     LOAD_CONST                      6: True
+                        812     KW_NAMES                        19: ('target', 'daemon')
+                        814     CALL                            2
+                        822     LOAD_DEREF                      0: self
+                        824     STORE_ATTR                      25: bot_thread
+                        834     LOAD_DEREF                      0: self
+                        836     LOAD_ATTR                       50: bot_thread
+                        856     LOAD_ATTR                       53: start
+                        876     CALL                            0
+                        884     POP_TOP                         
+                        886     RETURN_CONST                    0: None
+                        888     PUSH_EXC_INFO                   
+                        890     LOAD_GLOBAL                     22: ValueError
+                        900     CHECK_EXC_MATCH                 
+                        902     POP_JUMP_IF_FALSE               6 (to 916)
+                        904     POP_TOP                         
+                        906     LOAD_CONST                      4: 0
+                        908     STORE_DEREF                     4: max_loops
+                        910     POP_EXCEPT                      
+                        912     JUMP_BACKWARD                   272 (to 372)
+                        916     RERAISE                         0
+                        918     COPY                            3
+                        920     POP_EXCEPT                      
+                        922     RERAISE                         1
+                    [Exception Table]
+                        246 to 372 -> 888 [0] 
+                        888 to 910 -> 918 [1] lasti
+                        916 to 918 -> 918 [1] lasti
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: _on_loop_done
+                    Qualified Name: CookieGameApp._on_loop_done
+                    Arg Count: 2
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 5
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        '_max_loops'
+                        'max'
+                        'root'
+                        'after'
+                    [Locals+Names]
+                        'self'
+                        'loops_done'
+                        'remaining'
+                    [Constants]
+                        None
+                        0
+                        [Code]
+                            File Name: cookiegame.py
+                            Object Name: <lambda>
+                            Qualified Name: CookieGameApp._on_loop_done.<locals>.<lambda>
+                            Arg Count: 0
+                            Pos Only Arg Count: 0
+                            KW Only Arg Count: 0
+                            Stack Size: 5
+                            Flags: 0x00000013 (CO_OPTIMIZED | CO_NEWLOCALS | CO_NESTED)
+                            [Names]
+                                'loops_var'
+                                'set'
+                                'str'
+                            [Locals+Names]
+                                'remaining'
+                                'self'
+                            [Constants]
+                                None
+                            [Disassembly]
+                                0       COPY_FREE_VARS                  2
+                                2       RESUME                          0
+                                4       LOAD_DEREF                      1: self
+                                6       LOAD_ATTR                       0: loops_var
+                                26      LOAD_ATTR                       3: set
+                                46      LOAD_GLOBAL                     5: NULL + str
+                                56      LOAD_DEREF                      0: remaining
+                                58      CALL                            1
+                                66      CALL                            1
+                                74      RETURN_VALUE                    
+                            [Exception Table]
+                    [Disassembly]
+                        0       MAKE_CELL                       0: self
+                        2       MAKE_CELL                       2: remaining
+                        4       RESUME                          0
+                        6       LOAD_DEREF                      0: self
+                        8       LOAD_ATTR                       0: _max_loops
+                        28      POP_JUMP_IF_FALSE               58 (to 146)
+                        30      LOAD_GLOBAL                     3: NULL + max
+                        40      LOAD_CONST                      1: 0
+                        42      LOAD_DEREF                      0: self
+                        44      LOAD_ATTR                       0: _max_loops
+                        64      LOAD_FAST                       1: loops_done
+                        66      BINARY_OP                       10 (-)
+                        70      CALL                            2
+                        78      STORE_DEREF                     2: remaining
+                        80      LOAD_DEREF                      0: self
+                        82      LOAD_ATTR                       4: root
+                        102     LOAD_ATTR                       7: after
+                        122     LOAD_CONST                      1: 0
+                        124     LOAD_CLOSURE                    2: remaining
+                        126     LOAD_CLOSURE                    0: self
+                        128     BUILD_TUPLE                     2
+                        130     LOAD_CONST                      2: <CODE> <lambda>
+                        132     MAKE_FUNCTION                   8
+                        134     CALL                            2
+                        142     POP_TOP                         
+                        144     RETURN_CONST                    0: None
+                        146     RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: _update_coins
+                    Qualified Name: CookieGameApp._update_coins
+                    Arg Count: 3
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 7
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'coins_var'
+                        'set'
+                    [Locals+Names]
+                        'self'
+                        'coins'
+                        'total'
+                        'last'
+                    [Constants]
+                        None
+                        ','
+                        'อ่านไม่ได้'
+                        '🪙 เหรียญรอบล่าสุด: '
+                        '    รวม: '
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_FAST                       1: coins
+                        4       POP_JUMP_IF_NONE                4 (to 14)
+                        6       LOAD_FAST                       1: coins
+                        8       LOAD_CONST                      1: ','
+                        10      FORMAT_VALUE                    4 (FVC_NONE | FVS_HAVE_SPEC)
+                        12      JUMP_FORWARD                    1 (to 16)
+                        14      LOAD_CONST                      2: 'อ่านไม่ได้'
+                        16      STORE_FAST                      3: last
+                        18      LOAD_FAST                       0: self
+                        20      LOAD_ATTR                       0: coins_var
+                        40      LOAD_ATTR                       3: set
+                        60      LOAD_CONST                      3: '🪙 เหรียญรอบล่าสุด: '
+                        62      LOAD_FAST                       3: last
+                        64      FORMAT_VALUE                    0 (FVC_NONE)
+                        66      LOAD_CONST                      4: '    รวม: '
+                        68      LOAD_FAST                       2: total
+                        70      LOAD_CONST                      1: ','
+                        72      FORMAT_VALUE                    4 (FVC_NONE | FVS_HAVE_SPEC)
+                        74      BUILD_STRING                    4
+                        76      CALL                            1
+                        84      POP_TOP                         
+                        86      RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: stop_bot
+                    Qualified Name: CookieGameApp.stop_bot
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 3
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'bot'
+                        'STOP_FLAG'
+                        'set'
+                        'status_var'
+                        'status_lbl'
+                        'config'
+                        'toggle_btn'
+                        '_log'
+                    [Locals+Names]
+                        'self'
+                    [Constants]
+                        None
+                        '● กำลังหยุด...'
+                        '#ffd166'
+                        (
+                            'fg'
+                        )
+                        'disabled'
+                        (
+                            'state'
+                        )
+                        '[app] กำลังหยุด (รอจบ state ปัจจุบัน)...\n'
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_GLOBAL                     0: bot
+                        12      LOAD_ATTR                       2: STOP_FLAG
+                        32      LOAD_ATTR                       5: set
+                        52      CALL                            0
+                        60      POP_TOP                         
+                        62      LOAD_FAST                       0: self
+                        64      LOAD_ATTR                       6: status_var
+                        84      LOAD_ATTR                       5: set
+                        104     LOAD_CONST                      1: '● กำลังหยุด...'
+                        106     CALL                            1
+                        114     POP_TOP                         
+                        116     LOAD_FAST                       0: self
+                        118     LOAD_ATTR                       8: status_lbl
+                        138     LOAD_ATTR                       11: config
+                        158     LOAD_CONST                      2: '#ffd166'
+                        160     KW_NAMES                        3: ('fg',)
+                        162     CALL                            1
+                        170     POP_TOP                         
+                        172     LOAD_FAST                       0: self
+                        174     LOAD_ATTR                       12: toggle_btn
+                        194     LOAD_ATTR                       11: config
+                        214     LOAD_CONST                      4: 'disabled'
+                        216     KW_NAMES                        5: ('state',)
+                        218     CALL                            1
+                        226     POP_TOP                         
+                        228     LOAD_FAST                       0: self
+                        230     LOAD_ATTR                       15: _log
+                        250     LOAD_CONST                      6: '[app] กำลังหยุด (รอจบ state ปัจจุบัน)...\n'
+                        252     CALL                            1
+                        260     POP_TOP                         
+                        262     RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: _on_bot_stopped
+                    Qualified Name: CookieGameApp._on_bot_stopped
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 6
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'license_core'
+                        'release_run_lock'
+                        'running'
+                        'toggle_btn'
+                        'config'
+                        'status_var'
+                        'set'
+                        'status_lbl'
+                    [Locals+Names]
+                        'self'
+                    [Constants]
+                        None
+                        False
+                        '▶  เริ่มบอท'
+                        '#4caf50'
+                        '#43a047'
+                        'normal'
+                        (
+                            'text'
+                            'bg'
+                            'activebackground'
+                            'state'
+                        )
+                        '● หยุดอยู่'
+                        '#ff6b6b'
+                        (
+                            'fg'
+                        )
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_GLOBAL                     1: NULL + license_core
+                        12      LOAD_ATTR                       2: release_run_lock
+                        32      CALL                            0
+                        40      POP_TOP                         
+                        42      LOAD_CONST                      1: False
+                        44      LOAD_FAST                       0: self
+                        46      STORE_ATTR                      2: running
+                        56      LOAD_FAST                       0: self
+                        58      LOAD_ATTR                       6: toggle_btn
+                        78      LOAD_ATTR                       9: config
+                        98      LOAD_CONST                      2: '▶  เริ่มบอท'
+                        100     LOAD_CONST                      3: '#4caf50'
+                        102     LOAD_CONST                      4: '#43a047'
+                        104     LOAD_CONST                      5: 'normal'
+                        106     KW_NAMES                        6: ('text', 'bg', 'activebackground', 'state')
+                        108     CALL                            4
+                        116     POP_TOP                         
+                        118     LOAD_FAST                       0: self
+                        120     LOAD_ATTR                       10: status_var
+                        140     LOAD_ATTR                       13: set
+                        160     LOAD_CONST                      7: '● หยุดอยู่'
+                        162     CALL                            1
+                        170     POP_TOP                         
+                        172     LOAD_FAST                       0: self
+                        174     LOAD_ATTR                       14: status_lbl
+                        194     LOAD_ATTR                       9: config
+                        214     LOAD_CONST                      8: '#ff6b6b'
+                        216     KW_NAMES                        9: ('fg',)
+                        218     CALL                            1
+                        226     POP_TOP                         
+                        228     RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: _log
+                    Qualified Name: CookieGameApp._log
+                    Arg Count: 2
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 3
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'log_queue'
+                        'put'
+                    [Locals+Names]
+                        'self'
+                        'text'
+                    [Constants]
+                        None
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_FAST                       0: self
+                        4       LOAD_ATTR                       0: log_queue
+                        24      LOAD_ATTR                       3: put
+                        44      LOAD_FAST                       1: text
+                        46      CALL                            1
+                        54      POP_TOP                         
+                        56      RETURN_CONST                    0: None
+                    [Exception Table]
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: _poll_log
+                    Qualified Name: CookieGameApp._poll_log
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 5
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'log_queue'
+                        'get_nowait'
+                        'log'
+                        'insert'
+                        'queue'
+                        'Empty'
+                        'Exception'
+                        'see'
+                        'int'
+                        'index'
+                        'split'
+                        'delete'
+                        'root'
+                        'after'
+                        '_poll_log'
+                    [Locals+Names]
+                        'self'
+                        'inserted'
+                        'count'
+                        'text'
+                    [Constants]
+                        None
+                        False
+                        0
+                        300
+                        'end'
+                        True
+                        1
+                        'end-1c'
+                        '.'
+                        800
+                        '1.0'
+                        '300.0'
+                        150
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_CONST                      1: False
+                        4       STORE_FAST                      1: inserted
+                        6       NOP                             
+                        8       LOAD_CONST                      2: 0
+                        10      STORE_FAST                      2: count
+                        12      LOAD_FAST                       2: count
+                        14      LOAD_CONST                      3: 300
+                        16      COMPARE_OP                      2 (<)
+                        20      POP_JUMP_IF_FALSE               67 (to 156)
+                        22      LOAD_FAST                       0: self
+                        24      LOAD_ATTR                       0: log_queue
+                        44      LOAD_ATTR                       3: get_nowait
+                        64      CALL                            0
+                        72      STORE_FAST                      3: text
+                        74      LOAD_FAST                       0: self
+                        76      LOAD_ATTR                       4: log
+                        96      LOAD_ATTR                       7: insert
+                        116     LOAD_CONST                      4: 'end'
+                        118     LOAD_FAST                       3: text
+                        120     CALL                            2
+                        128     POP_TOP                         
+                        130     LOAD_CONST                      5: True
+                        132     STORE_FAST                      1: inserted
+                        134     LOAD_FAST                       2: count
+                        136     LOAD_CONST                      6: 1
+                        138     BINARY_OP                       13 (+=)
+                        142     STORE_FAST                      2: count
+                        144     LOAD_FAST                       2: count
+                        146     LOAD_CONST                      3: 300
+                        148     COMPARE_OP                      2 (<)
+                        152     POP_JUMP_IF_FALSE               1 (to 156)
+                        154     JUMP_BACKWARD                   67 (to 22)
+                        156     LOAD_FAST                       1: inserted
+                        158     POP_JUMP_IF_FALSE               113 (to 386)
+                        160     NOP                             
+                        162     LOAD_FAST                       0: self
+                        164     LOAD_ATTR                       4: log
+                        184     LOAD_ATTR                       15: see
+                        204     LOAD_CONST                      4: 'end'
+                        206     CALL                            1
+                        214     POP_TOP                         
+                        216     LOAD_GLOBAL                     17: NULL + int
+                        226     LOAD_FAST                       0: self
+                        228     LOAD_ATTR                       4: log
+                        248     LOAD_ATTR                       19: index
+                        268     LOAD_CONST                      7: 'end-1c'
+                        270     CALL                            1
+                        278     LOAD_ATTR                       21: split
+                        298     LOAD_CONST                      8: '.'
+                        300     CALL                            1
+                        308     LOAD_CONST                      2: 0
+                        310     BINARY_SUBSCR                   
+                        314     CALL                            1
+                        322     LOAD_CONST                      9: 800
+                        324     COMPARE_OP                      68 (>)
+                        328     POP_JUMP_IF_FALSE               28 (to 386)
+                        330     LOAD_FAST                       0: self
+                        332     LOAD_ATTR                       4: log
+                        352     LOAD_ATTR                       23: delete
+                        372     LOAD_CONST                      10: '1.0'
+                        374     LOAD_CONST                      11: '300.0'
+                        376     CALL                            2
+                        384     POP_TOP                         
+                        386     LOAD_FAST                       0: self
+                        388     LOAD_ATTR                       24: root
+                        408     LOAD_ATTR                       27: after
+                        428     LOAD_CONST                      12: 150
+                        430     LOAD_FAST                       0: self
+                        432     LOAD_ATTR                       28: _poll_log
+                        452     CALL                            2
+                        460     POP_TOP                         
+                        462     RETURN_CONST                    0: None
+                        464     PUSH_EXC_INFO                   
+                        466     LOAD_GLOBAL                     8: queue
+                        476     LOAD_ATTR                       10: Empty
+                        496     CHECK_EXC_MATCH                 
+                        498     POP_JUMP_IF_FALSE               3 (to 506)
+                        500     POP_TOP                         
+                        502     POP_EXCEPT                      
+                        504     JUMP_BACKWARD                   175 (to 156)
+                        506     LOAD_GLOBAL                     12: Exception
+                        516     CHECK_EXC_MATCH                 
+                        518     POP_JUMP_IF_FALSE               3 (to 526)
+                        520     POP_TOP                         
+                        522     POP_EXCEPT                      
+                        524     JUMP_BACKWARD                   185 (to 156)
+                        526     RERAISE                         0
+                        528     COPY                            3
+                        530     POP_EXCEPT                      
+                        532     RERAISE                         1
+                        534     PUSH_EXC_INFO                   
+                        536     LOAD_GLOBAL                     12: Exception
+                        546     CHECK_EXC_MATCH                 
+                        548     POP_JUMP_IF_FALSE               3 (to 556)
+                        550     POP_TOP                         
+                        552     POP_EXCEPT                      
+                        554     JUMP_BACKWARD                   85 (to 386)
+                        556     RERAISE                         0
+                        558     COPY                            3
+                        560     POP_EXCEPT                      
+                        562     RERAISE                         1
+                    [Exception Table]
+                        8 to 154 -> 464 [0] 
+                        162 to 386 -> 534 [0] 
+                        464 to 502 -> 528 [1] lasti
+                        506 to 522 -> 528 [1] lasti
+                        526 to 528 -> 528 [1] lasti
+                        534 to 552 -> 558 [1] lasti
+                        556 to 558 -> 558 [1] lasti
+                [Code]
+                    File Name: cookiegame.py
+                    Object Name: on_close
+                    Qualified Name: CookieGameApp.on_close
+                    Arg Count: 1
+                    Pos Only Arg Count: 0
+                    KW Only Arg Count: 0
+                    Stack Size: 3
+                    Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+                    [Names]
+                        'bot'
+                        'STOP_FLAG'
+                        'set'
+                        'time'
+                        'sleep'
+                        'root'
+                        'destroy'
+                    [Locals+Names]
+                        'self'
+                    [Constants]
+                        None
+                        0.1
+                    [Disassembly]
+                        0       RESUME                          0
+                        2       LOAD_GLOBAL                     0: bot
+                        12      LOAD_ATTR                       2: STOP_FLAG
+                        32      LOAD_ATTR                       5: set
+                        52      CALL                            0
+                        60      POP_TOP                         
+                        62      LOAD_GLOBAL                     7: NULL + time
+                        72      LOAD_ATTR                       8: sleep
+                        92      LOAD_CONST                      1: 0.1
+                        94      CALL                            1
+                        102     POP_TOP                         
+                        104     LOAD_FAST                       0: self
+                        106     LOAD_ATTR                       10: root
+                        126     LOAD_ATTR                       13: destroy
+                        146     CALL                            0
+                        154     POP_TOP                         
+                        156     RETURN_CONST                    0: None
+                    [Exception Table]
+                None
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_NAME                       0: __name__
+                4       STORE_NAME                      1: __module__
+                6       LOAD_CONST                      0: 'CookieGameApp'
+                8       STORE_NAME                      2: __qualname__
+                10      LOAD_CONST                      1: <CODE> __init__
+                12      MAKE_FUNCTION                   0
+                14      STORE_NAME                      3: __init__
+                16      LOAD_CONST                      2: <CODE> _build_ui
+                18      MAKE_FUNCTION                   0
+                20      STORE_NAME                      4: _build_ui
+                22      LOAD_CONST                      3: <CODE> copy_hwid
+                24      MAKE_FUNCTION                   0
+                26      STORE_NAME                      5: copy_hwid
+                28      LOAD_CONST                      4: <CODE> _apply_license_result
+                30      MAKE_FUNCTION                   0
+                32      STORE_NAME                      6: _apply_license_result
+                34      LOAD_CONST                      5: <CODE> load_license
+                36      MAKE_FUNCTION                   0
+                38      STORE_NAME                      7: load_license
+                40      LOAD_CONST                      6: <CODE> activate_license
+                42      MAKE_FUNCTION                   0
+                44      STORE_NAME                      8: activate_license
+                46      LOAD_CONST                      7: <CODE> auto_find_adb
+                48      MAKE_FUNCTION                   0
+                50      STORE_NAME                      9: auto_find_adb
+                52      LOAD_CONST                      8: <CODE> _apply_config
+                54      MAKE_FUNCTION                   0
+                56      STORE_NAME                      10: _apply_config
+                58      LOAD_CONST                      9: <CODE> test_connection
+                60      MAKE_FUNCTION                   0
+                62      STORE_NAME                      11: test_connection
+                64      LOAD_CONST                      10: <CODE> toggle
+                66      MAKE_FUNCTION                   0
+                68      STORE_NAME                      12: toggle
+                70      LOAD_CONST                      11: <CODE> start_bot
+                72      MAKE_FUNCTION                   0
+                74      STORE_NAME                      13: start_bot
+                76      LOAD_CONST                      12: <CODE> _on_loop_done
+                78      MAKE_FUNCTION                   0
+                80      STORE_NAME                      14: _on_loop_done
+                82      LOAD_CONST                      13: <CODE> _update_coins
+                84      MAKE_FUNCTION                   0
+                86      STORE_NAME                      15: _update_coins
+                88      LOAD_CONST                      14: <CODE> stop_bot
+                90      MAKE_FUNCTION                   0
+                92      STORE_NAME                      16: stop_bot
+                94      LOAD_CONST                      15: <CODE> _on_bot_stopped
+                96      MAKE_FUNCTION                   0
+                98      STORE_NAME                      17: _on_bot_stopped
+                100     LOAD_CONST                      16: <CODE> _log
+                102     MAKE_FUNCTION                   0
+                104     STORE_NAME                      18: _log
+                106     LOAD_CONST                      17: <CODE> _poll_log
+                108     MAKE_FUNCTION                   0
+                110     STORE_NAME                      19: _poll_log
+                112     LOAD_CONST                      18: <CODE> on_close
+                114     MAKE_FUNCTION                   0
+                116     STORE_NAME                      20: on_close
+                118     RETURN_CONST                    19: None
+            [Exception Table]
+        'CookieGameApp'
+        [Code]
+            File Name: cookiegame.py
+            Object Name: main
+            Qualified Name: main
+            Arg Count: 0
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 3
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                'tk'
+                'Tk'
+                'CookieGameApp'
+                'mainloop'
+            [Locals+Names]
+                'root'
+            [Constants]
+                None
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_GLOBAL                     1: NULL + tk
+                12      LOAD_ATTR                       2: Tk
+                32      CALL                            0
+                40      STORE_FAST                      0: root
+                42      LOAD_GLOBAL                     5: NULL + CookieGameApp
+                52      LOAD_FAST                       0: root
+                54      CALL                            1
+                62      POP_TOP                         
+                64      LOAD_FAST                       0: root
+                66      LOAD_ATTR                       7: mainloop
+                86      CALL                            0
+                94      POP_TOP                         
+                96      RETURN_CONST                    0: None
+            [Exception Table]
+        '__main__'
+    [Disassembly]
+        0       RESUME                          0
+        2       LOAD_CONST                      0: '\nCookieGame — หน้าต่างควบคุมบอท Cookie Run (LDPlayer)\n=====================================================\nแอปมีปุ่มเปิด/ปิดการทำงานของบอท + ช่องตั้งค่า ADB + log แบบเรียลไทม์\nสร้างเป็น .exe แจกให้คนอื่นใช้ได้ (ดูไฟล์ build_exe.bat / README)\n'
+        4       STORE_NAME                      0: __doc__
+        6       LOAD_CONST                      1: 0
+        8       LOAD_CONST                      2: None
+        10      IMPORT_NAME                     1: sys
+        12      STORE_NAME                      1: sys
+        14      LOAD_CONST                      1: 0
+        16      LOAD_CONST                      2: None
+        18      IMPORT_NAME                     2: time
+        20      STORE_NAME                      2: time
+        22      LOAD_CONST                      1: 0
+        24      LOAD_CONST                      2: None
+        26      IMPORT_NAME                     3: queue
+        28      STORE_NAME                      3: queue
+        30      LOAD_CONST                      1: 0
+        32      LOAD_CONST                      2: None
+        34      IMPORT_NAME                     4: threading
+        36      STORE_NAME                      4: threading
+        38      LOAD_CONST                      1: 0
+        40      LOAD_CONST                      2: None
+        42      IMPORT_NAME                     5: tkinter
+        44      STORE_NAME                      6: tk
+        46      LOAD_CONST                      1: 0
+        48      LOAD_CONST                      3: ('ttk', 'scrolledtext')
+        50      IMPORT_NAME                     5: tkinter
+        52      IMPORT_FROM                     7: ttk
+        54      STORE_NAME                      7: ttk
+        56      IMPORT_FROM                     8: scrolledtext
+        58      STORE_NAME                      8: scrolledtext
+        60      POP_TOP                         
+        62      LOAD_CONST                      1: 0
+        64      LOAD_CONST                      2: None
+        66      IMPORT_NAME                     9: os
+        68      STORE_NAME                      9: os
+        70      LOAD_CONST                      1: 0
+        72      LOAD_CONST                      2: None
+        74      IMPORT_NAME                     10: bot
+        76      STORE_NAME                      10: bot
+        78      LOAD_CONST                      1: 0
+        80      LOAD_CONST                      2: None
+        82      IMPORT_NAME                     11: license_core
+        84      STORE_NAME                      11: license_core
+        86      LOAD_CONST                      4: 'CookieGame'
+        88      STORE_NAME                      12: APP_NAME
+        90      LOAD_CONST                      5: <CODE> _license_path
+        92      MAKE_FUNCTION                   0
+        94      STORE_NAME                      13: _license_path
+        96      PUSH_NULL                       
+        98      LOAD_BUILD_CLASS                
+        100     LOAD_CONST                      6: <CODE> QueueWriter
+        102     MAKE_FUNCTION                   0
+        104     LOAD_CONST                      7: 'QueueWriter'
+        106     CALL                            2
+        114     STORE_NAME                      14: QueueWriter
+        116     PUSH_NULL                       
+        118     LOAD_BUILD_CLASS                
+        120     LOAD_CONST                      8: <CODE> CookieGameApp
+        122     MAKE_FUNCTION                   0
+        124     LOAD_CONST                      9: 'CookieGameApp'
+        126     CALL                            2
+        134     STORE_NAME                      15: CookieGameApp
+        136     LOAD_CONST                      10: <CODE> main
+        138     MAKE_FUNCTION                   0
+        140     STORE_NAME                      16: main
+        142     LOAD_NAME                       17: __name__
+        144     LOAD_CONST                      11: '__main__'
+        146     COMPARE_OP                      40 (==)
+        150     POP_JUMP_IF_FALSE               8 (to 168)
+        152     PUSH_NULL                       
+        154     LOAD_NAME                       16: main
+        156     CALL                            0
+        164     POP_TOP                         
+        166     RETURN_CONST                    2: None
+        168     RETURN_CONST                    2: None
+    [Exception Table]

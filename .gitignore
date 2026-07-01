@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.venv/
+venv/
+env/
+
+# PyInstaller
+build/
+dist/
+*.spec.bak
+
+# Runtime artifacts
+coins.csv
+coins_fail_*.png
+pattern.json
+license.key
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~

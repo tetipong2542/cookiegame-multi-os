@@ -1,0 +1,1309 @@
+license_core.pyc (Python 3.12)
+[Code]
+    File Name: license_core.py
+    Object Name: <module>
+    Qualified Name: <module>
+    Arg Count: 0
+    Pos Only Arg Count: 0
+    KW Only Arg Count: 0
+    Stack Size: 2
+    Flags: 0x00000000
+    [Names]
+        '__doc__'
+        'os'
+        'sys'
+        'json'
+        'base64'
+        'hashlib'
+        'datetime'
+        'date'
+        'ecdsa'
+        'PUBLIC_KEY_HEX'
+        '_SALT'
+        'get_hwid'
+        '_base_dir'
+        '_license_file'
+        '_state_path'
+        '_bind_hash'
+        '_clock_ok'
+        'verify_key'
+        'activate'
+        '_run_lock_handle'
+        '_run_lock_name'
+        'acquire_run_lock'
+        'release_run_lock'
+        'check_license'
+    [Locals+Names]
+    [Constants]
+        '\nระบบ License Key (ECDSA) — ฝั่งบอท (แบบ activate-on-first-use)\n- ลูกค้าแค่วาง key -> โปรแกรมล็อก key กับเครื่องนี้เองตอนใช้ครั้งแรก (ไม่ต้องส่ง HWID)\n- หลังล็อกแล้ว ก๊อป license.key ไปเครื่องอื่นใช้ไม่ได้ (HWID ไม่ตรง)\n- รองรับ key เช่า (มีวันหมดอายุ) และ ถาวร\n'
+        0
+        None
+        (
+            'date'
+        )
+        'f2c7836e980d03286b4641db41bce4cf40c6f24530dc1240905be93f4dc0be25bb68844c52a52d6f5adb80c52a320d813d7459c0908dab779d57bc6aec95bea2'
+        'cg-bind-v1-7Hq2pLx9'
+        [Code]
+            File Name: license_core.py
+            Object Name: get_hwid
+            Qualified Name: get_hwid
+            Arg Count: 0
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 8
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                'winreg'
+                'OpenKey'
+                'HKEY_LOCAL_MACHINE'
+                'QueryValueEx'
+                'CloseKey'
+                'Exception'
+                'uuid'
+                'str'
+                'getnode'
+                'hashlib'
+                'sha256'
+                'encode'
+                'hexdigest'
+                'upper'
+                'join'
+            [Locals+Names]
+                'raw'
+                'winreg'
+                'k'
+                'uuid'
+                'h'
+            [Constants]
+                'รหัสเครื่อง (สั้น) — อิง Windows MachineGuid (คงที่ต่อการลง Windows 1 ครั้ง)'
+                ''
+                0
+                None
+                'SOFTWARE\\Microsoft\\Cryptography'
+                'MachineGuid'
+                'cookiegame|'
+                '-'
+                4
+                8
+                12
+                16
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_CONST                      1: ''
+                4       STORE_FAST                      0: raw
+                6       NOP                             
+                8       LOAD_CONST                      2: 0
+                10      LOAD_CONST                      3: None
+                12      IMPORT_NAME                     0: winreg
+                14      STORE_FAST                      1: winreg
+                16      LOAD_FAST                       1: winreg
+                18      LOAD_ATTR                       3: OpenKey
+                38      LOAD_FAST                       1: winreg
+                40      LOAD_ATTR                       4: HKEY_LOCAL_MACHINE
+                60      LOAD_CONST                      4: 'SOFTWARE\\Microsoft\\Cryptography'
+                62      CALL                            2
+                70      STORE_FAST                      2: k
+                72      LOAD_FAST                       1: winreg
+                74      LOAD_ATTR                       7: QueryValueEx
+                94      LOAD_FAST                       2: k
+                96      LOAD_CONST                      5: 'MachineGuid'
+                98      CALL                            2
+                106     LOAD_CONST                      2: 0
+                108     BINARY_SUBSCR                   
+                112     STORE_FAST                      0: raw
+                114     LOAD_FAST                       1: winreg
+                116     LOAD_ATTR                       9: CloseKey
+                136     LOAD_FAST                       2: k
+                138     CALL                            1
+                146     POP_TOP                         
+                148     LOAD_GLOBAL                     19: NULL + hashlib
+                158     LOAD_ATTR                       20: sha256
+                178     LOAD_CONST                      6: 'cookiegame|'
+                180     LOAD_FAST                       0: raw
+                182     BINARY_OP                       0 (+)
+                186     LOAD_ATTR                       23: encode
+                206     CALL                            0
+                214     CALL                            1
+                222     LOAD_ATTR                       25: hexdigest
+                242     CALL                            0
+                250     LOAD_ATTR                       27: upper
+                270     CALL                            0
+                278     STORE_FAST                      4: h
+                280     LOAD_CONST                      7: '-'
+                282     LOAD_ATTR                       29: join
+                302     LOAD_FAST                       4: h
+                304     LOAD_CONST                      2: 0
+                306     LOAD_CONST                      8: 4
+                308     BINARY_SLICE                    
+                310     LOAD_FAST                       4: h
+                312     LOAD_CONST                      8: 4
+                314     LOAD_CONST                      9: 8
+                316     BINARY_SLICE                    
+                318     LOAD_FAST                       4: h
+                320     LOAD_CONST                      9: 8
+                322     LOAD_CONST                      10: 12
+                324     BINARY_SLICE                    
+                326     LOAD_FAST                       4: h
+                328     LOAD_CONST                      10: 12
+                330     LOAD_CONST                      11: 16
+                332     BINARY_SLICE                    
+                334     BUILD_LIST                      4
+                336     CALL                            1
+                344     RETURN_VALUE                    
+                346     PUSH_EXC_INFO                   
+                348     LOAD_GLOBAL                     10: Exception
+                358     CHECK_EXC_MATCH                 
+                360     POP_JUMP_IF_FALSE               32 (to 426)
+                362     POP_TOP                         
+                364     LOAD_CONST                      2: 0
+                366     LOAD_CONST                      3: None
+                368     IMPORT_NAME                     6: uuid
+                370     STORE_FAST                      3: uuid
+                372     LOAD_GLOBAL                     15: NULL + str
+                382     LOAD_FAST                       3: uuid
+                384     LOAD_ATTR                       17: getnode
+                404     CALL                            0
+                412     CALL                            1
+                420     STORE_FAST                      0: raw
+                422     POP_EXCEPT                      
+                424     JUMP_BACKWARD                   139 (to 148)
+                426     RERAISE                         0
+                428     COPY                            3
+                430     POP_EXCEPT                      
+                432     RERAISE                         1
+            [Exception Table]
+                8 to 148 -> 346 [0] 
+                346 to 422 -> 428 [1] lasti
+                426 to 428 -> 428 [1] lasti
+        [Code]
+            File Name: license_core.py
+            Object Name: _base_dir
+            Qualified Name: _base_dir
+            Arg Count: 0
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 5
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                'getattr'
+                'sys'
+                'os'
+                'path'
+                'dirname'
+                'executable'
+                'abspath'
+                '__file__'
+            [Locals+Names]
+            [Constants]
+                None
+                'frozen'
+                False
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_GLOBAL                     1: NULL + getattr
+                12      LOAD_GLOBAL                     2: sys
+                22      LOAD_CONST                      1: 'frozen'
+                24      LOAD_CONST                      2: False
+                26      CALL                            3
+                34      POP_JUMP_IF_FALSE               45 (to 126)
+                36      LOAD_GLOBAL                     4: os
+                46      LOAD_ATTR                       6: path
+                66      LOAD_ATTR                       9: dirname
+                86      LOAD_GLOBAL                     2: sys
+                96      LOAD_ATTR                       10: executable
+                116     CALL                            1
+                124     RETURN_VALUE                    
+                126     LOAD_GLOBAL                     4: os
+                136     LOAD_ATTR                       6: path
+                156     LOAD_ATTR                       9: dirname
+                176     LOAD_GLOBAL                     4: os
+                186     LOAD_ATTR                       6: path
+                206     LOAD_ATTR                       13: abspath
+                226     LOAD_GLOBAL                     14: __file__
+                236     CALL                            1
+                244     CALL                            1
+                252     RETURN_VALUE                    
+            [Exception Table]
+        [Code]
+            File Name: license_core.py
+            Object Name: _license_file
+            Qualified Name: _license_file
+            Arg Count: 0
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 4
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                'os'
+                'path'
+                'join'
+                '_base_dir'
+            [Locals+Names]
+            [Constants]
+                None
+                'license.key'
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_GLOBAL                     0: os
+                12      LOAD_ATTR                       2: path
+                32      LOAD_ATTR                       5: join
+                52      LOAD_GLOBAL                     7: NULL + _base_dir
+                62      CALL                            0
+                70      LOAD_CONST                      1: 'license.key'
+                72      CALL                            2
+                80      RETURN_VALUE                    
+            [Exception Table]
+        [Code]
+            File Name: license_core.py
+            Object Name: _state_path
+            Qualified Name: _state_path
+            Arg Count: 0
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 4
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                'os'
+                'path'
+                'join'
+                '_base_dir'
+            [Locals+Names]
+            [Constants]
+                None
+                '.cg_state'
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_GLOBAL                     0: os
+                12      LOAD_ATTR                       2: path
+                32      LOAD_ATTR                       5: join
+                52      LOAD_GLOBAL                     7: NULL + _base_dir
+                62      CALL                            0
+                70      LOAD_CONST                      1: '.cg_state'
+                72      CALL                            2
+                80      RETURN_VALUE                    
+            [Exception Table]
+        [Code]
+            File Name: license_core.py
+            Object Name: _bind_hash
+            Qualified Name: _bind_hash
+            Arg Count: 2
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 4
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                'hashlib'
+                'sha256'
+                '_SALT'
+                'encode'
+                'hexdigest'
+            [Locals+Names]
+                'key_string'
+                'hwid'
+            [Constants]
+                None
+                '|'
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_GLOBAL                     1: NULL + hashlib
+                12      LOAD_ATTR                       2: sha256
+                32      LOAD_FAST                       0: key_string
+                34      LOAD_CONST                      1: '|'
+                36      BINARY_OP                       0 (+)
+                40      LOAD_FAST                       1: hwid
+                42      BINARY_OP                       0 (+)
+                46      LOAD_CONST                      1: '|'
+                48      BINARY_OP                       0 (+)
+                52      LOAD_GLOBAL                     4: _SALT
+                62      BINARY_OP                       0 (+)
+                66      LOAD_ATTR                       7: encode
+                86      CALL                            0
+                94      CALL                            1
+                102     LOAD_ATTR                       9: hexdigest
+                122     CALL                            0
+                130     RETURN_VALUE                    
+            [Exception Table]
+        [Code]
+            File Name: license_core.py
+            Object Name: _clock_ok
+            Qualified Name: _clock_ok
+            Arg Count: 0
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 5
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                'date'
+                'today'
+                'isoformat'
+                '_state_path'
+                'os'
+                'path'
+                'exists'
+                'open'
+                'read'
+                'strip'
+                'write'
+                'Exception'
+            [Locals+Names]
+                'today'
+                'p'
+                'last'
+            [Constants]
+                'กันหมุนนาฬิกาเครื่องย้อนหลัง (สำหรับ key เช่า)'
+                'utf-8'
+                (
+                    'encoding'
+                )
+                ''
+                False
+                'w'
+                True
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_GLOBAL                     1: NULL + date
+                12      LOAD_ATTR                       2: today
+                32      CALL                            0
+                40      LOAD_ATTR                       5: isoformat
+                60      CALL                            0
+                68      STORE_FAST                      0: today
+                70      LOAD_GLOBAL                     7: NULL + _state_path
+                80      CALL                            0
+                88      STORE_FAST                      1: p
+                90      NOP                             
+                92      LOAD_GLOBAL                     8: os
+                102     LOAD_ATTR                       10: path
+                122     LOAD_ATTR                       13: exists
+                142     LOAD_FAST                       1: p
+                144     CALL                            1
+                152     POP_JUMP_IF_FALSE               41 (to 236)
+                154     LOAD_GLOBAL                     15: NULL + open
+                164     LOAD_FAST                       1: p
+                166     LOAD_CONST                      1: 'utf-8'
+                168     KW_NAMES                        2: ('encoding',)
+                170     CALL                            2
+                178     LOAD_ATTR                       17: read
+                198     CALL                            0
+                206     LOAD_ATTR                       19: strip
+                226     CALL                            0
+                234     JUMP_FORWARD                    1 (to 238)
+                236     LOAD_CONST                      3: ''
+                238     STORE_FAST                      2: last
+                240     LOAD_FAST                       2: last
+                242     POP_JUMP_IF_FALSE               6 (to 256)
+                244     LOAD_FAST                       0: today
+                246     LOAD_FAST                       2: last
+                248     COMPARE_OP                      2 (<)
+                252     POP_JUMP_IF_FALSE               1 (to 256)
+                254     RETURN_CONST                    4: False
+                256     LOAD_FAST                       0: today
+                258     LOAD_FAST                       2: last
+                260     COMPARE_OP                      92 (>=)
+                264     POP_JUMP_IF_FALSE               29 (to 324)
+                266     LOAD_GLOBAL                     15: NULL + open
+                276     LOAD_FAST                       1: p
+                278     LOAD_CONST                      5: 'w'
+                280     LOAD_CONST                      1: 'utf-8'
+                282     KW_NAMES                        2: ('encoding',)
+                284     CALL                            3
+                292     LOAD_ATTR                       21: write
+                312     LOAD_FAST                       0: today
+                314     CALL                            1
+                322     POP_TOP                         
+                324     RETURN_CONST                    6: True
+                326     PUSH_EXC_INFO                   
+                328     LOAD_GLOBAL                     22: Exception
+                338     CHECK_EXC_MATCH                 
+                340     POP_JUMP_IF_FALSE               3 (to 348)
+                342     POP_TOP                         
+                344     POP_EXCEPT                      
+                346     RETURN_CONST                    6: True
+                348     RERAISE                         0
+                350     COPY                            3
+                352     POP_EXCEPT                      
+                354     RERAISE                         1
+            [Exception Table]
+                92 to 254 -> 326 [0] 
+                256 to 324 -> 326 [0] 
+                326 to 344 -> 350 [1] lasti
+                348 to 350 -> 350 [1] lasti
+        [Code]
+            File Name: license_core.py
+            Object Name: verify_key
+            Qualified Name: verify_key
+            Arg Count: 1
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 8
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                'replace'
+                'strip'
+                'split'
+                'base64'
+                'urlsafe_b64decode'
+                'ecdsa'
+                'VerifyingKey'
+                'from_string'
+                'bytes'
+                'fromhex'
+                'PUBLIC_KEY_HEX'
+                'NIST256p'
+                'verify'
+                'json'
+                'loads'
+                'decode'
+                'Exception'
+                'get'
+                '_clock_ok'
+                'date'
+                'today'
+                'isoformat'
+            [Locals+Names]
+                'key_string'
+                'ch'
+                'msg_b64'
+                'sig_b64'
+                'msg'
+                'sig'
+                'vk'
+                'data'
+                'exp'
+            [Constants]
+                '\n    ตรวจ "ลายเซ็น + ประเภท + วันหมดอายุ" ของ key (ยังไม่ผูกเครื่อง)\n    คืน (ok: bool, info: dict | str)\n    '
+                ''
+                (
+                    '﻿'
+                    '\r'
+                    '\n'
+                    '\t'
+                    ' '
+                    '​'
+                    '\xc2\xa0'
+                )
+                '.'
+                (
+                    False
+                    'รูปแบบ key ไม่ถูกต้อง'
+                )
+                1
+                '=='
+                (
+                    'curve'
+                )
+                (
+                    False
+                    'key ไม่ถูกต้อง (ลายเซ็นไม่ผ่าน)'
+                )
+                'type'
+                'rental'
+                'exp'
+                (
+                    False
+                    'key เช่าไม่มีวันหมดอายุ'
+                )
+                (
+                    False
+                    'ตรวจพบการตั้งเวลาเครื่องผิดปกติ'
+                )
+                False
+                'key หมดอายุแล้ว (หมด '
+                ')'
+                True
+                'id'
+                'name'
+                (
+                    'type'
+                    'exp'
+                    'id'
+                    'name'
+                )
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_FAST                       0: key_string
+                4       COPY                            1
+                6       POP_JUMP_IF_TRUE                2 (to 12)
+                8       POP_TOP                         
+                10      LOAD_CONST                      1: ''
+                12      STORE_FAST                      0: key_string
+                14      LOAD_CONST                      2: ('﻿', '\r', '\n', '\t', ' ', '​', '\xc2\xa0')
+                16      GET_ITER                        
+                18      FOR_ITER                        20 (to 60)
+                22      STORE_FAST                      1: ch
+                24      LOAD_FAST                       0: key_string
+                26      LOAD_ATTR                       1: replace
+                46      LOAD_FAST                       1: ch
+                48      LOAD_CONST                      1: ''
+                50      CALL                            2
+                58      STORE_FAST                      0: key_string
+                60      JUMP_BACKWARD                   22 (to 18)
+                62      END_FOR                         
+                64      LOAD_FAST                       0: key_string
+                66      LOAD_ATTR                       3: strip
+                86      CALL                            0
+                94      STORE_FAST                      0: key_string
+                96      LOAD_FAST                       0: key_string
+                98      POP_JUMP_IF_FALSE               4 (to 108)
+                100     LOAD_CONST                      3: '.'
+                102     LOAD_FAST                       0: key_string
+                104     CONTAINS_OP                     1 (not in)
+                106     POP_JUMP_IF_FALSE               1 (to 110)
+                108     RETURN_CONST                    4: (False, 'รูปแบบ key ไม่ถูกต้อง')
+                110     NOP                             
+                112     LOAD_FAST                       0: key_string
+                114     LOAD_ATTR                       5: split
+                134     LOAD_CONST                      3: '.'
+                136     LOAD_CONST                      5: 1
+                138     CALL                            2
+                146     UNPACK_SEQUENCE                 2
+                150     STORE_FAST                      2: msg_b64
+                152     STORE_FAST                      3: sig_b64
+                154     LOAD_GLOBAL                     7: NULL + base64
+                164     LOAD_ATTR                       8: urlsafe_b64decode
+                184     LOAD_FAST                       2: msg_b64
+                186     LOAD_CONST                      6: '=='
+                188     BINARY_OP                       0 (+)
+                192     CALL                            1
+                200     STORE_FAST                      4: msg
+                202     LOAD_GLOBAL                     7: NULL + base64
+                212     LOAD_ATTR                       8: urlsafe_b64decode
+                232     LOAD_FAST                       3: sig_b64
+                234     LOAD_CONST                      6: '=='
+                236     BINARY_OP                       0 (+)
+                240     CALL                            1
+                248     STORE_FAST                      5: sig
+                250     LOAD_GLOBAL                     10: ecdsa
+                260     LOAD_ATTR                       12: VerifyingKey
+                280     LOAD_ATTR                       15: from_string
+                300     LOAD_GLOBAL                     16: bytes
+                310     LOAD_ATTR                       19: fromhex
+                330     LOAD_GLOBAL                     20: PUBLIC_KEY_HEX
+                340     CALL                            1
+                348     LOAD_GLOBAL                     10: ecdsa
+                358     LOAD_ATTR                       22: NIST256p
+                378     KW_NAMES                        7: ('curve',)
+                380     CALL                            2
+                388     STORE_FAST                      6: vk
+                390     LOAD_FAST                       6: vk
+                392     LOAD_ATTR                       25: verify
+                412     LOAD_FAST                       5: sig
+                414     LOAD_FAST                       4: msg
+                416     CALL                            2
+                424     POP_TOP                         
+                426     LOAD_GLOBAL                     27: NULL + json
+                436     LOAD_ATTR                       28: loads
+                456     LOAD_FAST                       4: msg
+                458     LOAD_ATTR                       31: decode
+                478     CALL                            0
+                486     CALL                            1
+                494     STORE_FAST                      7: data
+                496     LOAD_FAST                       7: data
+                498     LOAD_ATTR                       35: get
+                518     LOAD_CONST                      9: 'type'
+                520     CALL                            1
+                528     LOAD_CONST                      10: 'rental'
+                530     COMPARE_OP                      40 (==)
+                534     POP_JUMP_IF_FALSE               76 (to 688)
+                536     LOAD_FAST                       7: data
+                538     LOAD_ATTR                       35: get
+                558     LOAD_CONST                      11: 'exp'
+                560     CALL                            1
+                568     STORE_FAST                      8: exp
+                570     LOAD_FAST                       8: exp
+                572     POP_JUMP_IF_TRUE                1 (to 576)
+                574     RETURN_CONST                    12: (False, 'key เช่าไม่มีวันหมดอายุ')
+                576     LOAD_GLOBAL                     37: NULL + _clock_ok
+                586     CALL                            0
+                594     POP_JUMP_IF_TRUE                1 (to 598)
+                596     RETURN_CONST                    13: (False, 'ตรวจพบการตั้งเวลาเครื่องผิดปกติ')
+                598     LOAD_GLOBAL                     39: NULL + date
+                608     LOAD_ATTR                       40: today
+                628     CALL                            0
+                636     LOAD_ATTR                       43: isoformat
+                656     CALL                            0
+                664     LOAD_FAST                       8: exp
+                666     COMPARE_OP                      68 (>)
+                670     POP_JUMP_IF_FALSE               8 (to 688)
+                672     LOAD_CONST                      14: False
+                674     LOAD_CONST                      15: 'key หมดอายุแล้ว (หมด '
+                676     LOAD_FAST                       8: exp
+                678     FORMAT_VALUE                    0 (FVC_NONE)
+                680     LOAD_CONST                      16: ')'
+                682     BUILD_STRING                    3
+                684     BUILD_TUPLE                     2
+                686     RETURN_VALUE                    
+                688     LOAD_CONST                      17: True
+                690     LOAD_FAST                       7: data
+                692     LOAD_ATTR                       35: get
+                712     LOAD_CONST                      9: 'type'
+                714     CALL                            1
+                722     LOAD_FAST                       7: data
+                724     LOAD_ATTR                       35: get
+                744     LOAD_CONST                      11: 'exp'
+                746     CALL                            1
+                754     LOAD_FAST                       7: data
+                756     LOAD_ATTR                       35: get
+                776     LOAD_CONST                      18: 'id'
+                778     LOAD_CONST                      1: ''
+                780     CALL                            2
+                788     LOAD_FAST                       7: data
+                790     LOAD_ATTR                       35: get
+                810     LOAD_CONST                      19: 'name'
+                812     LOAD_CONST                      1: ''
+                814     CALL                            2
+                822     LOAD_CONST                      20: ('type', 'exp', 'id', 'name')
+                824     BUILD_CONST_KEY_MAP             4
+                826     BUILD_TUPLE                     2
+                828     RETURN_VALUE                    
+                830     PUSH_EXC_INFO                   
+                832     LOAD_GLOBAL                     32: Exception
+                842     CHECK_EXC_MATCH                 
+                844     POP_JUMP_IF_FALSE               3 (to 852)
+                846     POP_TOP                         
+                848     POP_EXCEPT                      
+                850     RETURN_CONST                    8: (False, 'key ไม่ถูกต้อง (ลายเซ็นไม่ผ่าน)')
+                852     RERAISE                         0
+                854     COPY                            3
+                856     POP_EXCEPT                      
+                858     RERAISE                         1
+            [Exception Table]
+                112 to 496 -> 830 [0] 
+                830 to 848 -> 854 [1] lasti
+                852 to 854 -> 854 [1] lasti
+        [Code]
+            File Name: license_core.py
+            Object Name: activate
+            Qualified Name: activate
+            Arg Count: 1
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 5
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                'verify_key'
+                'replace'
+                'strip'
+                'get_hwid'
+                '_bind_hash'
+                'open'
+                '_license_file'
+                'write'
+                'json'
+                'dumps'
+                'Exception'
+            [Locals+Names]
+                'key_string'
+                'ok'
+                'info'
+                'ch'
+                'hwid'
+                'rec'
+            [Constants]
+                'ใช้งาน key ครั้งแรก: ตรวจ key แล้วล็อกกับเครื่องนี้ (เซฟ license.key) — ไม่ต้องใช้ HWID จากภายนอก'
+                False
+                (
+                    '﻿'
+                    '\r'
+                    '\n'
+                    '\t'
+                    ' '
+                    '​'
+                    '\xc2\xa0'
+                )
+                ''
+                (
+                    'key'
+                    'bind'
+                )
+                'w'
+                'utf-8'
+                (
+                    'encoding'
+                )
+                True
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_GLOBAL                     1: NULL + verify_key
+                12      LOAD_FAST                       0: key_string
+                14      CALL                            1
+                22      UNPACK_SEQUENCE                 2
+                26      STORE_FAST                      1: ok
+                28      STORE_FAST                      2: info
+                30      LOAD_FAST                       1: ok
+                32      POP_JUMP_IF_TRUE                4 (to 42)
+                34      LOAD_CONST                      1: False
+                36      LOAD_FAST                       2: info
+                38      BUILD_TUPLE                     2
+                40      RETURN_VALUE                    
+                42      LOAD_CONST                      2: ('﻿', '\r', '\n', '\t', ' ', '​', '\xc2\xa0')
+                44      GET_ITER                        
+                46      FOR_ITER                        20 (to 88)
+                50      STORE_FAST                      3: ch
+                52      LOAD_FAST                       0: key_string
+                54      LOAD_ATTR                       3: replace
+                74      LOAD_FAST                       3: ch
+                76      LOAD_CONST                      3: ''
+                78      CALL                            2
+                86      STORE_FAST                      0: key_string
+                88      JUMP_BACKWARD                   22 (to 46)
+                90      END_FOR                         
+                92      LOAD_FAST                       0: key_string
+                94      LOAD_ATTR                       5: strip
+                114     CALL                            0
+                122     STORE_FAST                      0: key_string
+                124     LOAD_GLOBAL                     7: NULL + get_hwid
+                134     CALL                            0
+                142     STORE_FAST                      4: hwid
+                144     LOAD_FAST                       0: key_string
+                146     LOAD_GLOBAL                     9: NULL + _bind_hash
+                156     LOAD_FAST                       0: key_string
+                158     LOAD_FAST                       4: hwid
+                160     CALL                            2
+                168     LOAD_CONST                      4: ('key', 'bind')
+                170     BUILD_CONST_KEY_MAP             2
+                172     STORE_FAST                      5: rec
+                174     NOP                             
+                176     LOAD_GLOBAL                     11: NULL + open
+                186     LOAD_GLOBAL                     13: NULL + _license_file
+                196     CALL                            0
+                204     LOAD_CONST                      5: 'w'
+                206     LOAD_CONST                      6: 'utf-8'
+                208     KW_NAMES                        7: ('encoding',)
+                210     CALL                            3
+                218     LOAD_ATTR                       15: write
+                238     LOAD_GLOBAL                     17: NULL + json
+                248     LOAD_ATTR                       18: dumps
+                268     LOAD_FAST                       5: rec
+                270     CALL                            1
+                278     CALL                            1
+                286     POP_TOP                         
+                288     LOAD_CONST                      8: True
+                290     LOAD_FAST                       2: info
+                292     BUILD_TUPLE                     2
+                294     RETURN_VALUE                    
+                296     PUSH_EXC_INFO                   
+                298     LOAD_GLOBAL                     20: Exception
+                308     CHECK_EXC_MATCH                 
+                310     POP_JUMP_IF_FALSE               6 (to 324)
+                312     POP_TOP                         
+                314     POP_EXCEPT                      
+                316     LOAD_CONST                      8: True
+                318     LOAD_FAST                       2: info
+                320     BUILD_TUPLE                     2
+                322     RETURN_VALUE                    
+                324     RERAISE                         0
+                326     COPY                            3
+                328     POP_EXCEPT                      
+                330     RERAISE                         1
+            [Exception Table]
+                176 to 288 -> 296 [0] 
+                296 to 314 -> 326 [1] lasti
+                324 to 326 -> 326 [1] lasti
+        [Code]
+            File Name: license_core.py
+            Object Name: _run_lock_name
+            Qualified Name: _run_lock_name
+            Arg Count: 1
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 4
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                'hashlib'
+                'sha256'
+                '_SALT'
+                'encode'
+                'hexdigest'
+            [Locals+Names]
+                'key_string'
+                'h'
+            [Constants]
+                None
+                '|run|'
+                40
+                'cookiegame_run_'
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_GLOBAL                     1: NULL + hashlib
+                12      LOAD_ATTR                       2: sha256
+                32      LOAD_FAST                       0: key_string
+                34      LOAD_CONST                      1: '|run|'
+                36      BINARY_OP                       0 (+)
+                40      LOAD_GLOBAL                     4: _SALT
+                50      BINARY_OP                       0 (+)
+                54      LOAD_ATTR                       7: encode
+                74      CALL                            0
+                82      CALL                            1
+                90      LOAD_ATTR                       9: hexdigest
+                110     CALL                            0
+                118     LOAD_CONST                      0: None
+                120     LOAD_CONST                      2: 40
+                122     BINARY_SLICE                    
+                124     STORE_FAST                      1: h
+                126     LOAD_CONST                      3: 'cookiegame_run_'
+                128     LOAD_FAST                       1: h
+                130     BINARY_OP                       0 (+)
+                134     RETURN_VALUE                    
+            [Exception Table]
+        [Code]
+            File Name: license_core.py
+            Object Name: acquire_run_lock
+            Qualified Name: acquire_run_lock
+            Arg Count: 0
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 7
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                '_run_lock_handle'
+                'os'
+                'name'
+                'json'
+                'loads'
+                'open'
+                '_license_file'
+                'read'
+                'get'
+                'Exception'
+                'ctypes'
+                'windll'
+                'kernel32'
+                'c_void_p'
+                'CreateMutexW'
+                'restype'
+                'c_bool'
+                'c_wchar_p'
+                'argtypes'
+                'CloseHandle'
+                '_run_lock_name'
+                'GetLastError'
+            [Locals+Names]
+                'key'
+                'ctypes'
+                'k32'
+                'handle'
+                'err'
+            [Constants]
+                "จองสิทธิ์ 'กำลังรัน' ของคีย์นี้. คืน True = เริ่มได้ / False = คีย์นี้กำลังรันอยู่บนอีกจอ"
+                True
+                'nt'
+                'utf-8'
+                (
+                    'encoding'
+                )
+                'key'
+                ''
+                0
+                None
+                False
+                183
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_GLOBAL                     0: _run_lock_handle
+                12      POP_JUMP_IF_FALSE               1 (to 16)
+                14      RETURN_CONST                    1: True
+                16      LOAD_GLOBAL                     2: os
+                26      LOAD_ATTR                       4: name
+                46      LOAD_CONST                      2: 'nt'
+                48      COMPARE_OP                      55 (!=)
+                52      POP_JUMP_IF_FALSE               1 (to 56)
+                54      RETURN_CONST                    1: True
+                56      NOP                             
+                58      LOAD_GLOBAL                     7: NULL + json
+                68      LOAD_ATTR                       8: loads
+                88      LOAD_GLOBAL                     11: NULL + open
+                98      LOAD_GLOBAL                     13: NULL + _license_file
+                108     CALL                            0
+                116     LOAD_CONST                      3: 'utf-8'
+                118     KW_NAMES                        4: ('encoding',)
+                120     CALL                            2
+                128     LOAD_ATTR                       15: read
+                148     CALL                            0
+                156     CALL                            1
+                164     LOAD_ATTR                       17: get
+                184     LOAD_CONST                      5: 'key'
+                186     LOAD_CONST                      6: ''
+                188     CALL                            2
+                196     STORE_FAST                      0: key
+                198     LOAD_FAST                       0: key
+                200     POP_JUMP_IF_TRUE                1 (to 204)
+                202     RETURN_CONST                    1: True
+                204     NOP                             
+                206     LOAD_CONST                      7: 0
+                208     LOAD_CONST                      8: None
+                210     IMPORT_NAME                     10: ctypes
+                212     STORE_FAST                      1: ctypes
+                214     LOAD_FAST                       1: ctypes
+                216     LOAD_ATTR                       22: windll
+                236     LOAD_ATTR                       24: kernel32
+                256     STORE_FAST                      2: k32
+                258     LOAD_FAST                       1: ctypes
+                260     LOAD_ATTR                       26: c_void_p
+                280     LOAD_FAST                       2: k32
+                282     LOAD_ATTR                       28: CreateMutexW
+                302     STORE_ATTR                      15: restype
+                312     LOAD_FAST                       1: ctypes
+                314     LOAD_ATTR                       26: c_void_p
+                334     LOAD_FAST                       1: ctypes
+                336     LOAD_ATTR                       32: c_bool
+                356     LOAD_FAST                       1: ctypes
+                358     LOAD_ATTR                       34: c_wchar_p
+                378     BUILD_LIST                      3
+                380     LOAD_FAST                       2: k32
+                382     LOAD_ATTR                       28: CreateMutexW
+                402     STORE_ATTR                      18: argtypes
+                412     LOAD_FAST                       1: ctypes
+                414     LOAD_ATTR                       26: c_void_p
+                434     BUILD_LIST                      1
+                436     LOAD_FAST                       2: k32
+                438     LOAD_ATTR                       38: CloseHandle
+                458     STORE_ATTR                      18: argtypes
+                468     LOAD_FAST                       2: k32
+                470     LOAD_ATTR                       29: CreateMutexW
+                490     LOAD_CONST                      8: None
+                492     LOAD_CONST                      9: False
+                494     LOAD_GLOBAL                     41: NULL + _run_lock_name
+                504     LOAD_FAST                       0: key
+                506     CALL                            1
+                514     CALL                            3
+                522     STORE_FAST                      3: handle
+                524     LOAD_FAST                       2: k32
+                526     LOAD_ATTR                       43: GetLastError
+                546     CALL                            0
+                554     STORE_FAST                      4: err
+                556     LOAD_FAST                       3: handle
+                558     POP_JUMP_IF_TRUE                1 (to 562)
+                560     RETURN_CONST                    1: True
+                562     LOAD_FAST                       4: err
+                564     LOAD_CONST                      10: 183
+                566     COMPARE_OP                      40 (==)
+                570     POP_JUMP_IF_FALSE               18 (to 608)
+                572     LOAD_FAST                       2: k32
+                574     LOAD_ATTR                       39: CloseHandle
+                594     LOAD_FAST                       3: handle
+                596     CALL                            1
+                604     POP_TOP                         
+                606     RETURN_CONST                    9: False
+                608     LOAD_FAST                       3: handle
+                610     STORE_GLOBAL                    0: _run_lock_handle
+                612     RETURN_CONST                    1: True
+                614     PUSH_EXC_INFO                   
+                616     LOAD_GLOBAL                     18: Exception
+                626     CHECK_EXC_MATCH                 
+                628     POP_JUMP_IF_FALSE               5 (to 640)
+                630     POP_TOP                         
+                632     LOAD_CONST                      6: ''
+                634     STORE_FAST                      0: key
+                636     POP_EXCEPT                      
+                638     JUMP_BACKWARD                   221 (to 198)
+                640     RERAISE                         0
+                642     COPY                            3
+                644     POP_EXCEPT                      
+                646     RERAISE                         1
+                648     PUSH_EXC_INFO                   
+                650     LOAD_GLOBAL                     18: Exception
+                660     CHECK_EXC_MATCH                 
+                662     POP_JUMP_IF_FALSE               3 (to 670)
+                664     POP_TOP                         
+                666     POP_EXCEPT                      
+                668     RETURN_CONST                    1: True
+                670     RERAISE                         0
+                672     COPY                            3
+                674     POP_EXCEPT                      
+                676     RERAISE                         1
+            [Exception Table]
+                58 to 198 -> 614 [0] 
+                206 to 560 -> 648 [0] 
+                562 to 606 -> 648 [0] 
+                608 to 612 -> 648 [0] 
+                614 to 636 -> 642 [1] lasti
+                640 to 642 -> 642 [1] lasti
+                648 to 666 -> 672 [1] lasti
+                670 to 672 -> 672 [1] lasti
+        [Code]
+            File Name: license_core.py
+            Object Name: release_run_lock
+            Qualified Name: release_run_lock
+            Arg Count: 0
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 4
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                '_run_lock_handle'
+                'os'
+                'name'
+                'ctypes'
+                'windll'
+                'kernel32'
+                'c_void_p'
+                'CloseHandle'
+                'argtypes'
+                'Exception'
+            [Locals+Names]
+                'ctypes'
+                'k32'
+            [Constants]
+                'ปล่อยสิทธิ์รัน (เรียกตอนบอทหยุด/ปิดโปรแกรม) — เอาคีย์ไปใช้จออื่นต่อได้'
+                'nt'
+                0
+                None
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_GLOBAL                     0: _run_lock_handle
+                12      POP_JUMP_IF_FALSE               98 (to 210)
+                14      LOAD_GLOBAL                     2: os
+                24      LOAD_ATTR                       4: name
+                44      LOAD_CONST                      1: 'nt'
+                46      COMPARE_OP                      40 (==)
+                50      POP_JUMP_IF_FALSE               79 (to 210)
+                52      NOP                             
+                54      LOAD_CONST                      2: 0
+                56      LOAD_CONST                      3: None
+                58      IMPORT_NAME                     3: ctypes
+                60      STORE_FAST                      0: ctypes
+                62      LOAD_FAST                       0: ctypes
+                64      LOAD_ATTR                       8: windll
+                84      LOAD_ATTR                       10: kernel32
+                104     STORE_FAST                      1: k32
+                106     LOAD_FAST                       0: ctypes
+                108     LOAD_ATTR                       12: c_void_p
+                128     BUILD_LIST                      1
+                130     LOAD_FAST                       1: k32
+                132     LOAD_ATTR                       14: CloseHandle
+                152     STORE_ATTR                      8: argtypes
+                162     LOAD_FAST                       1: k32
+                164     LOAD_ATTR                       15: CloseHandle
+                184     LOAD_GLOBAL                     0: _run_lock_handle
+                194     CALL                            1
+                202     POP_TOP                         
+                204     LOAD_CONST                      3: None
+                206     STORE_GLOBAL                    0: _run_lock_handle
+                208     RETURN_CONST                    3: None
+                210     LOAD_CONST                      3: None
+                212     STORE_GLOBAL                    0: _run_lock_handle
+                214     RETURN_CONST                    3: None
+                216     PUSH_EXC_INFO                   
+                218     LOAD_GLOBAL                     18: Exception
+                228     CHECK_EXC_MATCH                 
+                230     POP_JUMP_IF_FALSE               5 (to 242)
+                232     POP_TOP                         
+                234     POP_EXCEPT                      
+                236     LOAD_CONST                      3: None
+                238     STORE_GLOBAL                    0: _run_lock_handle
+                240     RETURN_CONST                    3: None
+                242     RERAISE                         0
+                244     COPY                            3
+                246     POP_EXCEPT                      
+                248     RERAISE                         1
+            [Exception Table]
+                54 to 204 -> 216 [0] 
+                216 to 234 -> 244 [1] lasti
+                242 to 244 -> 244 [1] lasti
+        [Code]
+            File Name: license_core.py
+            Object Name: check_license
+            Qualified Name: check_license
+            Arg Count: 0
+            Pos Only Arg Count: 0
+            KW Only Arg Count: 0
+            Stack Size: 6
+            Flags: 0x00000003 (CO_OPTIMIZED | CO_NEWLOCALS)
+            [Names]
+                '_license_file'
+                'os'
+                'path'
+                'exists'
+                'json'
+                'loads'
+                'open'
+                'read'
+                'get'
+                'Exception'
+                'verify_key'
+                '_bind_hash'
+                'get_hwid'
+            [Locals+Names]
+                'p'
+                'rec'
+                'key'
+                'bind'
+                'ok'
+                'info'
+            [Constants]
+                'ตรวจ license ที่ล็อกไว้กับเครื่องนี้ (เรียกตอนเปิดโปรแกรม/ก่อนเริ่มบอท). คืน (ok, info|str)'
+                (
+                    False
+                    'ยังไม่ได้ใช้งาน key'
+                )
+                'utf-8'
+                (
+                    'encoding'
+                )
+                'key'
+                ''
+                'bind'
+                (
+                    False
+                    'ไฟล์ license เสียหาย'
+                )
+                False
+                (
+                    False
+                    'key นี้ถูกใช้งานบนเครื่องอื่น (ย้ายเครื่องไม่ได้)'
+                )
+                True
+            [Disassembly]
+                0       RESUME                          0
+                2       LOAD_GLOBAL                     1: NULL + _license_file
+                12      CALL                            0
+                20      STORE_FAST                      0: p
+                22      LOAD_GLOBAL                     2: os
+                32      LOAD_ATTR                       4: path
+                52      LOAD_ATTR                       7: exists
+                72      LOAD_FAST                       0: p
+                74      CALL                            1
+                82      POP_JUMP_IF_TRUE                1 (to 86)
+                84      RETURN_CONST                    1: (False, 'ยังไม่ได้ใช้งาน key')
+                86      NOP                             
+                88      LOAD_GLOBAL                     9: NULL + json
+                98      LOAD_ATTR                       10: loads
+                118     LOAD_GLOBAL                     13: NULL + open
+                128     LOAD_FAST                       0: p
+                130     LOAD_CONST                      2: 'utf-8'
+                132     KW_NAMES                        3: ('encoding',)
+                134     CALL                            2
+                142     LOAD_ATTR                       15: read
+                162     CALL                            0
+                170     CALL                            1
+                178     STORE_FAST                      1: rec
+                180     LOAD_FAST                       1: rec
+                182     LOAD_ATTR                       17: get
+                202     LOAD_CONST                      4: 'key'
+                204     LOAD_CONST                      5: ''
+                206     CALL                            2
+                214     STORE_FAST                      2: key
+                216     LOAD_FAST                       1: rec
+                218     LOAD_ATTR                       17: get
+                238     LOAD_CONST                      6: 'bind'
+                240     LOAD_CONST                      5: ''
+                242     CALL                            2
+                250     STORE_FAST                      3: bind
+                252     LOAD_GLOBAL                     21: NULL + verify_key
+                262     LOAD_FAST                       2: key
+                264     CALL                            1
+                272     UNPACK_SEQUENCE                 2
+                276     STORE_FAST                      4: ok
+                278     STORE_FAST                      5: info
+                280     LOAD_FAST                       4: ok
+                282     POP_JUMP_IF_TRUE                4 (to 292)
+                284     LOAD_CONST                      8: False
+                286     LOAD_FAST                       5: info
+                288     BUILD_TUPLE                     2
+                290     RETURN_VALUE                    
+                292     LOAD_FAST                       3: bind
+                294     LOAD_GLOBAL                     23: NULL + _bind_hash
+                304     LOAD_FAST                       2: key
+                306     LOAD_GLOBAL                     25: NULL + get_hwid
+                316     CALL                            0
+                324     CALL                            2
+                332     COMPARE_OP                      55 (!=)
+                336     POP_JUMP_IF_FALSE               1 (to 340)
+                338     RETURN_CONST                    9: (False, 'key นี้ถูกใช้งานบนเครื่องอื่น (ย้ายเครื่องไม่ได้)')
+                340     LOAD_CONST                      10: True
+                342     LOAD_FAST                       5: info
+                344     BUILD_TUPLE                     2
+                346     RETURN_VALUE                    
+                348     PUSH_EXC_INFO                   
+                350     LOAD_GLOBAL                     18: Exception
+                360     CHECK_EXC_MATCH                 
+                362     POP_JUMP_IF_FALSE               3 (to 370)
+                364     POP_TOP                         
+                366     POP_EXCEPT                      
+                368     RETURN_CONST                    7: (False, 'ไฟล์ license เสียหาย')
+                370     RERAISE                         0
+                372     COPY                            3
+                374     POP_EXCEPT                      
+                376     RERAISE                         1
+            [Exception Table]
+                88 to 252 -> 348 [0] 
+                348 to 366 -> 372 [1] lasti
+                370 to 372 -> 372 [1] lasti
+    [Disassembly]
+        0       RESUME                          0
+        2       LOAD_CONST                      0: '\nระบบ License Key (ECDSA) — ฝั่งบอท (แบบ activate-on-first-use)\n- ลูกค้าแค่วาง key -> โปรแกรมล็อก key กับเครื่องนี้เองตอนใช้ครั้งแรก (ไม่ต้องส่ง HWID)\n- หลังล็อกแล้ว ก๊อป license.key ไปเครื่องอื่นใช้ไม่ได้ (HWID ไม่ตรง)\n- รองรับ key เช่า (มีวันหมดอายุ) และ ถาวร\n'
+        4       STORE_NAME                      0: __doc__
+        6       LOAD_CONST                      1: 0
+        8       LOAD_CONST                      2: None
+        10      IMPORT_NAME                     1: os
+        12      STORE_NAME                      1: os
+        14      LOAD_CONST                      1: 0
+        16      LOAD_CONST                      2: None
+        18      IMPORT_NAME                     2: sys
+        20      STORE_NAME                      2: sys
+        22      LOAD_CONST                      1: 0
+        24      LOAD_CONST                      2: None
+        26      IMPORT_NAME                     3: json
+        28      STORE_NAME                      3: json
+        30      LOAD_CONST                      1: 0
+        32      LOAD_CONST                      2: None
+        34      IMPORT_NAME                     4: base64
+        36      STORE_NAME                      4: base64
+        38      LOAD_CONST                      1: 0
+        40      LOAD_CONST                      2: None
+        42      IMPORT_NAME                     5: hashlib
+        44      STORE_NAME                      5: hashlib
+        46      LOAD_CONST                      1: 0
+        48      LOAD_CONST                      3: ('date',)
+        50      IMPORT_NAME                     6: datetime
+        52      IMPORT_FROM                     7: date
+        54      STORE_NAME                      7: date
+        56      POP_TOP                         
+        58      LOAD_CONST                      1: 0
+        60      LOAD_CONST                      2: None
+        62      IMPORT_NAME                     8: ecdsa
+        64      STORE_NAME                      8: ecdsa
+        66      LOAD_CONST                      4: 'f2c7836e980d03286b4641db41bce4cf40c6f24530dc1240905be93f4dc0be25bb68844c52a52d6f5adb80c52a320d813d7459c0908dab779d57bc6aec95bea2'
+        68      STORE_NAME                      9: PUBLIC_KEY_HEX
+        70      LOAD_CONST                      5: 'cg-bind-v1-7Hq2pLx9'
+        72      STORE_NAME                      10: _SALT
+        74      LOAD_CONST                      6: <CODE> get_hwid
+        76      MAKE_FUNCTION                   0
+        78      STORE_NAME                      11: get_hwid
+        80      LOAD_CONST                      7: <CODE> _base_dir
+        82      MAKE_FUNCTION                   0
+        84      STORE_NAME                      12: _base_dir
+        86      LOAD_CONST                      8: <CODE> _license_file
+        88      MAKE_FUNCTION                   0
+        90      STORE_NAME                      13: _license_file
+        92      LOAD_CONST                      9: <CODE> _state_path
+        94      MAKE_FUNCTION                   0
+        96      STORE_NAME                      14: _state_path
+        98      LOAD_CONST                      10: <CODE> _bind_hash
+        100     MAKE_FUNCTION                   0
+        102     STORE_NAME                      15: _bind_hash
+        104     LOAD_CONST                      11: <CODE> _clock_ok
+        106     MAKE_FUNCTION                   0
+        108     STORE_NAME                      16: _clock_ok
+        110     LOAD_CONST                      12: <CODE> verify_key
+        112     MAKE_FUNCTION                   0
+        114     STORE_NAME                      17: verify_key
+        116     LOAD_CONST                      13: <CODE> activate
+        118     MAKE_FUNCTION                   0
+        120     STORE_NAME                      18: activate
+        122     LOAD_CONST                      2: None
+        124     STORE_GLOBAL                    19: _run_lock_handle
+        126     LOAD_CONST                      14: <CODE> _run_lock_name
+        128     MAKE_FUNCTION                   0
+        130     STORE_NAME                      20: _run_lock_name
+        132     LOAD_CONST                      15: <CODE> acquire_run_lock
+        134     MAKE_FUNCTION                   0
+        136     STORE_NAME                      21: acquire_run_lock
+        138     LOAD_CONST                      16: <CODE> release_run_lock
+        140     MAKE_FUNCTION                   0
+        142     STORE_NAME                      22: release_run_lock
+        144     LOAD_CONST                      17: <CODE> check_license
+        146     MAKE_FUNCTION                   0
+        148     STORE_NAME                      23: check_license
+        150     RETURN_CONST                    2: None
+    [Exception Table]

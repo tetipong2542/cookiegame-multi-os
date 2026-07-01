@@ -1,0 +1,51 @@
+Unsupported opcode: MAKE_CELL (225)
+Unsupported opcode: MAKE_CELL (225)
+Unsupported opcode: MAKE_CELL (225)
+Unsupported opcode: MAKE_CELL (225)
+Unsupported opcode: POP_JUMP_IF_NONE (239)
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Unsupported opcode: DICT_MERGE (213)
+Unsupported opcode: DICT_MERGE (213)
+Unsupported opcode: POP_JUMP_IF_NONE (239)
+Wrong block type 4 for END_FOR
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Unsupported opcode: POP_JUMP_IF_NOT_NONE (238)
+Unsupported opcode: POP_JUMP_IF_NOT_NONE (238)
+Unsupported opcode: POP_JUMP_IF_NOT_NONE (238)
+Unsupported opcode: POP_JUMP_IF_NOT_NONE (238)
+Unsupported opcode: POP_JUMP_IF_NOT_NONE (238)
+Unsupported opcode: CALL_FUNCTION_EX (170)
+Unsupported opcode: CALL_FUNCTION_EX (170)
+Unsupported opcode: CALL_FUNCTION_EX (170)
+Unsupported opcode: CALL_FUNCTION_EX (170)
+Unsupported opcode: LOAD_FAST_AND_CLEAR (241)
+Unsupported opcode: MAKE_CELL (225)
+Unsupported opcode: POP_JUMP_IF_NOT_NONE (238)
+Unsupported opcode: LOAD_FAST_AND_CLEAR (241)
+Unsupported opcode: RETURN_GENERATOR (109)
+Unsupported opcode: POP_JUMP_IF_NOT_NONE (238)
+Unsupported opcode: POP_JUMP_IF_NOT_NONE (238)
+Unsupported opcode: CALL_FUNCTION_EX (170)
+Unsupported opcode: POP_JUMP_IF_NONE (239)
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
+Warning: Stack history is not empty!
+Warning: block stack is not empty!
