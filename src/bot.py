@@ -201,7 +201,8 @@ PATTERN_FILE = 'pattern.json'
 REPLAY_PATTERN = None
 
 BOOST_START_ENABLED = True
-BOOST_START_DELAY_SEC = 0.6   # วินาทีหลังกด Play (รอเกม load แล้ว boost prompt โผล่)
+BOOST_START_DELAY_SEC = 1.5   # วินาทีหลังกด Play — 0.6s เร็วไป (เกม load ยังไม่เสร็จ), 3+ ช้าไป (boost หาย)
+BOOST_DEBUG_SAVE_SCREEN = True   # บันทึกภาพหน้าจอตอนกด boost -> ดูว่าตอน tap กำลังเห็นอะไร
 BOOST_START_TAP = (640, 350)   # LDPlayer 1280x720 — ปรับถ้า resolution ต่าง
 IMG_BOOST_START = 'templates/boost_start.png'
 BOOST_START_THRESHOLD = 0.7
@@ -595,15 +596,21 @@ def _tap_fast_start_boost():
     time.sleep(BOOST_START_DELAY_SEC)
     if STOP_FLAG.is_set():
         return
+    screen = adb_screencap() if (BOOST_DEBUG_SAVE_SCREEN or load_template(IMG_BOOST_START) is not None) else None
+    if BOOST_DEBUG_SAVE_SCREEN and screen is not None:
+        try:
+            path = os.path.join(_writable_dir(), f'boost_debug_{int(time.time())}.png')
+            cv2.imwrite(path, screen)
+            print(f'[boost-debug] saved screen -> {path}')
+        except Exception as e:
+            print(f'[boost-debug] save failed: {e}')
     tmpl = load_template(IMG_BOOST_START)
-    if tmpl is not None:
-        screen = adb_screencap()
-        if screen is not None:
-            bf, bc, bs = find_template(screen, IMG_BOOST_START, BOOST_START_THRESHOLD)
-            if bf and bc is not None:
-                print(f'[boost] เจอ Fast Start Boost (score={bs:.3f}) -> กด {bc}')
-                adb_tap(*bc)
-                return
+    if tmpl is not None and screen is not None:
+        bf, bc, bs = find_template(screen, IMG_BOOST_START, BOOST_START_THRESHOLD)
+        if bf and bc is not None:
+            print(f'[boost] เจอ Fast Start Boost (score={bs:.3f}) -> กด {bc}')
+            adb_tap(*bc)
+            return
         print(f'[boost] template ไม่เจอ -> blind tap ที่ {BOOST_START_TAP}')
     else:
         print(f'[boost] blind tap ที่ {BOOST_START_TAP} (หลังกด Play {BOOST_START_DELAY_SEC}s)')
