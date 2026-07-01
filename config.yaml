@@ -92,3 +92,22 @@ crash_log:
   # Output path:
   #   Windows: %LOCALAPPDATA%\CookieGame\crash_log\YYYYMMDD_HHMMSS\
   #   Mac:     ~/Library/Application Support/CookieGame/crash_log/YYYYMMDD_HHMMSS/
+
+# ------------------------------------------------------------------------------
+# Debug Mode - เก็บ log ทุก round (ไม่ใช่แค่ crash) สำหรับ tune ROI/threshold
+# ------------------------------------------------------------------------------
+debug:
+  enabled: true              # เปิด debug mode ทั้งระบบ
+  log_every_detection: true  # print [detect] ทุก tick ที่ detector.detect() ทำงาน
+  log_zone_stats: true       # include MOG2 px + Canny edges ใน log
+  save_all_runs: true        # save decisions.json/summary.json ทุก round (ไม่ใช่แค่ crash)
+  save_debug_frames: true    # save roi_debug_start.png + roi_debug_last.png
+  # Output path (per round):
+  #   Windows: %LOCALAPPDATA%\CookieGame\logs\runs\YYYYMMDD_HHMMSS\
+  #   Mac:     ~/Library/Application Support/CookieGame/logs/runs/YYYYMMDD_HHMMSS/
+  # Files:
+  #   - decisions.json      (all detection ticks + scores + votes)
+  #   - summary.json        (aggregated stats for the run)
+  #   - config_used.yaml    (snapshot of config at run start)
+  #   - roi_debug_start.png (first frame with ROI overlay)
+  #   - roi_debug_last.png  (last frame with ROI overlay)

@@ -751,6 +751,7 @@ def state_run():
         f, _, _ = find_template(screen, IMG_RESULT, 0.75)
         if f:
             print('[OK] เจอหน้า Result -> STATE 3')
+            _maybe_save_run_log(t_start, 'result')
             return State.RESULT
         f, _, _ = find_template(screen, IMG_RELAY, RELAY_THRESHOLD)
         if f:
@@ -800,6 +801,8 @@ def state_run():
                     time.sleep(DOUBLE_JUMP_GAP_SEC)
                     pt2 = random.choice(JUMP_TAP_POINTS)
                     adb_tap(pt2[0], pt2[1], JUMP_JITTER)
+                    if detector is not None:
+                        detector.notify_double_jump()
                 last_jump_time = now
                 next_jump_delay = random.uniform(JUMP_DELAY_MIN, JUMP_DELAY_MAX)
         try:
@@ -817,6 +820,7 @@ def state_run():
         except Exception:
             pass
         time.sleep(LOOP_SLEEP)
+    _maybe_save_run_log(t_start, 'stopped')
     return State.RESULT
 
 COIN_LOG_ROI = (945, 383, 1118, 430)
@@ -876,19 +880,43 @@ def _get_detector():
     return _DETECTOR
 
 
-def _maybe_save_crash_log(t_start, reason):
-    '''Save crash log if run duration < threshold and detector active.'''
+def _config_source_path():
+    try:
+        p = os.path.join(_writable_dir(), 'config.yaml')
+        if os.path.isfile(p):
+            return p
+    except Exception:
+        pass
+    try:
+        return resource_path('config.yaml')
+    except Exception:
+        return None
+
+
+def _maybe_save_run_log(t_start, reason):
     if _DETECTOR is None or _CFG is None:
         return
     try:
         run_duration = time.time() - t_start
-        if run_duration >= _CFG['crash_log']['short_run_threshold_sec']:
-            return
         ts = time.strftime('%Y%m%d_%H%M%S')
-        crash_dir = os.path.join(_writable_dir(), 'crash_log', f'{ts}_{reason}')
-        _DETECTOR.save_crash_log(crash_dir, run_duration)
+        run_dir = os.path.join(_writable_dir(), 'logs', 'runs', f'{ts}_{reason}')
+        _DETECTOR.save_run_log(run_dir, run_duration, _config_source_path())
+    except Exception as e:
+        print(f'[run-log] error: {e}')
+
+
+def _maybe_save_crash_log(t_start, reason):
+    if _DETECTOR is None or _CFG is None:
+        return
+    try:
+        run_duration = time.time() - t_start
+        if run_duration < _CFG['crash_log']['short_run_threshold_sec']:
+            ts = time.strftime('%Y%m%d_%H%M%S')
+            crash_dir = os.path.join(_writable_dir(), 'crash_log', f'{ts}_{reason}')
+            _DETECTOR.save_crash_log(crash_dir, run_duration)
     except Exception as e:
         print(f'[crash-log] error: {e}')
+    _maybe_save_run_log(t_start, reason)
 
 
 def _writable_dir():

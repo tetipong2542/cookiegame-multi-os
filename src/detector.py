@@ -186,12 +186,26 @@ class ObstacleDetector:
         self.save_last_n_frames = int(cl['save_last_n_frames'])
         self.save_decision_log = bool(cl['save_decision_log'])
 
+        d = config.get('debug', {}) or {}
+        self.debug_enabled = bool(d.get('enabled', False))
+        self.log_every_detection = bool(d.get('log_every_detection', False))
+        self.log_zone_stats = bool(d.get('log_zone_stats', False))
+        self.save_all_runs = bool(d.get('save_all_runs', False))
+        self.save_debug_frames = bool(d.get('save_debug_frames', False))
+
         self.round_start = time.time()
         self.last_detect = 0.0
         self.last_jump = 0.0
         self.last_slide = 0.0
         self._frame_buffer = collections.deque(maxlen=self.save_last_n_frames)
         self._decision_log: list = []
+        self.total_detections = 0
+        self.cooldown_blocks = 0
+        self.action_counts = {'jump': 0, 'slide': 0, 'double_jump': 0}
+        self.jump_score_history: list = []
+        self.slide_score_history: list = []
+        self.first_frame = None
+        self.last_frame = None
 
     def reset_round(self):
         self.round_start = time.time()
@@ -200,15 +214,29 @@ class ObstacleDetector:
         self.last_slide = 0.0
         self._frame_buffer.clear()
         self._decision_log.clear()
+        self.total_detections = 0
+        self.cooldown_blocks = 0
+        self.action_counts = {'jump': 0, 'slide': 0, 'double_jump': 0}
+        self.jump_score_history = []
+        self.slide_score_history = []
+        self.first_frame = None
+        self.last_frame = None
         self.mog2_high = cv2.createBackgroundSubtractorMOG2(**self._mog2_kwargs)
         self.mog2_low = cv2.createBackgroundSubtractorMOG2(**self._mog2_kwargs)
 
     def push_frame(self, screen):
         if screen is not None:
             try:
-                self._frame_buffer.append((time.time(), screen.copy()))
+                snapshot = screen.copy()
+                if self.first_frame is None:
+                    self.first_frame = snapshot
+                self.last_frame = snapshot
+                self._frame_buffer.append((time.time(), snapshot))
             except Exception:
                 pass
+
+    def notify_double_jump(self):
+        self.action_counts['double_jump'] += 1
 
     def _crop_zone(self, screen, zone_key: str):
         z = self.cfg['zones'][zone_key]
@@ -259,18 +287,17 @@ class ObstacleDetector:
         mog2_lo_px = self._mog2_pixels(lz, self.mog2_low)
 
         in_warmup = elapsed < self.warmup_seconds
-        if in_warmup:
-            return None, 0, {'warmup': True, 'elapsed_s': round(elapsed, 2)}
-
         canny_hi_ed = self._canny_edges(hz)
         canny_lo_ed = self._canny_edges(lz)
+
+        self.total_detections += 1
 
         slide_score = 0
         slide_votes: Dict[str, Any] = {}
         if template_slide_match:
             slide_score += self.w_template
             slide_votes['template'] = True
-        if mog2_lo_px > self.min_mog2_pixels:
+        if not in_warmup and mog2_lo_px > self.min_mog2_pixels:
             slide_score += self.w_mog2
             slide_votes['mog2_px'] = mog2_lo_px
         if canny_lo_ed > self.min_canny_edges:
@@ -279,25 +306,70 @@ class ObstacleDetector:
 
         jump_score = 0
         jump_votes: Dict[str, Any] = {}
-        if mog2_hi_px > self.min_mog2_pixels:
+        if not in_warmup and mog2_hi_px > self.min_mog2_pixels:
             jump_score += self.w_mog2
             jump_votes['mog2_px'] = mog2_hi_px
         if canny_hi_ed > self.min_canny_edges:
             jump_score += self.w_canny
             jump_votes['canny_edges'] = canny_hi_ed
 
-        if slide_score >= self.action_threshold and (now - self.last_slide) > self.cd_slide:
-            self.last_slide = now
-            entry = {'ts': now, 'action': 'slide', 'score': slide_score, 'votes': slide_votes}
-            self._decision_log.append(entry)
-            return 'slide', slide_score, slide_votes
+        self.jump_score_history.append(jump_score)
+        self.slide_score_history.append(slide_score)
 
-        if jump_score >= self.action_threshold and (now - self.last_jump) > self.cd_jump:
-            self.last_jump = now
-            entry = {'ts': now, 'action': 'jump', 'score': jump_score, 'votes': jump_votes}
-            self._decision_log.append(entry)
-            return 'jump', jump_score, jump_votes
+        cooldown_blocked_slide = False
+        cooldown_blocked_jump = False
+        chosen_action: Optional[str] = None
+        chosen_score = 0
+        chosen_votes: Dict[str, Any] = {}
 
+        if slide_score >= self.action_threshold:
+            if (now - self.last_slide) > self.cd_slide:
+                chosen_action = 'slide'
+                chosen_score = slide_score
+                chosen_votes = slide_votes
+                self.last_slide = now
+                self.action_counts['slide'] += 1
+            else:
+                cooldown_blocked_slide = True
+                self.cooldown_blocks += 1
+
+        if chosen_action is None and jump_score >= self.action_threshold:
+            if (now - self.last_jump) > self.cd_jump:
+                chosen_action = 'jump'
+                chosen_score = jump_score
+                chosen_votes = jump_votes
+                self.last_jump = now
+                self.action_counts['jump'] += 1
+            else:
+                cooldown_blocked_jump = True
+                self.cooldown_blocks += 1
+
+        entry = {
+            'time': round(elapsed, 3),
+            'ts': now,
+            'in_warmup': in_warmup,
+            'jump_score': jump_score,
+            'slide_score': slide_score,
+            'mog2_jump_pixels': mog2_hi_px,
+            'mog2_slide_pixels': mog2_lo_px,
+            'canny_jump_edges': canny_hi_ed,
+            'canny_slide_edges': canny_lo_ed,
+            'template_match': bool(template_slide_match) if template_slide_match else None,
+            'cooldown_blocked': bool(cooldown_blocked_slide or cooldown_blocked_jump),
+            'action': chosen_action,
+            'decision': 'ACTION' if chosen_action else ('COOLDOWN' if (cooldown_blocked_slide or cooldown_blocked_jump) else 'SKIP'),
+        }
+        self._decision_log.append(entry)
+
+        if self.debug_enabled and self.log_every_detection:
+            self._print_detect_line(elapsed, jump_score, slide_score,
+                                    mog2_hi_px, mog2_lo_px, canny_hi_ed, canny_lo_ed,
+                                    bool(template_slide_match), chosen_action,
+                                    cooldown_blocked_slide or cooldown_blocked_jump,
+                                    in_warmup)
+
+        if chosen_action is not None:
+            return chosen_action, chosen_score, chosen_votes
         return None, 0, {
             'slide_score': slide_score,
             'jump_score': jump_score,
@@ -305,7 +377,37 @@ class ObstacleDetector:
             'mog2_lo': mog2_lo_px,
             'canny_hi': canny_hi_ed,
             'canny_lo': canny_lo_ed,
+            'cooldown_blocked': cooldown_blocked_slide or cooldown_blocked_jump,
+            'warmup': in_warmup,
         }
+
+    def _print_detect_line(self, elapsed, jump_score, slide_score,
+                           mog2_hi, mog2_lo, canny_hi, canny_lo,
+                           tmpl_hit, action, cooldown_blocked, in_warmup):
+        prefix = f'[detect] t={elapsed:5.2f}s'
+        if in_warmup:
+            prefix += ' (warmup)'
+        if self.log_zone_stats:
+            j_stat = f'mog2={mog2_hi}({"HIT" if mog2_hi > self.min_mog2_pixels else "-"}) '\
+                     f'canny={canny_hi}({"HIT" if canny_hi > self.min_canny_edges else "-"})'
+            s_stat = f'mog2={mog2_lo}({"HIT" if mog2_lo > self.min_mog2_pixels else "-"}) '\
+                     f'canny={canny_lo}({"HIT" if canny_lo > self.min_canny_edges else "-"}) '\
+                     f'tmpl={"YES" if tmpl_hit else "-"}'
+        else:
+            j_stat = ''
+            s_stat = ''
+        if action == 'jump':
+            tag = 'ACTION'
+        elif action == 'slide':
+            tag = 'ACTION'
+        elif cooldown_blocked:
+            tag = 'COOLDOWN'
+        else:
+            tag = 'SKIP'
+        need = self.action_threshold
+        print(f'{prefix} Jump: {j_stat} score={jump_score} need={need} | '
+              f'Slide: {s_stat} score={slide_score} need={need} -> {tag}'
+              + (f' ({action.upper()})' if action else ''))
 
     def save_crash_log(self, crash_dir: str, run_duration: float) -> bool:
         if not self.crash_log_enabled:
@@ -344,4 +446,73 @@ class ObstacleDetector:
             return True
         except Exception as e:
             print(f'[crash-log] save error: {e}')
+            return False
+
+    def _draw_roi_overlay(self, frame):
+        try:
+            view = frame.copy()
+            hz = self.cfg['zones']['high']
+            lz = self.cfg['zones']['low']
+            cv2.rectangle(view, (int(hz[0]), int(hz[1])), (int(hz[2]), int(hz[3])), (0, 255, 255), 2)
+            cv2.rectangle(view, (int(lz[0]), int(lz[1])), (int(lz[2]), int(lz[3])), (0, 200, 255), 2)
+            cv2.putText(view, 'HIGH (Jump)', (int(hz[0]), int(hz[1]) - 8),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
+            cv2.putText(view, 'LOW (Slide)', (int(lz[0]), int(lz[1]) - 8),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 200, 255), 2)
+            return view
+        except Exception:
+            return frame
+
+    def get_summary(self, run_duration: float, config_path: Optional[str] = None) -> Dict[str, Any]:
+        def _avg(xs):
+            return round(float(sum(xs) / len(xs)), 3) if xs else 0.0
+        return {
+            'run_duration': round(float(run_duration), 3),
+            'total_detections': int(self.total_detections),
+            'actions': dict(self.action_counts),
+            'skipped_by_cooldown': int(self.cooldown_blocks),
+            'avg_jump_score': _avg(self.jump_score_history),
+            'avg_slide_score': _avg(self.slide_score_history),
+            'action_threshold': int(self.action_threshold),
+            'weights': {'template': self.w_template, 'mog2': self.w_mog2, 'canny': self.w_canny},
+            'zones': dict(self.cfg['zones']),
+            'config_path': config_path or '',
+        }
+
+    def save_run_log(self, run_dir: str, run_duration: float, config_path: Optional[str] = None) -> bool:
+        if not self.save_all_runs:
+            return False
+        try:
+            os.makedirs(run_dir, exist_ok=True)
+
+            if self.save_debug_frames:
+                if self.first_frame is not None:
+                    cv2.imwrite(os.path.join(run_dir, 'roi_debug_start.png'),
+                                self._draw_roi_overlay(self.first_frame))
+                if self.last_frame is not None:
+                    cv2.imwrite(os.path.join(run_dir, 'roi_debug_last.png'),
+                                self._draw_roi_overlay(self.last_frame))
+
+            with open(os.path.join(run_dir, 'decisions.json'), 'w', encoding='utf-8') as f:
+                json.dump(self._decision_log, f, indent=2, default=str, ensure_ascii=False)
+
+            summary = self.get_summary(run_duration, config_path)
+            with open(os.path.join(run_dir, 'summary.json'), 'w', encoding='utf-8') as f:
+                json.dump(summary, f, indent=2, ensure_ascii=False)
+
+            if config_path and os.path.isfile(config_path):
+                try:
+                    with open(config_path, 'r', encoding='utf-8') as src, \
+                         open(os.path.join(run_dir, 'config_used.yaml'), 'w', encoding='utf-8') as dst:
+                        dst.write(src.read())
+                except Exception:
+                    pass
+
+            print(f'[run-log] saved -> {run_dir} '
+                  f'(detections={self.total_detections} '
+                  f'actions=J{self.action_counts["jump"]}/S{self.action_counts["slide"]}/DJ{self.action_counts["double_jump"]} '
+                  f'duration={run_duration:.2f}s)')
+            return True
+        except Exception as e:
+            print(f'[run-log] save error: {e}')
             return False
