@@ -17,6 +17,7 @@ LDPlayer Game Bot - State Machine
     pip install opencv-python numpy keyboard
 """
 import subprocess
+import struct
 import os
 import time
 import sys
@@ -312,12 +313,38 @@ def auto_select_device():
     return True
 
 
-def adb_screencap():
-    '''
-    แคปหน้าจอผ่าน ADB แล้วแปลงเป็นภาพ OpenCV (BGR)
-    ใช้ exec-out screencap -p เพื่อรับข้อมูล PNG ทาง stdout โดยตรง (เร็วและไม่ต้องเซฟไฟล์)
-    คืนค่า: numpy array (ภาพ) หรือ None ถ้าล้มเหลว
-    '''
+_SCREENCAP_METHOD = None
+
+
+def _screencap_raw():
+    cmd = _adb_base() + ['exec-out', 'screencap']
+    try:
+        result = _run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=10)
+    except subprocess.TimeoutExpired:
+        return None
+    except Exception:
+        return None
+    buf = result.stdout
+    if not buf or len(buf) < 12:
+        return None
+    try:
+        w = struct.unpack('<I', buf[0:4])[0]
+        h = struct.unpack('<I', buf[4:8])[0]
+        fmt = struct.unpack('<I', buf[8:12])[0]
+        if not (100 < w < 4000 and 100 < h < 4000):
+            return None
+        expected = w * h * 4
+        for header_size in (16, 12):
+            body = buf[header_size:header_size + expected]
+            if len(body) >= expected:
+                pixels = np.frombuffer(body, dtype=np.uint8).reshape((h, w, 4))
+                return cv2.cvtColor(pixels, cv2.COLOR_RGBA2BGR)
+    except Exception:
+        return None
+    return None
+
+
+def _screencap_png():
     cmd = _adb_base() + ['exec-out', 'screencap', '-p']
     try:
         result = _run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=10)
@@ -325,14 +352,34 @@ def adb_screencap():
             print('[ERR] แคปหน้าจอไม่ได้:', result.stderr.decode(errors='ignore'))
             return None
         img_array = np.frombuffer(result.stdout, dtype=np.uint8)
-        screen = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
-        return screen
+        return cv2.imdecode(img_array, cv2.IMREAD_COLOR)
     except subprocess.TimeoutExpired:
         print('[ERR] ADB screencap timeout')
         return None
     except Exception as e:
         print(f'[ERR] adb_screencap: {e}')
         return None
+
+
+def adb_screencap():
+    global _SCREENCAP_METHOD
+    if _SCREENCAP_METHOD == 'png':
+        return _screencap_png()
+    if _SCREENCAP_METHOD == 'raw':
+        img = _screencap_raw()
+        if img is not None:
+            return img
+        _SCREENCAP_METHOD = 'png'
+        print('[screencap] raw failed mid-run -> switch to PNG for rest of session')
+        return _screencap_png()
+    img = _screencap_raw()
+    if img is not None:
+        _SCREENCAP_METHOD = 'raw'
+        print(f'[screencap] using RAW RGBA mode ({img.shape[1]}x{img.shape[0]})')
+        return img
+    _SCREENCAP_METHOD = 'png'
+    print('[screencap] raw not supported -> using PNG mode')
+    return _screencap_png()
 
 
 def adb_tap(x, y, jitter=None):
@@ -733,6 +780,9 @@ def state_run():
     last_jump_time = 0.0
     last_slide_time = 0.0
     next_jump_delay = random.uniform(JUMP_DELAY_MIN, JUMP_DELAY_MAX)
+    _last_pit_check = 0.0
+    _last_relay_check = 0.0
+    _pit_hit_cache = False
     while not STOP_FLAG.is_set():
         now = time.time()
         if now - t_start > RUN_STATE_TIMEOUT:
@@ -748,25 +798,34 @@ def state_run():
             time.sleep(LOOP_SLEEP)
             continue
 
-        # === Pit Lift avoidance: เจอหน้า "5 for 1 Pit Lift" -> หยุดกดทุกปุ่ม ===
-        if PIT_LIFT_AVOID:
-            pl, _, _ = find_template(screen, IMG_PIT_LIFT, PIT_LIFT_THRESHOLD)
-            if pl:
-                print('[pit-lift] เจอหน้า Save the Cookie / Pit Lift -> รอ auto-decline (ไม่กด)')
-                time.sleep(1.0)
-                continue
+        if PIT_LIFT_AVOID and (now - _last_pit_check) > 0.8:
+            _last_pit_check = now
+            _tt = time.perf_counter()
+            _pit_hit_cache, _, _ = find_template(screen, IMG_PIT_LIFT, PIT_LIFT_THRESHOLD)
+            if detector is not None:
+                detector.record_external_timing('template_ms', (time.perf_counter() - _tt) * 1000)
+        if _pit_hit_cache:
+            print('[pit-lift] เจอหน้า Save the Cookie / Pit Lift -> รอ auto-decline (ไม่กด)')
+            _pit_hit_cache = False
+            time.sleep(1.0)
+            continue
 
         f, _, _ = find_template(screen, IMG_RESULT, 0.75)
         if f:
             print('[OK] เจอหน้า Result -> STATE 3')
             _maybe_save_run_log(t_start, 'result')
             return State.RESULT
-        f, _, _ = find_template(screen, IMG_RELAY, RELAY_THRESHOLD)
-        if f:
-            print('[relay] กด Relay')
-            adb_tap(*BTN_RELAY)
-            time.sleep(0.5)
-            continue
+        if (now - _last_relay_check) > 0.6:
+            _last_relay_check = now
+            _tt = time.perf_counter()
+            f, _, _ = find_template(screen, IMG_RELAY, RELAY_THRESHOLD)
+            if detector is not None:
+                detector.record_external_timing('template_ms', (time.perf_counter() - _tt) * 1000)
+            if f:
+                print('[relay] กด Relay')
+                adb_tap(*BTN_RELAY)
+                time.sleep(0.5)
+                continue
 
         if detector is not None and _CFG is not None and _CFG['detection'].get('enabled', True):
             detector.push_frame(screen)

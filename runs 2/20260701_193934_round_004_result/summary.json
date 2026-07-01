@@ -1,0 +1,38 @@
+{
+  "run_duration": 32.335,
+  "total_detections": 17,
+  "actions": {
+    "jump": 0,
+    "slide": 13,
+    "double_jump": 2
+  },
+  "skipped_by_cooldown": 0,
+  "avg_jump_score": 2.412,
+  "avg_slide_score": 2.529,
+  "action_threshold": 3,
+  "weights": {
+    "template": 3,
+    "mog2": 2,
+    "canny": 1
+  },
+  "zones": {
+    "high": [
+      500,
+      200,
+      900,
+      450
+    ],
+    "low": [
+      500,
+      500,
+      900,
+      650
+    ]
+  },
+  "config_path": "C:\\Users\\NEXTSP~1\\AppData\\Local\\Temp\\_MEI44002\\config.yaml",
+  "effective_detection_hz": 0.65,
+  "avg_screencap_ms": 650.83,
+  "avg_template_ms": 168.49,
+  "avg_detect_total_ms": 12.6,
+  "avg_loop_total_ms": 1549.28
+}
