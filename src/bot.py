@@ -184,6 +184,8 @@ BTN_SLIDE = (1200, 670)
 BTN_RELAY = (644, 335)
 JUMP_DELAY_MIN = 0
 JUMP_DELAY_MAX = 0.75
+DOUBLE_JUMP_PROB = 0.30
+DOUBLE_JUMP_GAP_SEC = 0.12
 JUMP_TAP_POINTS = [
     (80, 670),
     (170, 650),
@@ -760,6 +762,10 @@ def state_run():
             if now - last_jump_time >= next_jump_delay:
                 pt = random.choice(JUMP_TAP_POINTS)
                 adb_tap(pt[0], pt[1], JUMP_JITTER)
+                if random.random() < DOUBLE_JUMP_PROB:
+                    time.sleep(DOUBLE_JUMP_GAP_SEC)
+                    pt2 = random.choice(JUMP_TAP_POINTS)
+                    adb_tap(pt2[0], pt2[1], JUMP_JITTER)
                 last_jump_time = now
                 next_jump_delay = random.uniform(JUMP_DELAY_MIN, JUMP_DELAY_MAX)
         try:
