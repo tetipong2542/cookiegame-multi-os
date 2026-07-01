@@ -201,7 +201,7 @@ PATTERN_FILE = 'pattern.json'
 REPLAY_PATTERN = None
 
 BOOST_START_ENABLED = True
-BOOST_START_DELAY_SEC = 1.5   # วินาทีหลังกด Play — 0.6s เร็วไป (เกม load ยังไม่เสร็จ), 3+ ช้าไป (boost หาย)
+BOOST_START_DELAY_SEC = 2.5   # วินาทีหลังกด Play — เพิ่มทีละ 0.5 ถ้า debug screencap ยังเป็น Loading
 BOOST_DEBUG_SAVE_SCREEN = True   # บันทึกภาพหน้าจอตอนกด boost -> ดูว่าตอน tap กำลังเห็นอะไร
 BOOST_START_TAP = (640, 350)   # LDPlayer 1280x720 — ปรับถ้า resolution ต่าง
 IMG_BOOST_START = 'templates/boost_start.png'

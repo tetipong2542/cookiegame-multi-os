@@ -1,9 +1,6 @@
 name: Build macOS .app
 
 on:
-  push:
-    branches: [main, master]
-    tags: ['v*']
   workflow_dispatch:
 
 permissions:
