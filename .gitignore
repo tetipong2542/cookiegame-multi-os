@@ -20,6 +20,13 @@ coins.csv
 coins_fail_*.png
 pattern.json
 license.key
+boost_debug_*.png
+ingame_fail_*.png
+
+# Debug logs (from user field tests)
+runs/
+logs/
+crash_log/
 
 # Editors
 .vscode/
