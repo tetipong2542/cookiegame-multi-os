@@ -16,6 +16,8 @@ IS_WIN = sys.platform == 'win32'
 hidden = [
     'keyboard',
     'ecdsa',
+    'yaml',
+    'detector',
 ]
 hidden += collect_submodules('cv2')
 
@@ -35,6 +37,7 @@ a = Analysis(
     binaries=[],
     datas=[
         ('templates', 'templates'),
+        ('config.yaml', '.'),
     ],
     hiddenimports=hidden,
     hookspath=[],

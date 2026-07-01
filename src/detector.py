@@ -1,0 +1,347 @@
+"""Hybrid Obstacle Detector (Phase 2)
+
+Layered detection combining MOG2 background subtraction, Canny edge density,
+and template matching via a configurable weighted voting system.
+
+Author: reconstructed for cookiegame port.
+"""
+import collections
+import json
+import os
+import shutil
+import time
+from typing import Any, Dict, Optional, Tuple
+
+import cv2
+import numpy as np
+
+try:
+    import yaml
+    HAS_YAML = True
+except ImportError:
+    HAS_YAML = False
+
+
+DEFAULT_CONFIG: Dict[str, Any] = {
+    'config_version': 1,
+    'detection': {
+        'enabled': True,
+        'detection_hz': 10,
+        'warmup_seconds': 8,
+    },
+    'zones': {
+        'high': [500, 200, 900, 450],
+        'low':  [500, 500, 900, 650],
+    },
+    'mog2': {
+        'history': 500,
+        'var_threshold': 25,
+        'detect_shadows': False,
+        'min_pixels_trigger': 500,
+    },
+    'canny': {
+        'low_threshold': 50,
+        'high_threshold': 150,
+        'min_edges_trigger': 300,
+    },
+    'template': {
+        'ingame2_threshold': 0.75,
+    },
+    'voting': {
+        'weights': {'template': 3, 'mog2': 2, 'canny': 1},
+        'action_threshold': 3,
+    },
+    'cooldowns': {
+        'jump': 0.4,
+        'slide': 0.8,
+        'double_jump': 0.6,
+    },
+    'double_jump': {
+        'random_probability': 0.30,
+        'gap_seconds': 0.12,
+    },
+    'crash_log': {
+        'enabled': True,
+        'short_run_threshold_sec': 8,
+        'save_last_n_frames': 10,
+        'save_decision_log': True,
+    },
+}
+
+
+def _deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+    result = dict(base)
+    for k, v in override.items():
+        if k in result and isinstance(result[k], dict) and isinstance(v, dict):
+            result[k] = _deep_merge(result[k], v)
+        else:
+            result[k] = v
+    return result
+
+
+def _read_yaml(path: str) -> Optional[Dict[str, Any]]:
+    if not HAS_YAML:
+        return None
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            return yaml.safe_load(f)
+    except Exception as e:
+        print(f'[config] อ่าน {path} ไม่ได้: {e}')
+        return None
+
+
+def load_config(user_config_path: str, bundled_config_path: str) -> Tuple[Dict[str, Any], str]:
+    """2-tier config loader with fallback.
+
+    Priority order:
+      1. User override at user_config_path
+      2. Bundled default at bundled_config_path
+      3. Hardcoded DEFAULT_CONFIG (last resort)
+
+    First-run behavior: if bundled exists but user doesn't, copy bundled to user path.
+    On YAML parse errors: fall back to next tier and continue.
+
+    Returns:
+      (merged_config_dict, source_description_string)
+    """
+    config = dict(DEFAULT_CONFIG)
+    source = 'hardcoded default'
+
+    bundled_data = None
+    if bundled_config_path and os.path.exists(bundled_config_path):
+        bundled_data = _read_yaml(bundled_config_path)
+        if bundled_data:
+            config = _deep_merge(config, bundled_data)
+            source = f'bundled: {bundled_config_path}'
+
+    if user_config_path:
+        if os.path.exists(user_config_path):
+            user_data = _read_yaml(user_config_path)
+            if user_data:
+                config = _deep_merge(config, user_data)
+                source = f'user override: {user_config_path}'
+            else:
+                print(f'[config] user config พัง -> fallback bundled')
+        elif bundled_config_path and os.path.exists(bundled_config_path):
+            try:
+                os.makedirs(os.path.dirname(user_config_path), exist_ok=True)
+                shutil.copy2(bundled_config_path, user_config_path)
+                print(f'[config] first run -> copied default to {user_config_path}')
+            except Exception as e:
+                print(f'[config] copy default ล้ม: {e}')
+
+    return config, source
+
+
+class ObstacleDetector:
+    """Hybrid MOG2 + Canny + Template + Voting detector.
+
+    Usage:
+      detector = ObstacleDetector(config)
+      # per round:
+      detector.reset_round()
+      while running:
+          detector.push_frame(screen)
+          action, score, votes = detector.detect(screen, template_slide_match=bool(tmpl_hit))
+          if action == 'slide': adb_slide()
+          elif action == 'jump': adb_tap(...)
+      # on crash:
+      detector.save_crash_log(crash_dir, run_duration)
+    """
+
+    def __init__(self, config: Dict[str, Any]):
+        self.cfg = config
+        self.enabled = config['detection'].get('enabled', True)
+        self.warmup_seconds = float(config['detection'].get('warmup_seconds', 8))
+        hz = max(1, int(config['detection'].get('detection_hz', 10)))
+        self._detect_interval = 1.0 / hz
+
+        m = config['mog2']
+        self._mog2_kwargs = dict(
+            history=int(m['history']),
+            varThreshold=float(m['var_threshold']),
+            detectShadows=bool(m['detect_shadows']),
+        )
+        self.min_mog2_pixels = int(m['min_pixels_trigger'])
+        self.mog2_high = cv2.createBackgroundSubtractorMOG2(**self._mog2_kwargs)
+        self.mog2_low = cv2.createBackgroundSubtractorMOG2(**self._mog2_kwargs)
+
+        c = config['canny']
+        self.canny_low = int(c['low_threshold'])
+        self.canny_high = int(c['high_threshold'])
+        self.min_canny_edges = int(c['min_edges_trigger'])
+
+        v = config['voting']
+        self.w_template = int(v['weights']['template'])
+        self.w_mog2 = int(v['weights']['mog2'])
+        self.w_canny = int(v['weights']['canny'])
+        self.action_threshold = int(v['action_threshold'])
+
+        self.cd_jump = float(config['cooldowns']['jump'])
+        self.cd_slide = float(config['cooldowns']['slide'])
+
+        cl = config['crash_log']
+        self.crash_log_enabled = bool(cl['enabled'])
+        self.short_run_threshold = float(cl['short_run_threshold_sec'])
+        self.save_last_n_frames = int(cl['save_last_n_frames'])
+        self.save_decision_log = bool(cl['save_decision_log'])
+
+        self.round_start = time.time()
+        self.last_detect = 0.0
+        self.last_jump = 0.0
+        self.last_slide = 0.0
+        self._frame_buffer = collections.deque(maxlen=self.save_last_n_frames)
+        self._decision_log: list = []
+
+    def reset_round(self):
+        self.round_start = time.time()
+        self.last_detect = 0.0
+        self.last_jump = 0.0
+        self.last_slide = 0.0
+        self._frame_buffer.clear()
+        self._decision_log.clear()
+        self.mog2_high = cv2.createBackgroundSubtractorMOG2(**self._mog2_kwargs)
+        self.mog2_low = cv2.createBackgroundSubtractorMOG2(**self._mog2_kwargs)
+
+    def push_frame(self, screen):
+        if screen is not None:
+            try:
+                self._frame_buffer.append((time.time(), screen.copy()))
+            except Exception:
+                pass
+
+    def _crop_zone(self, screen, zone_key: str):
+        z = self.cfg['zones'][zone_key]
+        x1, y1, x2, y2 = int(z[0]), int(z[1]), int(z[2]), int(z[3])
+        h, w = screen.shape[:2]
+        x1 = max(0, min(x1, w - 1))
+        x2 = max(0, min(x2, w))
+        y1 = max(0, min(y1, h - 1))
+        y2 = max(0, min(y2, h))
+        return screen[y1:y2, x1:x2]
+
+    def _mog2_pixels(self, zone_img, mog2) -> int:
+        fg = mog2.apply(zone_img)
+        return int(np.count_nonzero(fg))
+
+    def _canny_edges(self, zone_img) -> int:
+        if zone_img.ndim == 3:
+            gray = cv2.cvtColor(zone_img, cv2.COLOR_BGR2GRAY)
+        else:
+            gray = zone_img
+        edges = cv2.Canny(gray, self.canny_low, self.canny_high)
+        return int(np.count_nonzero(edges))
+
+    def detect(self, screen, template_slide_match: bool = False) -> Tuple[Optional[str], int, Dict[str, Any]]:
+        """Main entry. Returns (action|None, total_score, votes_debug_dict).
+
+        Args:
+          screen: BGR frame from adb_screencap()
+          template_slide_match: whether ingame2.png matched (caller pre-computes)
+        """
+        if not self.enabled or screen is None:
+            return None, 0, {'enabled': self.enabled}
+
+        now = time.time()
+        elapsed = now - self.round_start
+
+        if now - self.last_detect < self._detect_interval:
+            return None, 0, {'throttled': True}
+        self.last_detect = now
+
+        try:
+            hz = self._crop_zone(screen, 'high')
+            lz = self._crop_zone(screen, 'low')
+        except Exception as e:
+            return None, 0, {'crop_error': str(e)}
+
+        mog2_hi_px = self._mog2_pixels(hz, self.mog2_high)
+        mog2_lo_px = self._mog2_pixels(lz, self.mog2_low)
+
+        in_warmup = elapsed < self.warmup_seconds
+        if in_warmup:
+            return None, 0, {'warmup': True, 'elapsed_s': round(elapsed, 2)}
+
+        canny_hi_ed = self._canny_edges(hz)
+        canny_lo_ed = self._canny_edges(lz)
+
+        slide_score = 0
+        slide_votes: Dict[str, Any] = {}
+        if template_slide_match:
+            slide_score += self.w_template
+            slide_votes['template'] = True
+        if mog2_lo_px > self.min_mog2_pixels:
+            slide_score += self.w_mog2
+            slide_votes['mog2_px'] = mog2_lo_px
+        if canny_lo_ed > self.min_canny_edges:
+            slide_score += self.w_canny
+            slide_votes['canny_edges'] = canny_lo_ed
+
+        jump_score = 0
+        jump_votes: Dict[str, Any] = {}
+        if mog2_hi_px > self.min_mog2_pixels:
+            jump_score += self.w_mog2
+            jump_votes['mog2_px'] = mog2_hi_px
+        if canny_hi_ed > self.min_canny_edges:
+            jump_score += self.w_canny
+            jump_votes['canny_edges'] = canny_hi_ed
+
+        if slide_score >= self.action_threshold and (now - self.last_slide) > self.cd_slide:
+            self.last_slide = now
+            entry = {'ts': now, 'action': 'slide', 'score': slide_score, 'votes': slide_votes}
+            self._decision_log.append(entry)
+            return 'slide', slide_score, slide_votes
+
+        if jump_score >= self.action_threshold and (now - self.last_jump) > self.cd_jump:
+            self.last_jump = now
+            entry = {'ts': now, 'action': 'jump', 'score': jump_score, 'votes': jump_votes}
+            self._decision_log.append(entry)
+            return 'jump', jump_score, jump_votes
+
+        return None, 0, {
+            'slide_score': slide_score,
+            'jump_score': jump_score,
+            'mog2_hi': mog2_hi_px,
+            'mog2_lo': mog2_lo_px,
+            'canny_hi': canny_hi_ed,
+            'canny_lo': canny_lo_ed,
+        }
+
+    def save_crash_log(self, crash_dir: str, run_duration: float) -> bool:
+        if not self.crash_log_enabled:
+            return False
+        if run_duration >= self.short_run_threshold:
+            return False
+        try:
+            os.makedirs(crash_dir, exist_ok=True)
+            for i, (ts, frame) in enumerate(self._frame_buffer):
+                p = os.path.join(crash_dir, f'frame_{i:02d}.png')
+                cv2.imwrite(p, frame)
+            if self.save_decision_log:
+                p = os.path.join(crash_dir, 'decisions.json')
+                with open(p, 'w', encoding='utf-8') as f:
+                    json.dump(self._decision_log, f, indent=2, default=str)
+            meta = {
+                'run_duration_sec': round(run_duration, 3),
+                'crash_time': time.strftime('%Y-%m-%d %H:%M:%S'),
+                'frames_saved': len(self._frame_buffer),
+                'decisions_count': len(self._decision_log),
+                'config_snapshot': {
+                    'action_threshold': self.action_threshold,
+                    'weights': {
+                        'template': self.w_template,
+                        'mog2': self.w_mog2,
+                        'canny': self.w_canny,
+                    },
+                    'zones': self.cfg['zones'],
+                    'mog2': self.cfg['mog2'],
+                    'canny': self.cfg['canny'],
+                },
+            }
+            with open(os.path.join(crash_dir, 'metadata.json'), 'w', encoding='utf-8') as f:
+                json.dump(meta, f, indent=2)
+            print(f'[crash-log] saved -> {crash_dir} (duration={run_duration:.2f}s)')
+            return True
+        except Exception as e:
+            print(f'[crash-log] save error: {e}')
+            return False

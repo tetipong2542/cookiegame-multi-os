@@ -14,6 +14,9 @@ ecdsa>=0.19.0
 # หมายเหตุ Mac: ต้องรันด้วย sudo หรือให้สิทธิ์ Accessibility ใน System Settings
 keyboard>=0.13.5
 
+# Config file loader (YAML with comments) - Phase 2 Hybrid Detection
+pyyaml>=6.0
+
 # GUI ใช้ tkinter ที่มากับ Python อยู่แล้ว
 # ถ้าติดตั้ง Python ผ่าน brew ต้องลง tkinter เพิ่ม:
 #   brew install python-tk@3.12

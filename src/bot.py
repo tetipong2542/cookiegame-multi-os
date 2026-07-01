@@ -134,6 +134,19 @@ ADB_PATH = find_adb()
 ADB_DEVICE = 'emulator-5554'
 BOT_VERSION = '2'
 PREVENT_INACTIVE = BOT_VERSION == '2.1'
+try:
+    from detector import ObstacleDetector, load_config as _load_detector_config
+    _HAS_DETECTOR = True
+except ImportError as _e:
+    print(f'[detector] import failed: {_e}')
+    _HAS_DETECTOR = False
+    ObstacleDetector = None
+    _load_detector_config = None
+
+_CFG = None
+_DETECTOR = None
+_DETECTOR_INITIALIZED = False
+
 MATCH_THRESHOLD = 0.85
 IMG_TARGET_ITEM = 'templates/target_item.png'
 IMG_OK_BUTTON = 'templates/ok_button.png'
@@ -706,6 +719,9 @@ def state_run():
             print(f'[debug] เซฟ ingame_fail ล้ม: {_e}')
         return State.RESULT
     t_start = time.time()
+    detector = _get_detector()
+    if detector is not None:
+        detector.reset_round()
     last_sig = None
     last_change_time = time.time()
     pattern = REPLAY_PATTERN
@@ -717,6 +733,7 @@ def state_run():
         now = time.time()
         if now - t_start > RUN_STATE_TIMEOUT:
             print('[WARN] RUN state timeout')
+            _maybe_save_crash_log(t_start, 'timeout')
             return State.RESULT
         screen = adb_screencap()
         if screen is None:
@@ -742,12 +759,29 @@ def state_run():
             time.sleep(0.5)
             continue
 
-        sf, _, _ = find_template(screen, IMG_INGAME2, INGAME2_THRESHOLD)
-        if sf and (now - last_slide_time) > SLIDE_COOLDOWN:
-            print('[slide] เจอ ingame2 -> Slide')
-            adb_slide()
-            last_slide_time = now
-            continue
+        if detector is not None and _CFG is not None and _CFG['detection'].get('enabled', True):
+            detector.push_frame(screen)
+            _sf, _, _ = find_template(screen, IMG_INGAME2, INGAME2_THRESHOLD)
+            _action, _score, _votes = detector.detect(screen, template_slide_match=bool(_sf))
+            if _action == 'slide':
+                print(f'[hybrid] SLIDE score={_score} votes={_votes}')
+                adb_slide()
+                continue
+            if _action == 'jump':
+                print(f'[hybrid] JUMP score={_score} votes={_votes}')
+                pt = random.choice(JUMP_TAP_POINTS)
+                adb_tap(pt[0], pt[1], JUMP_JITTER)
+                if random.random() < _CFG['double_jump']['random_probability']:
+                    time.sleep(_CFG['double_jump']['gap_seconds'])
+                    adb_tap(pt[0], pt[1], JUMP_JITTER)
+                continue
+        else:
+            sf, _, _ = find_template(screen, IMG_INGAME2, INGAME2_THRESHOLD)
+            if sf and (now - last_slide_time) > SLIDE_COOLDOWN:
+                print('[slide] เจอ ingame2 -> Slide')
+                adb_slide()
+                last_slide_time = now
+                continue
 
         if pattern and pat_i < len(pattern):
             t, action = pattern[pat_i]
@@ -775,6 +809,7 @@ def state_run():
                 if diff < FREEZE_DIFF:
                     if now - last_change_time > FREEZE_SECS:
                         print('[WARN] freeze detected')
+                        _maybe_save_crash_log(t_start, 'freeze')
                         return State.RESULT
                 else:
                     last_change_time = now
@@ -816,6 +851,44 @@ def _user_data_dir():
 
 
 _WRITABLE_DIR_CACHE = None
+
+
+def _get_detector():
+    '''Lazy-init hybrid ObstacleDetector. Returns None if disabled/unavailable.'''
+    global _CFG, _DETECTOR, _DETECTOR_INITIALIZED
+    if _DETECTOR_INITIALIZED:
+        return _DETECTOR
+    _DETECTOR_INITIALIZED = True
+    if not _HAS_DETECTOR:
+        return None
+    try:
+        bundled = resource_path('config.yaml')
+        user = os.path.join(_user_data_dir(), 'config.yaml')
+        _CFG, source = _load_detector_config(user, bundled)
+        print(f'[config] source: {source}')
+        print(f'[config] version: {_CFG.get("config_version", "?")}')
+        _DETECTOR = ObstacleDetector(_CFG)
+        print(f'[detector] initialized (enabled={_CFG["detection"]["enabled"]})')
+    except Exception as e:
+        print(f'[detector] init error: {e}')
+        _DETECTOR = None
+        _CFG = None
+    return _DETECTOR
+
+
+def _maybe_save_crash_log(t_start, reason):
+    '''Save crash log if run duration < threshold and detector active.'''
+    if _DETECTOR is None or _CFG is None:
+        return
+    try:
+        run_duration = time.time() - t_start
+        if run_duration >= _CFG['crash_log']['short_run_threshold_sec']:
+            return
+        ts = time.strftime('%Y%m%d_%H%M%S')
+        crash_dir = os.path.join(_writable_dir(), 'crash_log', f'{ts}_{reason}')
+        _DETECTOR.save_crash_log(crash_dir, run_duration)
+    except Exception as e:
+        print(f'[crash-log] error: {e}')
 
 
 def _writable_dir():
