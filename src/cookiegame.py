@@ -10,7 +10,7 @@ import time
 import queue
 import threading
 import tkinter as tk
-from tkinter import ttk, scrolledtext
+from tkinter import ttk, scrolledtext, messagebox
 
 import bot
 import license_core
@@ -213,15 +213,41 @@ class CookieGameApp:
     def start_bot(self):
         if not self.licensed:
             self._log('[app] ❌ License ยังไม่พร้อม\n')
+            messagebox.showerror('License', 'License ยังไม่พร้อม — กด "ใช้งาน key" ก่อน')
             return
         if not license_core.acquire_run_lock():
             self._log('[app] ❌ Key นี้กำลังรันอยู่บนอีกจอ\n')
+            messagebox.showerror('License lock', 'Key นี้กำลังรันอยู่บนอีกจอ')
             return
         try:
             loops = int((self.loops_var.get() or '0').strip())
         except ValueError:
             loops = 0
         self._apply_config()
+
+        if not os.path.exists(bot.ADB_PATH) and bot.ADB_PATH != 'adb' and bot.ADB_PATH != 'adb.exe':
+            self._log(f'[app] ❌ ไม่พบ adb ที่: {bot.ADB_PATH}\n')
+            messagebox.showerror(
+                'ไม่พบ ADB',
+                f'ไม่พบไฟล์ adb ที่:\n{bot.ADB_PATH}\n\n'
+                'กด "หาอัตโนมัติ" หรือชี้ path ไปที่ adb.exe / adb เอง\n'
+                '(Windows: อยู่ในโฟลเดอร์ LDPlayer)\n'
+                '(macOS: brew install android-platform-tools)'
+            )
+            license_core.release_run_lock()
+            return
+
+        if not bot.check_connection():
+            self._log('[app] ❌ ADB เชื่อมต่อ device ไม่ได้\n')
+            messagebox.showerror(
+                'ADB เชื่อมต่อไม่ได้',
+                f'ADB path: {bot.ADB_PATH}\n'
+                f'Device: {bot.ADB_DEVICE}\n\n'
+                'กด "ทดสอบเชื่อมต่อ" หรือรันคำสั่ง "adb devices" ในเทอร์มินัลเพื่อดู device ที่ต่ออยู่'
+            )
+            license_core.release_run_lock()
+            return
+
         bot.STOP_FLAG.clear()
         self.running = True
         self.toggle_btn.config(text='■  หยุดบอท', bg='#f44336',

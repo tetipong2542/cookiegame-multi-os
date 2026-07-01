@@ -357,11 +357,26 @@ def adb_slide(jitter=None):
 _TEMPLATE_CACHE = {}
 
 
+def _imread_unicode(path, flags=cv2.IMREAD_COLOR):
+    '''cv2.imread ทดแทน รองรับ path ที่มีตัวอักษร Unicode (Thai/CJK)
+       — Windows: cv2.imread เจอ path ภาษาไทยจะคืน None แต่ np.fromfile เขียน
+    '''
+    try:
+        data = np.fromfile(path, dtype=np.uint8)
+        if data.size == 0:
+            return None
+        return cv2.imdecode(data, flags)
+    except Exception:
+        try:
+            return cv2.imread(path, flags)
+        except Exception:
+            return None
+
+
 def load_template(path):
-    # TODO: verify against disasm — reconstructed with best effort
     if path in _TEMPLATE_CACHE:
         return _TEMPLATE_CACHE[path]
-    tmpl = cv2.imread(resource_path(path))
+    tmpl = _imread_unicode(resource_path(path))
     _TEMPLATE_CACHE[path] = tmpl
     return tmpl
 
@@ -684,11 +699,52 @@ COIN_CALLBACK = None
 COIN_TOTAL = 0
 
 
+def _dir_writable(d):
+    '''ทดสอบว่าเขียนไฟล์ในโฟลเดอร์ได้จริง (Program Files มัก block ด้วย UAC)'''
+    try:
+        os.makedirs(d, exist_ok=True)
+        test = os.path.join(d, '.cookiegame_write_test')
+        with open(test, 'wb') as f:
+            f.write(b'x')
+        os.remove(test)
+        return True
+    except Exception:
+        return False
+
+
+def _user_data_dir():
+    '''โฟลเดอร์ user data ต่อ OS สำหรับ fallback เมื่อโฟลเดอร์หลักเขียนไม่ได้'''
+    if sys.platform == 'win32':
+        base = os.environ.get('LOCALAPPDATA') or os.path.expanduser('~\\AppData\\Local')
+    elif sys.platform == 'darwin':
+        base = os.path.expanduser('~/Library/Application Support')
+    else:
+        base = os.environ.get('XDG_DATA_HOME') or os.path.expanduser('~/.local/share')
+    return os.path.join(base, 'CookieGame')
+
+
+_WRITABLE_DIR_CACHE = None
+
+
 def _writable_dir():
-    '''โฟลเดอร์ที่เขียนไฟล์ได้ (ข้างๆ .exe ตอน build / โฟลเดอร์สคริปต์ตอนรันปกติ)'''
+    '''โฟลเดอร์เขียนไฟล์ได้ (pattern.json, coins.csv, license.key):
+       Frozen: ข้าง .exe ก่อน — ถ้าเขียนไม่ได้ (Program Files + UAC) fallback ไป user data
+       Dev:    โฟลเดอร์สคริปต์
+    '''
+    global _WRITABLE_DIR_CACHE
+    if _WRITABLE_DIR_CACHE is not None:
+        return _WRITABLE_DIR_CACHE
     if getattr(sys, 'frozen', False):
-        return os.path.dirname(sys.executable)
-    return os.path.dirname(os.path.abspath(__file__))
+        primary = os.path.dirname(sys.executable)
+        if _dir_writable(primary):
+            _WRITABLE_DIR_CACHE = primary
+        else:
+            fallback = _user_data_dir()
+            os.makedirs(fallback, exist_ok=True)
+            _WRITABLE_DIR_CACHE = fallback
+    else:
+        _WRITABLE_DIR_CACHE = os.path.dirname(os.path.abspath(__file__))
+    return _WRITABLE_DIR_CACHE
 
 
 def _load_digit_templates():
@@ -700,7 +756,7 @@ def _load_digit_templates():
     templates = {}
     for d in range(10):
         path = resource_path(f'templates/dig/{d}.png')
-        img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+        img = _imread_unicode(path, cv2.IMREAD_GRAYSCALE)
         if img is not None:
             templates[d] = img
     _DIGIT_TEMPLATES = templates

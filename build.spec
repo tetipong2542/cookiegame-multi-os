@@ -19,6 +19,16 @@ hidden = [
 ]
 hidden += collect_submodules('cv2')
 
+if IS_WIN:
+    hidden += [
+        'win32api', 'win32con', 'win32gui',
+    ]
+    excludes_extra = ['keyboard._nixkeyboard', 'keyboard._darwinkeyboard']
+elif IS_MAC:
+    excludes_extra = ['keyboard._winkeyboard', 'keyboard._nixkeyboard']
+else:
+    excludes_extra = ['keyboard._winkeyboard', 'keyboard._darwinkeyboard']
+
 a = Analysis(
     ['src/cookiegame.py'],
     pathex=['src'],
@@ -30,7 +40,7 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=['tkinter.test', 'test', 'unittest'],
+    excludes=['tkinter.test', 'test', 'unittest'] + excludes_extra,
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
