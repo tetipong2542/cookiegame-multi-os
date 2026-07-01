@@ -197,6 +197,9 @@ JUMP_JITTER = 28
 SLIDE_HOLD_SEC = 0.35
 IMG_INGAME = 'templates/ingame.png'
 INGAME_THRESHOLD = 0.72
+IMG_INGAME2 = 'templates/ingame2.png'
+INGAME2_THRESHOLD = 0.75
+SLIDE_COOLDOWN = 0.8
 PATTERN_FILE = 'pattern.json'
 REPLAY_PATTERN = None
 
@@ -706,6 +709,7 @@ def state_run():
     pattern = REPLAY_PATTERN
     pat_i = 0
     last_jump_time = 0.0
+    last_slide_time = 0.0
     next_jump_delay = random.uniform(JUMP_DELAY_MIN, JUMP_DELAY_MAX)
     while not STOP_FLAG.is_set():
         now = time.time()
@@ -734,6 +738,13 @@ def state_run():
             print('[relay] กด Relay')
             adb_tap(*BTN_RELAY)
             time.sleep(0.5)
+            continue
+
+        sf, _, _ = find_template(screen, IMG_INGAME2, INGAME2_THRESHOLD)
+        if sf and (now - last_slide_time) > SLIDE_COOLDOWN:
+            print('[slide] เจอ ingame2 -> Slide')
+            adb_slide()
+            last_slide_time = now
             continue
 
         if pattern and pat_i < len(pattern):
