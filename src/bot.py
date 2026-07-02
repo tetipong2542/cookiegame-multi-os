@@ -222,6 +222,12 @@ ROI_RESULT = (200, 100, 1080, 620)
 ROI_RELAY = (300, 200, 900, 500)
 ROI_PIT_LIFT = (200, 250, 1080, 500)
 ROI_INGAME2 = (300, 100, 900, 620)
+
+IMG_LEVEL_UP_CONFIRM = 'templates/level_up_confirm.png'
+LEVEL_UP_CONFIRM_THRESHOLD = 0.75
+ROI_LEVEL_UP = (300, 400, 900, 700)
+BLIND_TAP_LEVEL_UP = (640, 620)
+LEVEL_UP_BLIND_TAP_TIMEOUT = 15.0
 PATTERN_FILE = 'pattern.json'
 REPLAY_PATTERN = None
 
@@ -1202,15 +1208,12 @@ def record_result_coins(screen):
 
 
 def state_result():
-    '''
-    STATE 3: หาปุ่ม OK/ตกลง แล้วกดเพื่อกลับล็อบบี้ -> กลับไป STATE 1
-    คืนค่า: State ถัดไป
-    '''
-    # TODO: verify against disasm — reconstructed with best effort
     print('\n===== [STATE 3] RESULT — กำลังหาปุ่ม OK =====')
     attempts = 0
     MAX_ATTEMPTS = 40
     recorded = False
+    result_start = time.time()
+    blind_tapped_at = 0.0
     while attempts < MAX_ATTEMPTS and not STOP_FLAG.is_set():
         screen = adb_screencap()
         if screen is None:
@@ -1223,12 +1226,31 @@ def state_result():
             except Exception as e:
                 print(f'[ERR] record_result_coins: {e}')
             recorded = True
+
+        lu_found, lu_center, _ = find_template(screen, IMG_LEVEL_UP_CONFIRM,
+                                                LEVEL_UP_CONFIRM_THRESHOLD, roi=ROI_LEVEL_UP)
+        if lu_found and lu_center is not None:
+            print(f'[level-up] Confirm found -> tap {lu_center}')
+            adb_tap(*lu_center)
+            time.sleep(1.0)
+            result_start = time.time()
+            attempts = 0
+            continue
+
         found, center, _ = find_template(screen, IMG_OK_BUTTON, 0.75)
         if found and center is not None:
             print('[OK] กด OK -> กลับล็อบบี้')
             adb_tap(*center)
             time.sleep(1.5)
             return State.REROLL
+
+        elapsed = time.time() - result_start
+        if elapsed > LEVEL_UP_BLIND_TAP_TIMEOUT and (time.time() - blind_tapped_at) > 3.0:
+            print(f'[level-up] {elapsed:.0f}s no transition -> blind tap {BLIND_TAP_LEVEL_UP}')
+            adb_tap(*BLIND_TAP_LEVEL_UP)
+            blind_tapped_at = time.time()
+            time.sleep(1.0)
+
         time.sleep(RESULT_CHECK_INTERVAL)
         attempts += 1
     print('[WARN] state_result timeout -> กลับไป REROLL')
